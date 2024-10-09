@@ -5,6 +5,7 @@ public class Customer {
 	private String name;
 	private String address;
 	private String phoneNumber;
+	private String email;
 	
 	void setId(int custId) {
 		id = custId;
@@ -22,6 +23,14 @@ public class Customer {
 		phoneNumber = custPhone;
 	}
 	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	int getId() {
 		return id;
 	}
@@ -39,7 +48,14 @@ public class Customer {
 		
 	}
 	
-	public Customer(String custName, String custAddr, String custPhone) throws CustomerExceptionHandler  {
+	public Customer() {
+		this.address =null;
+		this.name = null;
+		this.phoneNumber = null;
+		this.email = null;
+	}
+	
+	public Customer(String custName, String custAddr, String custPhone, String email) throws CustomerExceptionHandler  {
 		
 		id = 0;
 		
@@ -49,6 +65,7 @@ public class Customer {
 			validateName(custName);
 			validateAddress(custAddr);
 			validatePhoneNumber(custPhone);
+			validateEmail(email);
 			
 		}
 		catch (CustomerExceptionHandler e) {
@@ -59,6 +76,7 @@ public class Customer {
 		name = custName;
 		address = custAddr;
 		phoneNumber = custPhone;
+		this.email = email;
 	}
 	
 	public static void validateName(String custName) throws CustomerExceptionHandler {
@@ -103,5 +121,17 @@ public class Customer {
 		
 	}
 	
-
+public static void validateEmail(String email) throws CustomerExceptionHandler {
+		
+		//Agree Formating Rules on "Customer Email"
+		//E.G. Name String must be a minimum of 7 characters and a maximum of 15 characters
+		
+		if (custPhone.isBlank() || custPhone.isEmpty())
+			throw new CustomerExceptionHandler("Customer Email NOT specified");
+		else if (custPhone.length() < 7)//a@pm.me
+			throw new CustomerExceptionHandler("Customer Email does not meet minimum length requirements");
+		else if (custPhone.length() > 25)
+			throw new CustomerExceptionHandler("Customer Email does not exceeds maximum length requirements");
+		
+	}
 }
