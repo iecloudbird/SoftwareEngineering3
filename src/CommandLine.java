@@ -1,7 +1,7 @@
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.Scanner;
-//test4
+//test7
 public class CommandLine {
 	
 	private static void listCustomerFuctionalityAvailable() {
