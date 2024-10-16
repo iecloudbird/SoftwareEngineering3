@@ -7,6 +7,13 @@ public class Customer {
 	private String phoneNumber;
 	private String email;
 	
+	public Customer() {
+		this.address =null;
+		this.name = null;
+		this.phoneNumber = null;
+		this.email = null;
+	}
+	
 	void setId(int custId) {
 		id = custId;
 	}
@@ -48,12 +55,7 @@ public class Customer {
 		
 	}
 	
-	public Customer() {
-		this.address =null;
-		this.name = null;
-		this.phoneNumber = null;
-		this.email = null;
-	}
+
 	
 	public Customer(String custName, String custAddr, String custPhone, String email) throws CustomerExceptionHandler  {
 		
@@ -89,7 +91,7 @@ public class Customer {
 		else if (custName.length() < 2)
 			throw new CustomerExceptionHandler("Customer Name does not meet minimum length requirements");
 		else if (custName.length() > 50)
-			throw new CustomerExceptionHandler("Customer Name does not exceeds maximum length requirements");
+			throw new CustomerExceptionHandler("Customer Name exceeds maximum length requirements");
 		
 	}
 	
@@ -103,7 +105,7 @@ public class Customer {
 		else if (custAddr.length() < 5)
 			throw new CustomerExceptionHandler("Customer Address does not meet minimum length requirements");
 		else if (custAddr.length() > 60)
-			throw new CustomerExceptionHandler("Customer Address does not exceeds maximum length requirements");
+			throw new CustomerExceptionHandler("Customer Address exceeds maximum length requirements");
 		
 	}
 	
@@ -114,24 +116,28 @@ public class Customer {
 		
 		if (custPhone.isBlank() || custPhone.isEmpty())
 			throw new CustomerExceptionHandler("Customer PhoneNumber NOT specified");
+		else if (!custPhone.matches("\\d+")) {  // Ensure it contains only digits
+	        throw new CustomerExceptionHandler("Customer PhoneNumber does not meet numeric format requirements");
+	    }
 		else if (custPhone.length() < 7)
 			throw new CustomerExceptionHandler("Customer PhoneNumber does not meet minimum length requirements");
 		else if (custPhone.length() > 15)
-			throw new CustomerExceptionHandler("Customer PhoneNumber does not exceeds maximum length requirements");
+			throw new CustomerExceptionHandler("Customer PhoneNumber exceeds maximum length requirements");
 		
 	}
 	
-public static void validateEmail(String email) throws CustomerExceptionHandler {
-		
-		//Agree Formating Rules on "Customer Email"
-		//E.G. Name String must be a minimum of 7 characters and a maximum of 15 characters
-		
-		if (custPhone.isBlank() || custPhone.isEmpty())
-			throw new CustomerExceptionHandler("Customer Email NOT specified");
-		else if (custPhone.length() < 7)//a@pm.me
-			throw new CustomerExceptionHandler("Customer Email does not meet minimum length requirements");
-		else if (custPhone.length() > 25)
-			throw new CustomerExceptionHandler("Customer Email does not exceeds maximum length requirements");
-		
-	}
+	public static void validateEmail(String email) throws CustomerExceptionHandler {
+			
+			//Agree Formating Rules on "Customer Email"
+			//E.G. Name String must be a minimum of 7 characters and a maximum of 15 characters
+			
+		if (email.isBlank() || email.isEmpty()) {
+	        throw new CustomerExceptionHandler("Customer Email NOT specified");
+	    } else if (email.length() < 5) {
+	        throw new CustomerExceptionHandler("Customer Email does not meet minimum length requirements");
+	    } else if (email.length() > 50) {
+	        throw new CustomerExceptionHandler("Customer Email exceeds maximum length requirements");
+	    }
+			
+		}
 }

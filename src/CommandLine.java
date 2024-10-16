@@ -77,8 +77,10 @@ public class CommandLine {
 					String custAddr = keyboard.next();
 					System.out.printf("Enter Customer PhoneNumber: \n");
 					String custphoneNumber = keyboard.next();
+					System.out.printf("Enter Customer Email: \n");
+					String custEmail = keyboard.next();
 				
-					Customer custObj = new Customer(custName,custAddr,custphoneNumber);
+					Customer custObj = new Customer(custName,custAddr,custphoneNumber, custEmail);
 				
 					//Insert Customer Details into the database
 					boolean insertResult = dao.insertCustomerDetailsAccount(custObj);
