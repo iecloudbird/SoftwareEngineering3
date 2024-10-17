@@ -1,5 +1,6 @@
 import junit.framework.TestCase;
-public class OrderTest extends TestCase{
+//To do
+public class InvoiceTest extends TestCase{
 	public void testCreateOrderSuccess() {
 		//Test 1: Create and test the Order object
 		try {
@@ -28,14 +29,4 @@ public class OrderTest extends TestCase{
             assertEquals("Order Id does not meet minimum length requirements", e.getMessage());
         }
     }
-	public void testInvalidCustId() {
-        try {
-            // Call method under test
-            Order.validateCustId("J");
-            fail("Exception expected");
-        } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Id does not meet minimum length requirements", e.getMessage());
-        }
-    }
-	//Will finish other test cases
 }

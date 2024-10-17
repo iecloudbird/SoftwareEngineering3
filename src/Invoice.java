@@ -1,6 +1,6 @@
-import java.util.*;
-
-public class Order {
+import java.util.Date;
+//To do
+public class Invoice {
 	private int orderId;
 	private int custId;
 	private int deliveryId;
