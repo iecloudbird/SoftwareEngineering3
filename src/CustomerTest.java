@@ -18,7 +18,7 @@ public class CustomerTest extends TestCase {
 		try {
 			
 			// Call method under test
-            Customer custObj = new Customer("Jack Daniels", "Athlone", "0871231233", "jack@example.com");
+            Customer custObj = new Customer("Jack Daniels", "Athlone", "0871231233", "jack@example.com",true);
             
             // Use getters to check for object creation
             assertEquals(0, custObj.getId());
@@ -69,7 +69,7 @@ public class CustomerTest extends TestCase {
     
     public void testValidCustomerAddress() {
         try {
-            Customer custObj = new Customer("John Doe", "Athlone", "0874555757", "john@example.com");
+            Customer custObj = new Customer("John Doe", "Athlone", "0874555757", "john@example.com",true);
             assertEquals("Athlone", custObj.getAddress());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
@@ -97,7 +97,7 @@ public class CustomerTest extends TestCase {
     
     public void testValidCustomerPhoneNumber() {
         try {
-            Customer custObj = new Customer("John Doe", "Athlone", "0874555757", "john@example.com");
+            Customer custObj = new Customer("John Doe", "Athlone", "0874555757", "john@example.com",true);
             assertEquals("0874555757", custObj.getPhoneNumber());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
@@ -125,7 +125,7 @@ public class CustomerTest extends TestCase {
     
     public void testValidCustomerEmail() {
         try {
-            Customer custObj = new Customer("Jack Daniels", "Athlone", "0874555757", "jack@example.com");
+            Customer custObj = new Customer("Jack Daniels", "Athlone", "0874555757", "jack@example.com",true);
             assertEquals("jack@example.com", custObj.getEmail());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
@@ -137,7 +137,7 @@ public class CustomerTest extends TestCase {
 	 public void testValidateCustomerIDFormat() {
 		 try {
 		        // Arrange & Act
-		        Customer customer = new Customer("Jack Daniels", "Athlone", "0871234567", "jack@example.com");
+		        Customer customer = new Customer("Jack Daniels", "Athlone", "0871234567", "jack@example.com",true);
 		        
 		        // Assert
 		        int expectedCustomerId = 0; 
@@ -207,7 +207,6 @@ public class CustomerTest extends TestCase {
 	        assertEquals("Customer PhoneNumber does not meet numeric format requirements", e.getMessage());
 	    }
 	}
-
 }
 
 		

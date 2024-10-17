@@ -55,7 +55,7 @@ public class CommandLine {
 		try {
 			
 			MySQLAccess dao = new MySQLAccess();
-		
+
 			// Configure System for Running
 			Scanner keyboard = new Scanner(System.in); 
 			String functionNumber = "-99";
@@ -79,8 +79,9 @@ public class CommandLine {
 					String custphoneNumber = keyboard.next();
 					System.out.printf("Enter Customer Email: \n");
 					String custEmail = keyboard.next();
-				
-					Customer custObj = new Customer(custName,custAddr,custphoneNumber, custEmail);
+					Boolean subscriptionStatus = keyboard.nextBoolean();
+
+					Customer custObj = new Customer(custName,custAddr,custphoneNumber, custEmail, subscriptionStatus);
 				
 					//Insert Customer Details into the database
 					boolean insertResult = dao.insertCustomerDetailsAccount(custObj);

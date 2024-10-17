@@ -6,14 +6,17 @@ public class Customer {
 	private String address;
 	private String phoneNumber;
 	private String email;
-	
-	public Customer() {
-		this.address =null;
-		this.name = null;
-		this.phoneNumber = null;
-		this.email = null;
+	private Boolean subscriptionStatus;
+
+
+	public Boolean getSubscriptionStatus() {
+		return subscriptionStatus;
 	}
-	
+
+	public void setSubscriptionStatus(Boolean subscriptionStatus) {
+		this.subscriptionStatus = subscriptionStatus;
+	}
+
 	void setId(int custId) {
 		id = custId;
 	}
@@ -55,9 +58,15 @@ public class Customer {
 		
 	}
 	
-
+	public Customer() {
+		this.address =null;
+		this.name = null;
+		this.phoneNumber = null;
+		this.email = null;
+		this.subscriptionStatus = null;
+	}
 	
-	public Customer(String custName, String custAddr, String custPhone, String email) throws CustomerExceptionHandler  {
+	public Customer(String custName, String custAddr, String custPhone, String custEmail, Boolean custSubscriptionStatus) throws CustomerExceptionHandler  {
 		
 		id = 0;
 		
@@ -67,7 +76,7 @@ public class Customer {
 			validateName(custName);
 			validateAddress(custAddr);
 			validatePhoneNumber(custPhone);
-			validateEmail(email);
+			validateEmail(custEmail);
 			
 		}
 		catch (CustomerExceptionHandler e) {
@@ -78,7 +87,8 @@ public class Customer {
 		name = custName;
 		address = custAddr;
 		phoneNumber = custPhone;
-		this.email = email;
+		email = custEmail;
+		subscriptionStatus = custSubscriptionStatus;
 	}
 	
 	public static void validateName(String custName) throws CustomerExceptionHandler {
@@ -125,7 +135,7 @@ public class Customer {
 			throw new CustomerExceptionHandler("Customer PhoneNumber exceeds maximum length requirements");
 		
 	}
-	
+
 	public static void validateEmail(String email) throws CustomerExceptionHandler {
 			
 			//Agree Formating Rules on "Customer Email"
