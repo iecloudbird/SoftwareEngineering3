@@ -1,17 +1,25 @@
 import java.util.Date;
 //To do
 public class Invoice {
-	private int orderId;
+	private int invoiceId;
 	private int custId;
-	private int deliveryId;
-	private int publicationId;
+	private String paymentMethod;
 	private Date orderDate;
-	private Boolean orderStatus;
-	public int getOrderId() {
-		return orderId;
+	private double totalAmount;
+	
+//	public Invoice(int invoiceId, int custId, String paymentMethod, Date orderDate, double totalAmount) {
+//		super();
+//		this.invoiceId = invoiceId;
+//		this.custId = custId;
+//		this.paymentMethod = paymentMethod;
+//		this.orderDate = orderDate;
+//		this.totalAmount = totalAmount;
+//	}
+	public int getInvoiceId() {
+		return invoiceId;
 	}
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
+	public void setInvoiceId(int invoiceId) {
+		this.invoiceId = invoiceId;
 	}
 	public int getCustId() {
 		return custId;
@@ -19,17 +27,11 @@ public class Invoice {
 	public void setCustId(int custId) {
 		this.custId = custId;
 	}
-	public int getDeliveryId() {
-		return deliveryId;
+	public String getPaymentMethod() {
+		return paymentMethod;
 	}
-	public void setDeliveryId(int deliveryId) {
-		this.deliveryId = deliveryId;
-	}
-	public int getPublicationId() {
-		return publicationId;
-	}
-	public void setPublicationId(int publicationId) {
-		this.publicationId = publicationId;
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 	public Date getOrderDate() {
 		return orderDate;
@@ -37,26 +39,25 @@ public class Invoice {
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 	}
-	public Boolean getOrderStatus() {
-		return orderStatus;
+	public double getTotalAmount() {
+		return totalAmount;
 	}
-	public void setOrderStatus(Boolean orderStatus) {
-		this.orderStatus = orderStatus;
+	public void setTotalAmount(double totalAmount) {
+		this.totalAmount = totalAmount;
 	}
-	public Order() {
-		this.orderId =0;
+	public Invoice() {
+		this.invoiceId =0;
 		this.custId = 0;
-		this.deliveryId = 0;
-		this.publicationId = 0;
+		this.paymentMethod = "card";
 		this.orderDate = null;
-		this.orderStatus = true;
+		this.totalAmount = 0.0;
 	}
-	public Order(int orderId, int custId, int deliveryId, int publicationId, Date orderDate, Boolean orderStatus) throws CustomerExceptionHandler  {
+	public Invoice(int invoiceId, int custId, String paymentMethod, Date orderDate, double totalAmount) throws CustomerExceptionHandler  {
 		
-		orderId = 0;
+		invoiceId = 0;
 		custId = 0;
-		deliveryId = 0;
-		publicationId = 0;
+		orderDate = null;
+		totalAmount = 0.0;
 		
 		// Validate Input
 		try {
@@ -66,18 +67,18 @@ public class Invoice {
 			//validatePublicationId(publicationId);
 			//validateOrderDate(orderDate);
 			//validateOrderStatus(orderStatus);
-		}finally{System.out.print("");}
-//		catch (CustomerExceptionHandler e) {
-//			throw e;
-//		}
+			validatePaymentMethod(paymentMethod);
+		}//finally{System.out.print("");}
+		catch (CustomerExceptionHandler e) {
+			throw e;
+		}
 		
 		// Set Attributes
-		orderId = orderId;
+		invoiceId = invoiceId;
 		custId = custId;
-		deliveryId = deliveryId;
-		publicationId = publicationId;
+		paymentMethod = paymentMethod;
+		totalAmount = totalAmount;
 		orderDate = orderDate;
-		orderStatus = orderStatus;
 	}
 //	public static void validateOrderId(int orderId) throws CustomerExceptionHandler {
 //		
@@ -157,4 +158,17 @@ public class Invoice {
 //			throw new CustomerExceptionHandler("Publication Id exceeds maximum length requirements");
 //		
 //	}
+	public static void validatePaymentMethod(String paymentMethod) throws CustomerExceptionHandler {
+	
+	//Agree Formating Rules on "Order Date"
+	//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
+	
+	if (paymentMethod.isBlank() || paymentMethod.isEmpty())
+		throw new CustomerExceptionHandler("Payment Method NOT specified");
+	else if (paymentMethod.length() < 5)
+		throw new CustomerExceptionHandler("Payment Method does not meet minimum length requirements");
+	else if (paymentMethod.length() > 60)
+		throw new CustomerExceptionHandler("Payment Method exceeds maximum length requirements");
+	
+}
 }

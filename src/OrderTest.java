@@ -5,15 +5,15 @@ public class OrderTest extends TestCase{
 		try {
 			
 			// Call method under test
-            Order orderObj = new Order(0, 0, 0, 0, null, true);
+            Order orderObj = new Order(null, null, null, null, null, true);
             
             // Use getters to check for object creation
-            assertEquals(0, orderObj.getOrderId());
-            assertEquals(0, orderObj.getCustId());
-            assertEquals(0, orderObj.getDeliveryId());
-            assertEquals(0, orderObj.getPublicationId());
+            assertEquals(null, orderObj.getOrderId());
+            assertEquals(null, orderObj.getCustId());
+            assertEquals(null, orderObj.getDeliveryId());
+            assertEquals(null, orderObj.getPublicationId());
             assertEquals(null, orderObj.getOrderDate());
-            assertEquals(true, orderObj.getOrderStatus());
+            assertEquals("true", orderObj.getOrderStatus().toString());
 		}
 		catch (CustomerExceptionHandler e) {
 			fail("Exception not expected");
@@ -37,5 +37,40 @@ public class OrderTest extends TestCase{
             assertEquals("Customer Id does not meet minimum length requirements", e.getMessage());
         }
     }
-	//Will finish other test cases
+	public void testInvalidDeliveryId() {
+        try {
+            // Call method under test
+            Order.validateDeliveryId("J");
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Delivery Id does not meet minimum length requirements", e.getMessage());
+        }
+	}
+	public void testInvalidPublicationId() {
+        try {
+            // Call method under test
+            Order.validatePublicationId("J");
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Publication Id does not meet minimum length requirements", e.getMessage());
+        }
+	}
+	public void testInvalidOrderDate() {
+        try {
+            // Call method under test
+            Order.validateOrderDate("J");
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Order Date does not meet minimum length requirements", e.getMessage());
+        }
+	}
+	public void testInvalidOrderStatus() {
+        try {
+            // Call method under test
+            Order.validateOrderStatus("J");
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Order Status does not meet minimum length requirements", e.getMessage());
+        }
+	}
 }

@@ -1,29 +1,28 @@
 import junit.framework.TestCase;
 //To do
 public class InvoiceTest extends TestCase{
-	public void testCreateOrderSuccess() {
+	public void testCreateInvoiceSuccess() {
 		//Test 1: Create and test the Order object
 		try {
 			
 			// Call method under test
-            Order orderObj = new Order(0, 0, 0, 0, null, true);
+            Invoice invoiceObj = new Invoice(0, 0, "card", null, 0.0);
             
             // Use getters to check for object creation
-            assertEquals(0, orderObj.getOrderId());
-            assertEquals(0, orderObj.getCustId());
-            assertEquals(0, orderObj.getDeliveryId());
-            assertEquals(0, orderObj.getPublicationId());
-            assertEquals(null, orderObj.getOrderDate());
-            assertEquals(true, orderObj.getOrderStatus());
+            assertEquals(0, invoiceObj.getInvoiceId());
+            assertEquals(0, invoiceObj.getCustId());
+            assertEquals("card", invoiceObj.getPaymentMethod());
+            assertEquals(null, invoiceObj.getOrderDate());
+            assertEquals(0.0, invoiceObj.getTotalAmount());
 		}
 		catch (CustomerExceptionHandler e) {
 			fail("Exception not expected");
 		}
 	}
-	public void testInvalidOrderId() {
+	public void testInvalidPaymentMethod001() {
         try {
             // Call method under test
-            Order.validateOrderId("J");
+            Invoice.validatePaymentMethod("J");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
             assertEquals("Order Id does not meet minimum length requirements", e.getMessage());

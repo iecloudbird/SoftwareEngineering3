@@ -2,3 +2,6 @@
 /DeliveryPersonException.class
 /Invoice.class
 /InvoiceTest.class
+/DeliveryArea.class
+/DeliveryDocket.class
+/DeliveryDocketException.class
