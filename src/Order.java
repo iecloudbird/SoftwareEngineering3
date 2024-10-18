@@ -131,30 +131,30 @@ public class Order {
 			throw new CustomerExceptionHandler("Publication Id exceeds maximum length requirements");
 		
 	}
-	public static void validateOrderDate(Date orderDate) throws CustomerExceptionHandler {
-		
-		//Agree Formating Rules on "Order Date"
-		//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
-		
-		if (orderDate == null)
-			throw new CustomerExceptionHandler("Order Date NOT specified");
-		else if (orderDate.length() < 5)
-			throw new CustomerExceptionHandler("Order Date does not meet minimum length requirements");
-		else if (orderDate.length() > 60)
-			throw new CustomerExceptionHandler("Order Date exceeds maximum length requirements");
-		
-	}
-	public static void validateOrderStatus(Boolean orderStatus) throws CustomerExceptionHandler {
-		
-		//Agree Formating Rules on "Order Status"
-		//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
-		
-		if (orderStatus.isBlank() || orderStatus.isEmpty())
-			throw new CustomerExceptionHandler("Publication Id NOT specified");
-		else if (orderStatus.length() < 5)
-			throw new CustomerExceptionHandler("Publication Id does not meet minimum length requirements");
-		else if (orderStatus.length() > 60)
-			throw new CustomerExceptionHandler("Publication Id exceeds maximum length requirements");
-		
-	}
+//	public static void validateOrderDate(Date orderDate) throws CustomerExceptionHandler {
+//		
+//		//Agree Formating Rules on "Order Date"
+//		//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
+//		
+//		if (orderDate == null)
+//			throw new CustomerExceptionHandler("Order Date NOT specified");
+//		else if (orderDate.length() < 5)
+//			throw new CustomerExceptionHandler("Order Date does not meet minimum length requirements");
+//		else if (orderDate.length() > 60)
+//			throw new CustomerExceptionHandler("Order Date exceeds maximum length requirements");
+//		
+//	}
+//	public static void validateOrderStatus(Boolean orderStatus) throws CustomerExceptionHandler {
+//		
+//		//Agree Formating Rules on "Order Status"
+//		//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
+//		
+//		if (orderStatus.isBlank() || orderStatus.isEmpty())
+//			throw new CustomerExceptionHandler("Publication Id NOT specified");
+//		else if (orderStatus.length() < 5)
+//			throw new CustomerExceptionHandler("Publication Id does not meet minimum length requirements");
+//		else if (orderStatus.length() > 60)
+//			throw new CustomerExceptionHandler("Publication Id exceeds maximum length requirements");
+//		
+//	}
 }

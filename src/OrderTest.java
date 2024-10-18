@@ -55,22 +55,22 @@ public class OrderTest extends TestCase{
             assertEquals("Publication Id does not meet minimum length requirements", e.getMessage());
         }
 	}
-	public void testInvalidOrderDate() {
-        try {
-            // Call method under test
-            Order.validateOrderDate("J");
-            fail("Exception expected");
-        } catch (CustomerExceptionHandler e) {
-            assertEquals("Order Date does not meet minimum length requirements", e.getMessage());
-        }
-	}
-	public void testInvalidOrderStatus() {
-        try {
-            // Call method under test
-            Order.validateOrderStatus("J");
-            fail("Exception expected");
-        } catch (CustomerExceptionHandler e) {
-            assertEquals("Order Status does not meet minimum length requirements", e.getMessage());
-        }
-	}
+//	public void testInvalidOrderDate() {
+//        try {
+//            // Call method under test
+//            Order.validateOrderDate("J");
+//            fail("Exception expected");
+//        } catch (CustomerExceptionHandler e) {
+//            assertEquals("Order Date does not meet minimum length requirements", e.getMessage());
+//        }
+//	}
+//	public void testInvalidOrderStatus() {
+//        try {
+//            // Call method under test
+//            Order.validateOrderStatus("J");
+//            fail("Exception expected");
+//        } catch (CustomerExceptionHandler e) {
+//            assertEquals("Order Status does not meet minimum length requirements", e.getMessage());
+//        }
+//	}
 }
