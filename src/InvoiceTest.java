@@ -6,11 +6,11 @@ public class InvoiceTest extends TestCase{
 		try {
 			
 			// Call method under test
-            Invoice invoiceObj = new Invoice(0, 0, "card", null, 0.0);
+            Invoice invoiceObj = new Invoice(null, null, "card", null, 0.0);
             
             // Use getters to check for object creation
-            assertEquals(0, invoiceObj.getInvoiceId());
-            assertEquals(0, invoiceObj.getCustId());
+            assertEquals(null, invoiceObj.getInvoiceId());
+            assertEquals(null, invoiceObj.getCustId());
             assertEquals("card", invoiceObj.getPaymentMethod());
             assertEquals(null, invoiceObj.getOrderDate());
             assertEquals(0.0, invoiceObj.getTotalAmount());
@@ -19,13 +19,49 @@ public class InvoiceTest extends TestCase{
 			fail("Exception not expected");
 		}
 	}
+	public void testInvalidInvoiceId001() {
+        try {
+            // Call method under test
+            Invoice.validateInvoiceId("J");
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Order Id does not meet minimum length requirements", e.getMessage());
+        }
+    }
+	public void testInvalidCustId001() {
+        try {
+            // Call method under test
+            Invoice.validateCustId("J");
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Order Id does not meet minimum length requirements", e.getMessage());
+        }
+    }
 	public void testInvalidPaymentMethod001() {
         try {
             // Call method under test
             Invoice.validatePaymentMethod("J");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Order Id does not meet minimum length requirements", e.getMessage());
+            assertEquals("Payment Method does not meet minimum length requirements", e.getMessage());
         }
     }
+//	public void testInvalidOrderDate001() {
+//        try {
+//            // Call method under test
+//            Invoice.validateOrderDate("J");
+//            fail("Exception expected");
+//        } catch (CustomerExceptionHandler e) {
+//            assertEquals("Order Date does not meet minimum length requirements", e.getMessage());
+//        }
+//    }
+//	public void testInvalidTotalAmount001() {
+//        try {
+//            // Call method under test
+//            Invoice.validateTotalAmount("J");
+//            fail("Exception expected");
+//        } catch (CustomerExceptionHandler e) {
+//            assertEquals("Total Amount does not meet minimum length requirements", e.getMessage());
+//        }
+//    }
 }

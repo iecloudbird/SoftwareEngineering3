@@ -1,8 +1,8 @@
 import java.util.Date;
 //To do
 public class Invoice {
-	private int invoiceId;
-	private int custId;
+	private String invoiceId;
+	private String custId;
 	private String paymentMethod;
 	private Date orderDate;
 	private double totalAmount;
@@ -15,16 +15,16 @@ public class Invoice {
 //		this.orderDate = orderDate;
 //		this.totalAmount = totalAmount;
 //	}
-	public int getInvoiceId() {
+	public String getInvoiceId() {
 		return invoiceId;
 	}
-	public void setInvoiceId(int invoiceId) {
+	public void setInvoiceId(String invoiceId) {
 		this.invoiceId = invoiceId;
 	}
-	public int getCustId() {
+	public String getCustId() {
 		return custId;
 	}
-	public void setCustId(int custId) {
+	public void setCustId(String custId) {
 		this.custId = custId;
 	}
 	public String getPaymentMethod() {
@@ -46,28 +46,30 @@ public class Invoice {
 		this.totalAmount = totalAmount;
 	}
 	public Invoice() {
-		this.invoiceId =0;
-		this.custId = 0;
+		this.invoiceId = null;
+		this.custId = null;
 		this.paymentMethod = "card";
 		this.orderDate = null;
 		this.totalAmount = 0.0;
 	}
-	public Invoice(int invoiceId, int custId, String paymentMethod, Date orderDate, double totalAmount) throws CustomerExceptionHandler  {
+	public Invoice(String invoiceId, String custId, String paymentMethod, Date orderDate, double totalAmount) throws CustomerExceptionHandler  {
 		
-		invoiceId = 0;
-		custId = 0;
+		invoiceId = null;
+		custId = null;
+		paymentMethod = "card";
 		orderDate = null;
 		totalAmount = 0.0;
 		
 		// Validate Input
 		try {
-			//validateOrderId(orderId);
-			//validateCustId(custId);
-			//validateDeliveryId(deliveryId);
-			//validatePublicationId(publicationId);
+			validateInvoiceId(invoiceId);
+			validateCustId(custId);
+			validatePaymentMethod(paymentMethod);
+			//validateOrderDate(orderDate);
+			//validateTotalAmount(totalAmount);
+//			validatePublicationId(publicationId);
 			//validateOrderDate(orderDate);
 			//validateOrderStatus(orderStatus);
-			validatePaymentMethod(paymentMethod);
 		}//finally{System.out.print("");}
 		catch (CustomerExceptionHandler e) {
 			throw e;
@@ -80,32 +82,71 @@ public class Invoice {
 		totalAmount = totalAmount;
 		orderDate = orderDate;
 	}
-//	public static void validateOrderId(int orderId) throws CustomerExceptionHandler {
+	public static void validateInvoiceId(String invoiceId) throws CustomerExceptionHandler {
+		
+		//Agree Formating Rules on "Order Id"
+		//E.G. Name String must be a minimum of 2 characters and a maximum of 50 characters
+		
+		if (invoiceId.isBlank() || invoiceId.isEmpty())
+			throw new CustomerExceptionHandler("Order Id NOT specified");
+		else if (invoiceId.length() < 2)
+			throw new CustomerExceptionHandler("Order Id does not meet minimum length requirements");
+		else if (invoiceId.length() > 50)
+			throw new CustomerExceptionHandler("Order Id exceeds maximum length requirements");
+		
+	}
+	public static void validateCustId(String custId) throws CustomerExceptionHandler {
+		
+		//Agree Formating Rules on "Customer Id"
+		//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
+		
+		if (custId.isBlank() || custId.isEmpty())
+			throw new CustomerExceptionHandler("Customer Id NOT specified");
+		else if (custId.length() < 5)
+			throw new CustomerExceptionHandler("Customer Id does not meet minimum length requirements");
+		else if (custId.length() > 60)
+			throw new CustomerExceptionHandler("Customer Id exceeds maximum length requirements");
+		
+	}
+	public static void validatePaymentMethod(String paymentMethod) throws CustomerExceptionHandler {
+		
+	//Agree Formating Rules on "Order Date"
+	//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
+	
+	if (paymentMethod.isBlank() || paymentMethod.isEmpty())
+		throw new CustomerExceptionHandler("Payment Method NOT specified");
+	else if (paymentMethod.length() < 5)
+		throw new CustomerExceptionHandler("Payment Method does not meet minimum length requirements");
+	else if (paymentMethod.length() > 60)
+		throw new CustomerExceptionHandler("Payment Method exceeds maximum length requirements");
+	
+}
+//	public static void validateOrderDate(Date orderDate) throws CustomerExceptionHandler {
+//	
+//	//Agree Formating Rules on "Order Date"
+//	//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
+//	
+//	if (orderDate == null)
+//		throw new CustomerExceptionHandler("Order Date NOT specified");
+//	else if (orderDate.length() < 5)
+//		throw new CustomerExceptionHandler("Order Date does not meet minimum length requirements");
+//	else if (orderDate.length() > 60)
+//		throw new CustomerExceptionHandler("Order Date exceeds maximum length requirements");
+//	
+//}
+//	public static void validateTotalAmount(double totalAmount) throws CustomerExceptionHandler {
 //		
-//		//Agree Formating Rules on "Order Id"
-//		//E.G. Name String must be a minimum of 2 characters and a maximum of 50 characters
-//		
-//		if (orderId.isBlank() || orderId.isEmpty())
-//			throw new CustomerExceptionHandler("Order Id NOT specified");
-//		else if (orderId.length() < 2)
-//			throw new CustomerExceptionHandler("Order Id does not meet minimum length requirements");
-//		else if (orderId.length() > 50)
-//			throw new CustomerExceptionHandler("Order Id exceeds maximum length requirements");
-//		
-//	}
-//	public static void validateCustId(int custId) throws CustomerExceptionHandler {
-//		
-//		//Agree Formating Rules on "Customer Id"
-//		//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
-//		
-//		if (custId.isBlank() || custId.isEmpty())
-//			throw new CustomerExceptionHandler("Customer Id NOT specified");
-//		else if (custId.length() < 5)
-//			throw new CustomerExceptionHandler("Customer Id does not meet minimum length requirements");
-//		else if (custId.length() > 60)
-//			throw new CustomerExceptionHandler("Customer Id exceeds maximum length requirements");
-//		
-//	}
+//	//Agree Formating Rules on "Order Date"
+//	//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
+//	
+//	if (totalAmount.isBlank() || totalAmount.isEmpty())
+//		throw new CustomerExceptionHandler("Total Amount NOT specified");
+//	else if (totalAmount.length() < 5)
+//		throw new CustomerExceptionHandler("Total Amount does not meet minimum length requirements");
+//	else if (totalAmount.length() > 60)
+//		throw new CustomerExceptionHandler("Total Amount exceeds maximum length requirements");
+//	
+//}
 //	public static void validateDeliveryId(int deliveryId) throws CustomerExceptionHandler {
 //		
 //		//Agree Formating Rules on "Delivery Id"
@@ -158,17 +199,4 @@ public class Invoice {
 //			throw new CustomerExceptionHandler("Publication Id exceeds maximum length requirements");
 //		
 //	}
-	public static void validatePaymentMethod(String paymentMethod) throws CustomerExceptionHandler {
-	
-	//Agree Formating Rules on "Order Date"
-	//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
-	
-	if (paymentMethod.isBlank() || paymentMethod.isEmpty())
-		throw new CustomerExceptionHandler("Payment Method NOT specified");
-	else if (paymentMethod.length() < 5)
-		throw new CustomerExceptionHandler("Payment Method does not meet minimum length requirements");
-	else if (paymentMethod.length() > 60)
-		throw new CustomerExceptionHandler("Payment Method exceeds maximum length requirements");
-	
-}
 }
