@@ -1,0 +1,3 @@
+USE newsagent;
+
+DROP TABLE 
