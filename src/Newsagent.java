@@ -6,16 +6,9 @@ public class Newsagent {
 	private String address;
 	private String phoneNumber;
 	private String email;
-	private Boolean subscriptionStatus;
+	
 
 
-	public Boolean getSubscriptionStatus() {
-		return subscriptionStatus;
-	}
-
-	public void setSubscriptionStatus(Boolean subscriptionStatus) {
-		this.subscriptionStatus = subscriptionStatus;
-	}
 
 	void setId(int custId) {
 		id = custId;
@@ -58,15 +51,14 @@ public class Newsagent {
 		
 	}
 	
-	public Customer() {
+	public Newsagent() {
 		this.address =null;
 		this.name = null;
 		this.phoneNumber = null;
 		this.email = null;
-		this.subscriptionStatus = null;
 	}
 	
-	public Customer(String custName, String custAddr, String custPhone, String custEmail, Boolean custSubscriptionStatus) throws CustomerExceptionHandler  {
+	public Newsagent(String custName, String custAddr, String custPhone, String custEmail) throws CustomerExceptionHandler  {
 		
 		id = 0;
 		
