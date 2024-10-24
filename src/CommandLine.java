@@ -14,7 +14,14 @@ public class CommandLine {
 		System.out.println("Please choose ONE of the following options:");
 		System.out.println("1. Create Customer Account");
 		System.out.println("2. View ALL Customer Records");
-		System.out.println("3. Delete Customer Record by ID");
+		System.out.println("3. Update Customer Record by ID");
+        System.out.println("4. Delete Inactive Customer Records");
+        System.out.println("5. Create Delivery Person");
+        System.out.println("6. Update Delivery Person");
+        System.out.println("7. Delete Delivery Person");
+        System.out.println("8. Create Invoice");
+        System.out.println("9. Update Invoice");
+        System.out.println("10. Cancel Invoice");
 		System.out.println("99. Close the NewsAgent Application");
 		System.out.println("=============================================");
 		System.out.println(" ");
@@ -54,6 +61,93 @@ public class CommandLine {
 		
 	}
 
+	private static void updateCustomer(Scanner keyboard, MySQLAccess dao) {
+        // Implementation for updating customer details
+        System.out.println("Enter Customer ID to update:");
+        int updateId = keyboard.nextInt();
+        keyboard.nextLine();
+        
+        // Get updated details
+        System.out.printf("Enter New Customer Name: \n");
+        String custName = keyboard.nextLine();
+        System.out.printf("Enter New Customer Address: \n");
+        String custAddr = keyboard.nextLine();
+        System.out.printf("Enter New Customer PhoneNumber: \n");
+        String custPhoneNumber = keyboard.nextLine();
+        System.out.printf("Enter New Customer Email: \n");
+        String custEmail = keyboard.nextLine();
+        
+        try {
+            boolean updateResult = dao.updateCustomerDetails(updateId, custName, custAddr, custPhoneNumber, custEmail);
+            System.out.println(updateResult ? "Customer Details Updated" : "ERROR: Customer Details NOT Updated");
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+	
+	private static void createDeliveryPerson(Scanner keyboard, MySQLAccess dao) {
+        // Implementation for creating a delivery person
+		System.out.printf("Enter Delivery Person First Name: \n");
+        String firstName = keyboard.nextLine();
+        
+        System.out.printf("Enter Delivery Person Last Name: \n");
+        String lastName = keyboard.nextLine();
+        
+        System.out.printf("Enter Delivery Person ID (format DP/123): \n");
+        String id = keyboard.nextLine();
+        
+        System.out.printf("Enter Delivery Person Phone Number: \n");
+        String phone = keyboard.nextLine();
+        
+        System.out.printf("Enter Assigned Area: \n");
+        String area = keyboard.nextLine();
+        
+        System.out.printf("Enter Status (Out for delivery/Returned/Inactive): \n");
+        String status = keyboard.nextLine();
+        
+        try {
+        	 DeliveryPerson deliveryPerson = new DeliveryPerson(firstName, lastName, id, phone, area, status);
+             boolean insertResult = dao.insertDeliveryPerson(deliveryPerson);
+            System.out.println(insertResult ? "Delivery Person Created" : "ERROR: Delivery Person NOT Created");
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+	private static void updateDeliveryPerson(Scanner keyboard, MySQLAccess dao) {
+	    // Implementation for updating delivery person details
+	    System.out.println("Enter Delivery Person ID to update:");
+	    String updateId = keyboard.nextLine();
+
+	    // Get updated details
+	    System.out.printf("Enter New Delivery Person First Name: \n");
+	    String firstName = keyboard.nextLine();
+	    System.out.printf("Enter New Delivery Person Last Name: \n");
+	    String lastName = keyboard.nextLine();
+	    System.out.printf("Enter New Delivery Person Phone Number (10 digits): \n");
+	    String phone = keyboard.nextLine();
+	    System.out.printf("Enter New Assigned Area: \n");
+	    String area = keyboard.nextLine();
+	    System.out.printf("Enter New Status (Out for delivery/Returned/Inactive): \n");
+	    String status = keyboard.nextLine();
+
+	    try {
+	        // Create a new DeliveryPerson object with the updated details
+	        DeliveryPerson deliveryPerson = new DeliveryPerson(firstName, lastName, updateId, phone, area, status);
+	        boolean updateResult = dao.updateDeliveryPersonDetails(deliveryPerson); // You'll need to implement this method in MySQLAccess
+	        System.out.println(updateResult ? "Delivery Person Details Updated" : "ERROR: Delivery Person Details NOT Updated");
+	    } catch (DeliveryPersonException e) {
+	        System.out.println("ERROR: " + e.getMessage());
+	    } catch (Exception e) {
+	        System.out.println("ERROR: " + e.getMessage());
+	    }
+	}
+
+    private static void deleteDeliveryPerson(Scanner keyboard, MySQLAccess dao) {
+        // Implementation for deleting delivery person
+        System.out.println("Enter Delivery Person ID to delete:");
+        String deleteId = keyboard.nextLine();
+        boolean deleteResult = true;
+    }
 	public static void main(String[] args) {
 		
 		//Create the Database Object
@@ -124,6 +218,10 @@ public class CommandLine {
 					break;
 					
 				case "3":
+					updateCustomer(keyboard, dao);
+				    break;
+				
+				case "4":
 					//Delete Customer Record by ID
 					System.out.println("Enter Customer ID to be deleted or -99 to Clear all Rows:");
 					while (!keyboard.hasNextInt()) {
@@ -147,7 +245,19 @@ public class CommandLine {
 					    }
 					}
 					break;
-			
+				case "5":
+				        createDeliveryPerson(keyboard, dao);
+				        break;
+				case "6":
+				        updateDeliveryPerson(keyboard, dao);
+				        break;
+				case "7":
+				        deleteDeliveryPerson(keyboard, dao);
+				        break;
+				case "8":
+				        // Create invoice logic...
+				        break;
+				        
 				case "99":
 					System.out.println("Are you sure you want to exit? (yes/no): ");
 					String exitConfirmation = keyboard.nextLine();
