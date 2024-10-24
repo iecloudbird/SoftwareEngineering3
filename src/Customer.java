@@ -29,7 +29,8 @@ public class Customer {
 		address = custAddr;
 	}
 	
-	void setPhoneNumber(String custPhone) {
+	void setPhoneNumber(String custPhone) throws CustomerExceptionHandler {
+		validatePhoneNumber(custPhone);
 		phoneNumber = custPhone;
 	}
 	
@@ -37,7 +38,8 @@ public class Customer {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(String email) throws CustomerExceptionHandler {
+		validateEmail(email);  
 		this.email = email;
 	}
 
@@ -78,17 +80,17 @@ public class Customer {
 			validatePhoneNumber(custPhone);
 			validateEmail(custEmail);
 			
+			// Set attributes if valid
+			name = custName;
+			address = custAddr;
+			phoneNumber = custPhone;
+			email = custEmail;
+			subscriptionStatus = custSubscriptionStatus;
+			
 		}
 		catch (CustomerExceptionHandler e) {
 			throw e;
 		}
-		
-		// Set Attributes
-		name = custName;
-		address = custAddr;
-		phoneNumber = custPhone;
-		email = custEmail;
-		subscriptionStatus = custSubscriptionStatus;
 	}
 	
 	public static void validateName(String custName) throws CustomerExceptionHandler {
@@ -143,7 +145,11 @@ public class Customer {
 			
 		if (email.isBlank() || email.isEmpty()) {
 	        throw new CustomerExceptionHandler("Customer Email NOT specified");
-	    } else if (email.length() < 5) {
+	    }
+		else if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+			throw new CustomerExceptionHandler("Invalid email format");
+		}
+		else if (email.length() < 5) {
 	        throw new CustomerExceptionHandler("Customer Email does not meet minimum length requirements");
 	    } else if (email.length() > 50) {
 	        throw new CustomerExceptionHandler("Customer Email exceeds maximum length requirements");
