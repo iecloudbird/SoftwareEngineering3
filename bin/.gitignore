@@ -5,3 +5,8 @@
 /DeliveryArea.class
 /DeliveryDocket.class
 /DeliveryDocketException.class
+/customer.sql
+/Newsagent.class
+/NewsagentTest.class
+/WarningLetter.class
+/WarningLetterTest.class
