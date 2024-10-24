@@ -2,7 +2,7 @@
 public class DeliveryPerson {
 	private String firstName;
     private String lastName;
-    private String deliveryPersonId; // Format: DP/xx/ddd
+    private String deliveryPersonId; // Format: DP003
     private String phoneNumber; // 10 digits
     private String assignedArea;
     private String status; // Options: "Out for delivery", "Returned", "Inactive"
@@ -47,7 +47,7 @@ public class DeliveryPerson {
     }
 
     public static void validateDeliveryPersonId(String deliveryPersonId) throws DeliveryPersonException {
-        if (deliveryPersonId == null || !deliveryPersonId.matches("DP/\\d{2}/\\d{3}")) {
+        if (deliveryPersonId == null || !deliveryPersonId.matches("DP\\d{3}")) {
             throw new DeliveryPersonException("Delivery Person ID must be in the format DP/xx/ddd (Two digits followed by three digits).");
         }
     }

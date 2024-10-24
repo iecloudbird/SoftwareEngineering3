@@ -8,6 +8,7 @@ public class DeliveryDocket {
     private String orderId;
     private LocalDate deliveryDate;
     private String deliveryStatus; // "Delivered", "Out for delivery", "Not delivered"
+    private String details;
 
     // Regular expression for valid docket ID
     private static final String DOCKET_ID_PATTERN = "D\\d{5}";
@@ -20,9 +21,10 @@ public class DeliveryDocket {
         this.orderId = null;
         this.deliveryDate = null;
         this.deliveryStatus = null;
+        this.details = null;
     }
 
-    public DeliveryDocket(String docketId, String orderId, String deliveryDate, String deliveryStatus) throws DeliveryDocketException {
+    public DeliveryDocket(String docketId, String orderId, String deliveryDate, String deliveryStatus, String details) throws DeliveryDocketException {
         try {
             validateDocketId(docketId);
             validateOrderId(orderId);
@@ -36,6 +38,7 @@ public class DeliveryDocket {
         this.orderId = orderId;
         this.deliveryDate = LocalDate.parse(deliveryDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         this.deliveryStatus = deliveryStatus;
+        this.details = details;
     }
 
     public String getDocketId() {
@@ -67,7 +70,9 @@ public class DeliveryDocket {
     }
 
     public static void validateOrderId(String orderId) throws DeliveryDocketException {
-
+        if (orderId == null || orderId.isEmpty()) {
+            throw new DeliveryDocketException("Order ID cannot be null or empty");
+        }
     }
 
     public static void validateDeliveryDate(String deliveryDate) throws DeliveryDocketException {
