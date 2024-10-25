@@ -84,10 +84,10 @@ public class WarningLetterTest extends TestCase {
     
     public void testInvalidCustomerReasonLength() {
         try {
-            WarningLetter.validateReason"8");
+            WarningLetter.validateReason("P");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer PhoneNumber does not meet minimum length requirements", e.getMessage());
+            assertEquals("Reason does not meet minimum length requirements", e.getMessage());
         }
     }
 
@@ -96,10 +96,10 @@ public class WarningLetterTest extends TestCase {
     // Inputs: custPhone = "0874555757"
     // Expected Output: No exception, phone number is valid
     
-    public void testValidCustomerPhoneNumber() {
+    public void testValidCustomerReason() {
         try {
-            Customer custObj = new Customer("John Doe", "Athlone", "0874555757", "john@example.com",true);
-            assertEquals("0874555757", custObj.getPhoneNumber());
+            WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
+            assertEquals("0874555757", custId.getReason());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
         }
@@ -110,12 +110,12 @@ public class WarningLetterTest extends TestCase {
     // Inputs: email = "a@p"
     // Expected Output: Exception Message: "Customer Email does not meet minimum length requirements"
     
-    public void testInvalidCustomerEmailFormat() {
+    public void testInvalidDueAmountFormat() {
         try {
-            Customer.validateEmail("a@p");
+            WarningLetter.validateDueAmount("a@p");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Email does not meet minimum length requirements", e.getMessage());
+            assertEquals("Due Amount does not meet minimum length requirements", e.getMessage());
         }
     }
 
@@ -124,10 +124,10 @@ public class WarningLetterTest extends TestCase {
     // Inputs: email = "jack@example.com"
     // Expected Output: No exception, email is valid
     
-    public void testValidCustomerEmail() {
+    public void testValidDueAmount() {
         try {
-            Customer custObj = new Customer("Jack Daniels", "Athlone", "0874555757", "jack@example.com",true);
-            assertEquals("jack@example.com", custObj.getEmail());
+            WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
+            assertEquals("90.00", custId.getDueAmount());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
         }
@@ -135,14 +135,14 @@ public class WarningLetterTest extends TestCase {
     
 	 // Test #: 9
 	 // Test Objective: To validate the format of customer ID (e.g., #C00000)
-	 public void testValidateCustomerIDFormat() {
+	 public void testValidateIssueDateFormat() {
 		 try {
 		        // Arrange & Act
-		        Customer customer = new Customer("Jack Daniels", "Athlone", "0871234567", "jack@example.com",true);
+		        WarningLetter issueDate = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
 		        
 		        // Assert
-		        int expectedCustomerId = 0; 
-		        assertEquals(expectedCustomerId, customer.getId());
+		        int expectedIssueDate = 0; 
+		        assertEquals(expectedIssueDate, issueDate.getIssueDate());
 		    } catch (CustomerExceptionHandler e) {
 		        fail("Exception was not expected.");
 		    }

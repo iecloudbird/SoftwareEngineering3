@@ -12,20 +12,20 @@ public class NewsagentTest extends TestCase {
 	//Test Objective: To create a Customer Account
 	//Inputs: custName = "Jack Daniels", custAddr = "Athlone", custPhone = "087-123123123", email = "jack@example.com"
 	// Expected Output: Customer Object created with id = 0, "Jack Daniels", "Athlone", "087-123123123", "jack@example.com"	//Expected Output: Customer Object created with id = 0, "Jack Daniels", custAddr = "Athlone", custPhone = "087-123123123"
-	public void testCreateCustomerSuccess() {
+	public void testCreateNewsagentSuccess() {
 		
 		//Create the Customer Object
 		try {
 			
 			// Call method under test
-            Customer custObj = new Customer("Jack Daniels", "Athlone", "0871231233", "jack@example.com",true);
+			Newsagent newsObj = new Newsagent("Jack Daniels", "Athlone", "0871231233", "jack@example.com");
             
             // Use getters to check for object creation
-            assertEquals(0, custObj.getId());
-            assertEquals("Jack Daniels", custObj.getName());
-            assertEquals("Athlone", custObj.getAddress());
-            assertEquals("0871231233", custObj.getPhoneNumber());
-            assertEquals("jack@example.com", custObj.getEmail());
+            assertEquals(0, newsObj.getId());
+            assertEquals("Jack Daniels", newsObj.getName());
+            assertEquals("Athlone", newsObj.getAddress());
+            assertEquals("0871231233", newsObj.getPhoneNumber());
+            assertEquals("jack@example.com", newsObj.getEmail());
 		}
 		catch (CustomerExceptionHandler e) {
 			fail("Exception not expected");
@@ -38,13 +38,13 @@ public class NewsagentTest extends TestCase {
     // Inputs: custName = "J"
     // Expected Output: Exception Message: "Customer Name does not meet minimum length requirements"
     
-    public void testInvalidCustomerNameLength() {
+    public void testInvalidNewsagentNameLength() {
         try {
             // Call method under test
-            Customer.validateName("J");
+            Newsagent.validateName("J");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Name does not meet minimum length requirements", e.getMessage());
+            assertEquals("Newsagent Name does not meet minimum length requirements", e.getMessage());
         }
     }
     
@@ -53,12 +53,12 @@ public class NewsagentTest extends TestCase {
     // Inputs: custAddr = "A"
     // Expected Output: Exception Message: "Customer Address does not meet minimum length requirements"
     
-    public void testInvalidCustomerAddressLength() {
+    public void testInvalidNewsagentAddressLength() {
         try {
-            Customer.validateAddress("A");
+        	Newsagent.validateAddress("A");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Address does not meet minimum length requirements", e.getMessage());
+            assertEquals("Newsagent Address does not meet minimum length requirements", e.getMessage());
         }
     }
 
@@ -67,10 +67,10 @@ public class NewsagentTest extends TestCase {
     // Inputs: custAddr = "Athlone"
     // Expected Output: No exception, address is valid
     
-    public void testValidCustomerAddress() {
+    public void testValidNewsagentAddress() {
         try {
-            Customer custObj = new Customer("John Doe", "Athlone", "0874555757", "john@example.com",true);
-            assertEquals("Athlone", custObj.getAddress());
+        	Newsagent newsObj = new Newsagent("John Doe", "Athlone", "0874555757", "john@example.com");
+            assertEquals("Athlone", newsObj.getAddress());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
         }
@@ -81,12 +81,12 @@ public class NewsagentTest extends TestCase {
     // Inputs: custPhone = "8"
     // Expected Output: Exception Message: "Customer PhoneNumber does not meet minimum length requirements"
     
-    public void testInvalidCustomerPhoneNumberLength() {
+    public void testInvalidNewsagentPhoneNumberLength() {
         try {
-            Customer.validatePhoneNumber("8");
+        	Newsagent.validatePhoneNumber("8");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer PhoneNumber does not meet minimum length requirements", e.getMessage());
+            assertEquals("Newsagent PhoneNumber does not meet minimum length requirements", e.getMessage());
         }
     }
 
@@ -95,10 +95,10 @@ public class NewsagentTest extends TestCase {
     // Inputs: custPhone = "0874555757"
     // Expected Output: No exception, phone number is valid
     
-    public void testValidCustomerPhoneNumber() {
+    public void testValidNewsagentPhoneNumber() {
         try {
-            Customer custObj = new Customer("John Doe", "Athlone", "0874555757", "john@example.com",true);
-            assertEquals("0874555757", custObj.getPhoneNumber());
+        	Newsagent newsObj = new Newsagent("John Doe", "Athlone", "0874555757", "john@example.com");
+            assertEquals("0874555757", newsObj.getPhoneNumber());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
         }
@@ -109,12 +109,12 @@ public class NewsagentTest extends TestCase {
     // Inputs: email = "a@p"
     // Expected Output: Exception Message: "Customer Email does not meet minimum length requirements"
     
-    public void testInvalidCustomerEmailFormat() {
+    public void testInvalidNewsagentEmailFormat() {
         try {
-            Customer.validateEmail("a@p");
+        	Newsagent.validateEmail("a@p");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Email does not meet minimum length requirements", e.getMessage());
+            assertEquals("Newsagent Email does not meet minimum length requirements", e.getMessage());
         }
     }
 
@@ -123,10 +123,10 @@ public class NewsagentTest extends TestCase {
     // Inputs: email = "jack@example.com"
     // Expected Output: No exception, email is valid
     
-    public void testValidCustomerEmail() {
+    public void testValidNewsagentEmail() {
         try {
-            Customer custObj = new Customer("Jack Daniels", "Athlone", "0874555757", "jack@example.com",true);
-            assertEquals("jack@example.com", custObj.getEmail());
+        	Newsagent newsObj = new Newsagent("Jack Daniels", "Athlone", "0874555757", "jack@example.com");
+            assertEquals("jack@example.com", newsObj.getEmail());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
         }
@@ -134,14 +134,14 @@ public class NewsagentTest extends TestCase {
     
 	 // Test #: 9
 	 // Test Objective: To validate the format of customer ID (e.g., #C00000)
-	 public void testValidateCustomerIDFormat() {
+	 public void testValidateNewsagentIDFormat() {
 		 try {
 		        // Arrange & Act
-		        Customer customer = new Customer("Jack Daniels", "Athlone", "0871234567", "jack@example.com",true);
+			 Newsagent newsagent = new Newsagent("Jack Daniels", "Athlone", "0871234567", "jack@example.com");
 		        
 		        // Assert
-		        int expectedCustomerId = 0; 
-		        assertEquals(expectedCustomerId, customer.getId());
+		        int expectedNewsagentId = 0; 
+		        assertEquals(expectedNewsagentId, newsagent.getId());
 		    } catch (CustomerExceptionHandler e) {
 		        fail("Exception was not expected.");
 		    }
@@ -149,9 +149,9 @@ public class NewsagentTest extends TestCase {
 	 
 	// Test #: 10
 	// Test Objective: Validate name of exactly 1 character
-	public void testCustomerNameMinBoundary() {
+	public void testNewsagentNameMinBoundary() {
 	    try {
-	        Customer.validateName("AB");
+	    	Newsagent.validateName("AB");
 	        assertEquals("AB", "AB");
 	    } catch (CustomerExceptionHandler e) {
 	        fail("Exception not expected");
@@ -163,7 +163,7 @@ public class NewsagentTest extends TestCase {
 	public void testValidateNameMaxBoundary() {
 	    try {
 	    	String validName = "Alexanderson123";  // 15 characters
-	        Customer.validateName(validName);
+	    	Newsagent.validateName(validName);
 	        
 	      
 	        assertEquals(validName, "Alexanderson123");
@@ -176,7 +176,7 @@ public class NewsagentTest extends TestCase {
 	// Test Objective: Validate address of exactly 5 character (boundary case)
 	public void testValidateAddressMinBoundary() {
 	    try {
-	        Customer.validateAddress("1glen");
+	    	Newsagent.validateAddress("1glen");
 	        assertTrue(true);  
 	    } catch (CustomerExceptionHandler e) {
 	        fail("Exception not expected");
@@ -188,7 +188,7 @@ public class NewsagentTest extends TestCase {
 	public void testValidateAddressMaxBoundary() {
 	    String longAddress = "A".repeat(60); //total 60 characters
 	    try {
-	        Customer.validateAddress(longAddress);
+	    	Newsagent.validateAddress(longAddress);
 	        assertTrue(true); 
 	    } catch (CustomerExceptionHandler e) {
 	        fail("Exception not expected");
@@ -201,10 +201,10 @@ public class NewsagentTest extends TestCase {
     // Expected Output: Exception with message "Customer PhoneNumber does not meet numeric format requirements".
 	public void testValidatePhoneNumberWithDashes() {
 	    try {
-	        Customer.validatePhoneNumber("087-1234567");
+	    	Newsagent.validatePhoneNumber("087-1234567");
 	        fail("Exception expected"); 
 	    } catch (CustomerExceptionHandler e) {
-	        assertEquals("Customer PhoneNumber does not meet numeric format requirements", e.getMessage());
+	        assertEquals("Newsagent PhoneNumber does not meet numeric format requirements", e.getMessage());
 	    }
 	}
 }
