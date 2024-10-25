@@ -18,7 +18,7 @@ public class WarningLetterTest extends TestCase {
 		try {
 			
 			// Call method under test
-            WarningLetter letterObj = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
+            WarningLetter letterObj = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, null);
             
             // Use getters to check for object creation
             assertEquals("923478", letterObj.getLetterId());
@@ -70,7 +70,7 @@ public class WarningLetterTest extends TestCase {
     
     public void testValidCustomerId() {
         try {
-            WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
+            WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, null);
             assertEquals("82614", custId.getCustId());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
@@ -98,7 +98,7 @@ public class WarningLetterTest extends TestCase {
     
     public void testValidCustomerReason() {
         try {
-            WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
+            WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, null);
             assertEquals("0874555757", custId.getReason());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
@@ -126,7 +126,8 @@ public class WarningLetterTest extends TestCase {
     
     public void testValidDueAmount() {
         try {
-            WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
+            WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, null);
+            //WarningLetter.validateDueAmount("90.00");
             assertEquals("90.00", custId.getDueAmount());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
@@ -138,7 +139,7 @@ public class WarningLetterTest extends TestCase {
 	 public void testValidateIssueDateFormat() {
 		 try {
 		        // Arrange & Act
-		        WarningLetter issueDate = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
+		        WarningLetter issueDate = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, null);
 		        
 		        // Assert
 		        int expectedIssueDate = 0; 
