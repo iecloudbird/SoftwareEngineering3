@@ -12,20 +12,21 @@ public class WarningLetterTest extends TestCase {
 	//Test Objective: To create a Customer Account
 	//Inputs: custName = "Jack Daniels", custAddr = "Athlone", custPhone = "087-123123123", email = "jack@example.com"
 	// Expected Output: Customer Object created with id = 0, "Jack Daniels", "Athlone", "087-123123123", "jack@example.com"	//Expected Output: Customer Object created with id = 0, "Jack Daniels", custAddr = "Athlone", custPhone = "087-123123123"
-	public void testCreateCustomerSuccess() {
+	public void testCreateWarningLetterSuccess() {
 		
 		//Create the Customer Object
 		try {
 			
 			// Call method under test
-            Customer custObj = new Customer("Jack Daniels", "Athlone", "0871231233", "jack@example.com",true);
+            WarningLetter letterObj = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
             
             // Use getters to check for object creation
-            assertEquals(0, custObj.getId());
-            assertEquals("Jack Daniels", custObj.getName());
-            assertEquals("Athlone", custObj.getAddress());
-            assertEquals("0871231233", custObj.getPhoneNumber());
-            assertEquals("jack@example.com", custObj.getEmail());
+            assertEquals("923478", letterObj.getLetterId());
+            assertEquals("8174239", letterObj.getOrderId());
+            assertEquals("82614", letterObj.getCustId());
+            assertEquals("Payment Issues", letterObj.getReason());
+            assertEquals("90.00", letterObj.getDueAmount());
+            assertEquals("2011-01-18", letterObj.getIssueDate());
 		}
 		catch (CustomerExceptionHandler e) {
 			fail("Exception not expected");
@@ -38,13 +39,13 @@ public class WarningLetterTest extends TestCase {
     // Inputs: custName = "J"
     // Expected Output: Exception Message: "Customer Name does not meet minimum length requirements"
     
-    public void testInvalidCustomerNameLength() {
+    public void testInvalidLetterIdLength() {
         try {
             // Call method under test
-            Customer.validateName("J");
+            WarningLetter.validateLetterId("J");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Name does not meet minimum length requirements", e.getMessage());
+            assertEquals("Letter Id does not meet minimum length requirements", e.getMessage());
         }
     }
     
@@ -53,12 +54,12 @@ public class WarningLetterTest extends TestCase {
     // Inputs: custAddr = "A"
     // Expected Output: Exception Message: "Customer Address does not meet minimum length requirements"
     
-    public void testInvalidCustomerAddressLength() {
+    public void testInvalidOrderIdLength() {
         try {
-            Customer.validateAddress("A");
+            WarningLetter.validateOrderId("A");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Address does not meet minimum length requirements", e.getMessage());
+            assertEquals("Order Id does not meet minimum length requirements", e.getMessage());
         }
     }
 
@@ -67,10 +68,10 @@ public class WarningLetterTest extends TestCase {
     // Inputs: custAddr = "Athlone"
     // Expected Output: No exception, address is valid
     
-    public void testValidCustomerAddress() {
+    public void testValidCustomerId() {
         try {
-            Customer custObj = new Customer("John Doe", "Athlone", "0874555757", "john@example.com",true);
-            assertEquals("Athlone", custObj.getAddress());
+            WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, "2011-01-18");
+            assertEquals("82614", custId.getCustId());
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
         }
@@ -81,9 +82,9 @@ public class WarningLetterTest extends TestCase {
     // Inputs: custPhone = "8"
     // Expected Output: Exception Message: "Customer PhoneNumber does not meet minimum length requirements"
     
-    public void testInvalidCustomerPhoneNumberLength() {
+    public void testInvalidCustomerReasonLength() {
         try {
-            Customer.validatePhoneNumber("8");
+            WarningLetter.validateReason"8");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
             assertEquals("Customer PhoneNumber does not meet minimum length requirements", e.getMessage());

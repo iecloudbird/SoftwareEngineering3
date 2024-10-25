@@ -80,7 +80,6 @@ public class Newsagent {
 		address = custAddr;
 		phoneNumber = custPhone;
 		email = custEmail;
-		subscriptionStatus = custSubscriptionStatus;
 	}
 	
 	public static void validateName(String custName) throws CustomerExceptionHandler {
