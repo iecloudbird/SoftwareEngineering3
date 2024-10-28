@@ -1,5 +1,4 @@
-
-import java.sql.Date;
+import java.util.Date;
 
 public class WarningLetter {
 	
@@ -64,7 +63,7 @@ public class WarningLetter {
 		this.custId = null;
 		this.reason = null;
 		this.dueAmount = 0;
-		this.issueDate = null;
+		this.issueDate = new Date(); 
 	}
 	
 	public WarningLetter(String letterId, String orderId, String custId, String reason, double dueAmount, Date issueDate) throws CustomerExceptionHandler  {
@@ -81,18 +80,17 @@ public class WarningLetter {
 			validateDueAmount(dueAmount);
 			validateIssueDate(issueDate);
 			
+			 // Set Attributes
+			this.letterId = letterId;
+	        this.orderId = orderId;
+	        this.custId = custId;
+	        this.reason = reason;
+	        this.dueAmount = dueAmount;
+	        this.issueDate = (issueDate == null) ? new Date() : issueDate;
 		}
 		catch (CustomerExceptionHandler e) {
 			throw e;
 		}
-		
-		// Set Attributes
-		letterId = letterId;
-		orderId = orderId;
-		custId = custId;
-		reason = reason;
-		dueAmount = dueAmount;
-		issueDate = issueDate;
 		
 	}
 	
@@ -129,17 +127,15 @@ public class WarningLetter {
 		//Agree Formating Rules on "Customer PhoneNumber"
 		//E.G. Name String must be a minimum of 7 characters and a maximum of 15 characters
 		
-		if (custId.isBlank() || custId.isEmpty())
-			throw new CustomerExceptionHandler("Customer Id NOT specified");
-		else if (!custId.matches("\\d+")) {  // Ensure it contains only digits
-	        throw new CustomerExceptionHandler("Customer Id does not meet numeric format requirements");
-	    }
-		else if (custId.length() < 7)
-			throw new CustomerExceptionHandler("Customer Id does not meet minimum length requirements");
-		else if (custId.length() > 15)
-			throw new CustomerExceptionHandler("Customer Id exceeds maximum length requirements");
-		
-	}
+		if (custId == null || custId.isBlank())
+            throw new CustomerExceptionHandler("Customer Id NOT specified");
+        if (!custId.matches("\\d+"))	
+            throw new CustomerExceptionHandler("Customer Id does not meet numeric format requirements");
+        if (custId.length() < 7)
+            throw new CustomerExceptionHandler("Customer Id does not meet minimum length requirements");
+        if (custId.length() > 15)
+            throw new CustomerExceptionHandler("Customer Id exceeds maximum length requirements");
+    }
 
 	public static void validateReason(String reason) throws CustomerExceptionHandler {
 			

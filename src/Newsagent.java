@@ -6,9 +6,6 @@ public class Newsagent {
 	private String address;
 	private String phoneNumber;
 	private String email;
-	
-
-
 
 	void setId(int custId) {
 		id = custId;
@@ -134,11 +131,13 @@ public class Newsagent {
 			
 		if (email.isBlank() || email.isEmpty()) {
 	        throw new CustomerExceptionHandler("Customer Email NOT specified");
-	    } else if (email.length() < 5) {
-	        throw new CustomerExceptionHandler("Customer Email does not meet minimum length requirements");
-	    } else if (email.length() > 50) {
-	        throw new CustomerExceptionHandler("Customer Email exceeds maximum length requirements");
-	    }
+	    } 
+		if (email.length() < 5)
+            throw new CustomerExceptionHandler("Customer Email does not meet minimum length requirements");
+        if (email.length() > 50)
+            throw new CustomerExceptionHandler("Customer Email exceeds maximum length requirements");
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
+            throw new CustomerExceptionHandler("Customer Email format is invalid");
 			
 		}
 }
