@@ -1,3 +1,5 @@
+import java.util.Date;
+
 import junit.framework.TestCase;
 
 /*
@@ -8,19 +10,18 @@ import junit.framework.TestCase;
 
 public class WarningLetterTest extends TestCase {
 	
-	//Test #: 1
-	//Test Objective: To create a Customer Account
-	//Inputs: custName = "Jack Daniels", custAddr = "Athlone", custPhone = "087-123123123", email = "jack@example.com"
-	// Expected Output: Customer Object created with id = 0, "Jack Daniels", "Athlone", "087-123123123", "jack@example.com"	//Expected Output: Customer Object created with id = 0, "Jack Daniels", custAddr = "Athlone", custPhone = "087-123123123"
+	// Test #: 1
+		// Test Objective: Create a WarningLetter with valid inputs.
+		// Inputs: letterId = "923478", orderId = "8174239", custId = "82614", reason = "Payment Issues", dueAmount = 90.00, issueDate = null
+		// Expected Output: WarningLetter object created with the specified values.
 	public void testCreateWarningLetterSuccess() {
 		
-		//Create the Customer Object
+		// Create the WarningLetter object with valid inputs
 		try {
-			
 			// Call method under test
             WarningLetter letterObj = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, null);
             
-            // Use getters to check for object creation
+            /// Validate the object properties with expected values
             assertEquals("923478", letterObj.getLetterId());
             assertEquals("8174239", letterObj.getOrderId());
             assertEquals("82614", letterObj.getCustId());
@@ -34,10 +35,10 @@ public class WarningLetterTest extends TestCase {
 		
 	}
 	
-	// Test #: 2
-    // Test Objective: To catch an invalid customer name
-    // Inputs: custName = "J"
-    // Expected Output: Exception Message: "Customer Name does not meet minimum length requirements"
+	/// Test #: 2
+    // Test Objective:  Invalid letterId - Boundary case (1 character)
+    // Inputs: letterId = "J"
+    // Expected Output: Exception with message "Letter Id does not meet minimum length requirements".
     
     public void testInvalidLetterIdLength() {
         try {
@@ -49,11 +50,10 @@ public class WarningLetterTest extends TestCase {
         }
     }
     
-    // Test #: 3
-    // Test Objective: To catch an invalid customer address
-    // Inputs: custAddr = "A"
-    // Expected Output: Exception Message: "Customer Address does not meet minimum length requirements"
-    
+ // Test #: 3
+    // Test Objective: Verify that an exception is thrown for an invalid order ID with insufficient length.
+    // Inputs: orderId = "A"
+    // Expected Output: Exception with message "Order Id does not meet minimum length requirements".
     public void testInvalidOrderIdLength() {
         try {
             WarningLetter.validateOrderId("A");
@@ -64,10 +64,9 @@ public class WarningLetterTest extends TestCase {
     }
 
     // Test #: 4
-    // Test Objective: To successfully validate a customer address
-    // Inputs: custAddr = "Athlone"
-    // Expected Output: No exception, address is valid
-    
+    // Test Objective: Verify that a valid customer ID is accepted without exception.
+    // Inputs: custId = "82614"
+    // Expected Output: No exception, customer ID is valid.
     public void testValidCustomerId() {
         try {
             WarningLetter custId = new WarningLetter("923478", "8174239", "82614", "Payment Issues", 90.00, null);
@@ -78,9 +77,9 @@ public class WarningLetterTest extends TestCase {
     }
     
     // Test #: 5
-    // Test Objective: To catch an invalid customer phone number
-    // Inputs: custPhone = "8"
-    // Expected Output: Exception Message: "Customer PhoneNumber does not meet minimum length requirements"
+    // Test Objective: Verify that an exception is thrown for a reason that doesn't meet minimum length requirements.
+    // Inputs: reason = "P"
+    // Expected Output: Exception with message "Reason does not meet minimum length requirements".
     
     public void testInvalidCustomerReasonLength() {
         try {
@@ -92,9 +91,9 @@ public class WarningLetterTest extends TestCase {
     }
 
     // Test #: 6
-    // Test Objective: To successfully validate a customer phone number
-    // Inputs: custPhone = "0874555757"
-    // Expected Output: No exception, phone number is valid
+    // Test Objective: Verify that a valid reason is accepted without exception.
+    // Inputs: reason = "Payment Issues"
+    // Expected Output: No exception, reason is valid.
     
     public void testValidCustomerReason() {
         try {
@@ -106,10 +105,9 @@ public class WarningLetterTest extends TestCase {
     }
 
     // Test #: 7
-    // Test Objective: To catch an invalid customer email
-    // Inputs: email = "a@p"
-    // Expected Output: Exception Message: "Customer Email does not meet minimum length requirements"
-    
+    // Test Objective: Verify that an invalid due amount format triggers an exception.
+    // Inputs: dueAmount = "a@p"
+    // Expected Output: Exception with message "Due Amount does not meet format requirements".   
     public void testInvalidDueAmountFormat() {
         try {
             WarningLetter.validateDueAmount("a@p");
@@ -120,9 +118,9 @@ public class WarningLetterTest extends TestCase {
     }
 
     // Test #: 8
-    // Test Objective: To successfully validate a customer email
-    // Inputs: email = "jack@example.com"
-    // Expected Output: No exception, email is valid
+    // Test Objective: Verify that a valid due amount is accepted without exception.
+    // Inputs: dueAmount = 90.00
+    // Expected Output: No exception, due amount is valid.
     
     public void testValidDueAmount() {
         try {
@@ -134,8 +132,10 @@ public class WarningLetterTest extends TestCase {
         }
     }
     
-	 // Test #: 9
-	 // Test Objective: To validate the format of customer ID (e.g., #C00000)
+	// Test #: 9
+	// Test Objective: Verify the correct handling and formatting of the issue date.
+	// Inputs: issueDate = null
+	// Expected Output: issueDate is null initially, no exceptions thrown.
 	 public void testValidateIssueDateFormat() {
 		 try {
 		        // Arrange & Act
@@ -150,7 +150,9 @@ public class WarningLetterTest extends TestCase {
 	 }
 	 
 	// Test #: 10
-	// Test Objective: Validate name of exactly 1 character
+	// Test Objective: Validate customer name with exactly the minimum required characters.
+	// Inputs: custName = "AB"
+	// Expected Output: No exception, name is valid.
 	public void testCustomerNameMinBoundary() {
 	    try {
 	        Customer.validateName("AB");
@@ -161,7 +163,9 @@ public class WarningLetterTest extends TestCase {
 	}
 	
 	// Test #: 11
-	// Test Objective: Validate name of exactly 15 characters (boundary case)
+	// Test Objective: Validate customer name at maximum length boundary.
+	// Inputs: custName = "Alexanderson123" (15 characters)
+	// Expected Output: No exception, name is valid.
 	public void testValidateNameMaxBoundary() {
 	    try {
 	    	String validName = "Alexanderson123";  // 15 characters
@@ -175,7 +179,9 @@ public class WarningLetterTest extends TestCase {
 	}
 	
 	// Test #: 12
-	// Test Objective: Validate address of exactly 5 character (boundary case)
+	// Test Objective: Validate customer address at minimum length boundary.
+	// Inputs: custAddr = "1glen" (5 characters)
+	// Expected Output: No exception, address is valid.
 	public void testValidateAddressMinBoundary() {
 	    try {
 	        Customer.validateAddress("1glen");
@@ -186,7 +192,9 @@ public class WarningLetterTest extends TestCase {
 	}
 
 	// Test #: 13
-	// Test Objective: Validate address of exactly 100 characters (assuming max length is 100)
+	// Test Objective: Validate customer address at maximum length boundary.
+	// Inputs: custAddr = "A".repeat(60) (total 60 characters)
+	// Expected Output: No exception, address is valid.
 	public void testValidateAddressMaxBoundary() {
 	    String longAddress = "A".repeat(60); //total 60 characters
 	    try {
@@ -198,9 +206,9 @@ public class WarningLetterTest extends TestCase {
 	}
 	
 	// Test #: 14
-	// Test Objective: Catch invalid customer phone number containing special characters (dashes).
-    // Input: custPhone = "087-1234567"
-    // Expected Output: Exception with message "Customer PhoneNumber does not meet numeric format requirements".
+	// Test Objective: Catch an invalid phone number containing special characters (dashes).
+	// Input: custPhone = "087-1234567"
+	// Expected Output: Exception with message "Customer PhoneNumber does not meet numeric format requirements".
 	public void testValidatePhoneNumberWithDashes() {
 	    try {
 	        Customer.validatePhoneNumber("087-1234567");

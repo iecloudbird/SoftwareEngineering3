@@ -1,3 +1,4 @@
+
 import java.sql.Date;
 
 public class WarningLetter {
@@ -154,32 +155,27 @@ public class WarningLetter {
 	    }
 			
 		}
-	public static void validateDueAmount(String dueAmount) throws CustomerExceptionHandler {
+	public static void validateDueAmount(double dueAmount) throws CustomerExceptionHandler {
 		
 		//Agree Formating Rules on "Customer Email"
 		//E.G. Name String must be a minimum of 7 characters and a maximum of 15 characters
 		
-	if (dueAmount.isBlank() || dueAmount.isEmpty()) {
-        throw new CustomerExceptionHandler("Customer dueAmount NOT specified");
-    } else if (dueAmount.length() < 5) {
-        throw new CustomerExceptionHandler("Customer dueAmount does not meet minimum length requirements");
-    } else if (dueAmount.length() > 50) {
-        throw new CustomerExceptionHandler("Customer dueAmount exceeds maximum length requirements");
-    }
+		if (Double.isNaN(dueAmount)) {
+	        throw new CustomerExceptionHandler("Due amount is not specified or is invalid.");
+	    } else if (dueAmount < 0) {
+	        throw new CustomerExceptionHandler("Due amount cannot be negative.");
+	    } else if (dueAmount > 1000) {
+	        throw new CustomerExceptionHandler("Due amount exceeds the allowed maximum of 1000.");
+	    }
 		
 	}
-	public static void validateIssueDate(String issueDate) throws CustomerExceptionHandler {
+	public static void validateIssueDate(Date issueDate) throws CustomerExceptionHandler {
 		
 		//Agree Formating Rules on "Customer Email"
 		//E.G. Name String must be a minimum of 7 characters and a maximum of 15 characters
-		
-	if (issueDate.isBlank() || issueDate.isEmpty()) {
-        throw new CustomerExceptionHandler("Customer issueDate NOT specified");
-    } else if (issueDate.length() < 5) {
-        throw new CustomerExceptionHandler("Customer issueDate does not meet minimum length requirements");
-    } else if (issueDate.length() > 50) {
-        throw new CustomerExceptionHandler("Customer issueDate exceeds maximum length requirements");
-    }
+		 if (issueDate == null) {
+		        throw new CustomerExceptionHandler("Issue date is not specified.");
+		    }
 		
 	}
 	

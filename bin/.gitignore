@@ -1,15 +1,6 @@
-/DeliveryPerson.class
-/DeliveryPersonException.class
-/Invoice.class
-/InvoiceTest.class
-/DeliveryArea.class
-/DeliveryDocket.class
-/DeliveryDocketException.class
-/customer.sql
-/Newsagent.class
-/NewsagentTest.class
-/WarningLetter.class
+/Test/
 /WarningLetterTest.class
+<<<<<<< HEAD
 /orders.sql
 /deliveryPerson.sql
 /deliveryArea.sql
@@ -21,3 +12,7 @@
 /newsagent.sql
 /storage.sql
 /warningLetter.sql
+=======
+/ProductSkeleton/
+/WarningLetter.class
+>>>>>>> f7b40fd (minor fixes)
