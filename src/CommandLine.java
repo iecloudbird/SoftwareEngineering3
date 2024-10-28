@@ -22,6 +22,10 @@ public class CommandLine {
         System.out.println("8. Create Invoice");
         System.out.println("9. Update Invoice");
         System.out.println("10. Cancel Invoice");
+        System.out.println("13. Create Publication");
+        System.out.println("14. Read Publication");
+        System.out.println("15. Update Publication");
+        System.out.println("16. Delete Publication");
 		System.out.println("99. Close the NewsAgent Application");
 		System.out.println("=============================================");
 		System.out.println(" ");
@@ -148,6 +152,103 @@ public class CommandLine {
         String deleteId = keyboard.nextLine();
         boolean deleteResult = true;
     }
+    
+    private static void createPublication(Scanner keyboard, MySQLAccess dao) {
+    	//Implementation for creating Publication
+    	System.out.println("Enter Publication ID (format PUB001): \n");
+    	String id = keyboard.nextLine();
+        
+        System.out.println("Enter Publication Title: \n");
+        String title = keyboard.nextLine();
+        
+        System.out.println("Enter Publication Stock Amount: \n");
+        int stock = keyboard.nextInt();
+        
+        System.out.println("Enter Price: \n");
+        double price = keyboard.nextDouble();
+        
+        System.out.println("Enter Type of Publication (Newspaper or Magazine): \n");
+        String type = keyboard.next();
+        
+        System.out.println("Enter Delivery Frequency (Daily, Weekly, Monthly): \n");
+        String frequency = keyboard.next();
+        
+        try {
+        	 Publication publication = new Publication(id, title, stock, price, type, frequency);
+             boolean insertResult = dao.insertPublication(publication);
+            System.out.println(insertResult ? "Publication Created" : "ERROR: Publication NOT Created");
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+    
+private static boolean printPublicationTable(ResultSet rs) throws Exception {
+		
+		//Print The Contents of the Full Customer Table
+		
+		System.out.println("------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.println("Table: " + rs.getMetaData().getTableName(1));
+		for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+			System.out.printf("%30s",rs.getMetaData().getColumnName(i));
+		}
+		System.out.println();
+		while (rs.next()) {
+			String id = rs.getString("publication_id");
+			String title = rs.getString("publication_name");
+	        int stock = rs.getInt("stock_number");
+	        double price = rs.getDouble("publication_price");
+	        String type = rs.getString("publication_type");
+	        String frequency = rs.getString("publication_frequency");
+	        
+			System.out.printf("%30s", id);
+			System.out.printf("%30s", title);
+			System.out.printf("%30s", stock);
+			System.out.printf("%30s", type);
+			System.out.printf("%30s", price); 
+	        System.out.printf("%30s", frequency);
+			System.out.println();
+		}// end while
+		System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+		
+		return true;
+		
+	}
+    
+private static void updatePublication(Scanner keyboard, MySQLAccess dao) {
+    // Implementation for updating publication details
+    System.out.println("Enter Publication ID to update:");
+    String updateId = keyboard.nextLine();
+
+    // Get updated details
+    System.out.println("Enter New Publication Title: \n");
+    String title = keyboard.nextLine();
+    System.out.println("Enter New Publication Stock amount: \n");
+    int stock = keyboard.nextInt();
+    System.out.println("Enter New Publication Price: \n");
+    double price = keyboard.nextDouble();
+    System.out.println("Enter New Type of Publication (Newspaper/Magazine): \n");
+    String type = keyboard.next();
+    System.out.println("Enter New Delivery Frequency (Daily/Weekly/Monthly): \n");
+    String status = keyboard.next();
+
+    try {
+        // Create a new Publication object with the updated details
+        Publication publication = new Publication(updateId, title, stock, price, type, status);
+        boolean updateResult = dao.updatePublicationDetails(publication); // You'll need to implement this method in MySQLAccess
+        System.out.println(updateResult ? "Publication Details Updated" : "ERROR: Publication Details NOT Updated");
+    } catch (PublicationException e) {
+        System.out.println("ERROR: " + e.getMessage());
+    } catch (Exception e) {
+        System.out.println("ERROR: " + e.getMessage());
+    }
+}
+	private static void deletePublication(Scanner keyboard, MySQLAccess dao) {
+	    // Implementation for deleting publication
+	    System.out.println("Enter Publication ID to delete:");
+	    String deleteId = keyboard.nextLine();
+	    boolean deleteResult = true;
+	}
+	
 	public static void main(String[] args) {
 		
 		//Create the Database Object
@@ -257,6 +358,29 @@ public class CommandLine {
 				case "8":
 				        // Create invoice logic...
 				        break;
+				case "13":
+					createPublication(keyboard, dao);
+						break;
+				case "14":
+					try (ResultSet rSet = dao.retrieveAllPublications()) {
+					    if (rSet != null) {
+					        boolean tablePrinted = printPublicationTable(rSet);
+					        if (tablePrinted) {
+					            rSet.close();
+					        }
+					    } else {
+					        System.out.println("No Records Found");
+					    }
+					} catch (SQLException e) {
+					    System.out.println("Error retrieving publication records: " + e.getMessage());
+					}
+					break;
+				case "15":
+					updatePublication(keyboard, dao);
+					break;
+				case "16":
+					deletePublication(keyboard, dao);
+					break;
 				        
 				case "99":
 					System.out.println("Are you sure you want to exit? (yes/no): ");

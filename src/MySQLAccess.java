@@ -193,7 +193,85 @@ import java.sql.SQLException;
 	        return updateSuccessful;
 	    }
 
+		public boolean insertPublication(Publication publication) {
+		    String query = "INSERT INTO publications (publication_id, publication_name, stock_number, publication_price, publication_type, publication_frequency) VALUES (?, ?, ?, ?, ?, ?)";
+		    
+		    try {
+		        preparedStatement = connect.prepareStatement(query);
+		        
+		        preparedStatement.setString(1, publication.getPublicationId());
+		        preparedStatement.setString(2, publication.getTitle());
+		        preparedStatement.setInt(3, publication.getNumberInStocks());
+		        preparedStatement.setDouble(4, publication.getPrice());
+		        preparedStatement.setString(5, publication.getType());
+		        preparedStatement.setString(6, publication.getDeliveryFrequency());
+
+		        int rowsAffected = preparedStatement.executeUpdate();
+		        return rowsAffected > 0; // Return true if insert was successful
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false; // Return false if there was an error
+		    }
+		}
+		public ResultSet retrieveAllPublications() {
+			
+			//Add Code here to call embedded SQL to view Customer Details
+		
+			try {
+				statement = connect.createStatement();
+				resultSet = statement.executeQuery("Select * from newsagent.publications");
+			
+			}
+			catch (Exception e) {
+				resultSet = null;
+			}
+			return resultSet;
+		}
+		public boolean updatePublicationDetails(Publication publication) {
+	        boolean updateSuccessful = false;
+	        String query = "UPDATE publications SET publication_name = ?, stock_number = ?, publication_price = ?, publication_type = ?, publication_frequency = ? WHERE publication_id = ?";
+	        try {
+	            preparedStatement = connect.prepareStatement(query);
+	            preparedStatement.setString(1, publication.getTitle());
+	            preparedStatement.setInt(2, publication.getNumberInStocks());
+	            preparedStatement.setDouble(3, publication.getPrice());
+	            preparedStatement.setString(4, publication.getType());
+	            preparedStatement.setString(5, publication.getDeliveryFrequency());
+	            preparedStatement.setString(6, publication.getPublicationId());
+
+	            int rowsAffected = preparedStatement.executeUpdate();
+	            updateSuccessful = rowsAffected > 0; // Returns true if update was successful
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } 
+	        return updateSuccessful;
+	    }
+		public boolean deletePublicationById(String publication_id) {
+			
+			boolean deleteSucessfull = true;
+			
+			//Add Code here to call embedded SQL to insert Customer into DB
+			
+			try {
+				String x = "DELETEALL";
+				//Create prepared statement to issue SQL query to the database
+				if (publication_id == x)
+					//Delete all entries in Table
+					preparedStatement = connect.prepareStatement("delete from newsagent.publications");
+				else
+					//Delete a particular Customer
+				preparedStatement = connect.prepareStatement("DELETE FROM newsagent.publications WHERE publication_id = ?");
+				preparedStatement.setString(1, publication_id);
 	
-	
+				preparedStatement.executeUpdate();
+			 
+			}
+			catch (Exception e) {
+				deleteSucessfull = false;
+			}
+			
+			return deleteSucessfull;
+			
+		}
 	}// end Class
 	
