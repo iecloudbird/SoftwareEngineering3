@@ -17,3 +17,7 @@
 /publication.sql
 /PublicationException.class
 /invoices.sql
+/deliveryDocket.sql
+/newsagent.sql
+/storage.sql
+/warningLetter.sql
