@@ -3,7 +3,7 @@ import java.util.Date;
 public class Invoice {
     private String invoiceId;          // Unique identifier for the invoice
     private String custId;             // Unique identifier for the customer
-    private String paymentMethod;       // Payment method (e.g., card, cash)
+    private PaymentMethod paymentMethod;       // Payment method (e.g., card, cash)
     private Date orderDate;             // Date of the order
     private double totalAmount;         // Total amount of the invoice
     private String deliveryId;          // Unique identifier for the delivery (optional)
@@ -14,7 +14,7 @@ public class Invoice {
     public Invoice() {
         this.invoiceId = null;
         this.custId = null;
-        this.paymentMethod = "card";  // Default payment method
+        this.paymentMethod = PaymentMethod.CARD; 
         this.orderDate = null;
         this.totalAmount = 0.0;
         this.deliveryId = null;  // Optional
@@ -37,7 +37,7 @@ public class Invoice {
 
         this.invoiceId = invoiceId;
         this.custId = custId;
-        this.paymentMethod = paymentMethod;
+        this.paymentMethod = PaymentMethod.fromString(paymentMethod);  
         this.orderDate = orderDate;
         this.totalAmount = totalAmount;
         this.deliveryId = deliveryId;
@@ -64,13 +64,12 @@ public class Invoice {
         this.custId = custId;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
     public void setPaymentMethod(String paymentMethod) throws CustomerExceptionHandler {
-        validatePaymentMethod(paymentMethod);
-        this.paymentMethod = paymentMethod;
+        this.paymentMethod = PaymentMethod.fromString(paymentMethod); // Use enum validation
     }
 
     public Date getOrderDate() {
@@ -133,13 +132,11 @@ public class Invoice {
     }
 
     public static void validatePaymentMethod(String paymentMethod) throws CustomerExceptionHandler {
-        if (paymentMethod == null || paymentMethod.isBlank()) {
+    	if (paymentMethod == null || paymentMethod.isBlank()) {
             throw new CustomerExceptionHandler("Payment Method NOT specified");
-        } else if (paymentMethod.length() < 5) {
-            throw new CustomerExceptionHandler("Payment Method must be at least 5 characters long");
-        } else if (paymentMethod.length() > 60) {
-            throw new CustomerExceptionHandler("Payment Method must not exceed 60 characters");
         }
+       
+        PaymentMethod.fromString(paymentMethod);
     }
 
     public static void validateOrderDate(Date orderDate) throws CustomerExceptionHandler {
@@ -194,5 +191,29 @@ public class Invoice {
 class CustomerExceptionHandler extends Exception {
     public CustomerExceptionHandler(String message) {
         super(message);
+    }
+}
+
+ enum PaymentMethod {
+    CARD("card"),
+    CASH("cash");
+
+    private final String method;
+
+    PaymentMethod(String method) {
+        this.method = method;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public static PaymentMethod fromString(String method) throws CustomerExceptionHandler {
+        for (PaymentMethod pm : PaymentMethod.values()) {
+            if (pm.getMethod().equalsIgnoreCase(method)) {
+                return pm;
+            }
+        }
+        throw new CustomerExceptionHandler("Invalid payment method. Accepted values: card, cash");
     }
 }
