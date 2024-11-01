@@ -55,7 +55,7 @@ public class DeliveryPerson {
     public static void validatePhoneNumber(String phoneNumber) throws DeliveryPersonException {
         if (phoneNumber == null || !phoneNumber.matches("\\d{10}")) {
             throw new DeliveryPersonException("Phone number must be exactly 10 digits.");
-            //etc. DP/12/345
+            //etc. DP/345
         }
     }
 

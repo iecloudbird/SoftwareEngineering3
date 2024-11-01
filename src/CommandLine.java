@@ -98,7 +98,7 @@ public class CommandLine {
         String lastName = keyboard.nextLine();
         
         System.out.printf("Enter Delivery Person ID (format DP/123): \n");
-        String id = keyboard.nextLine();
+        String id = keyboard.nextLine().toUpperCase();
         
         System.out.printf("Enter Delivery Person Phone Number: \n");
         String phone = keyboard.nextLine();
