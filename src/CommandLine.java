@@ -1,6 +1,9 @@
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class CommandLine {
@@ -17,11 +20,13 @@ public class CommandLine {
 		System.out.println("3. Update Customer Record by ID");
         System.out.println("4. Delete Inactive Customer Records");
         System.out.println("5. Create Delivery Person");
-        System.out.println("6. Update Delivery Person");
-        System.out.println("7. Delete Delivery Person");
-        System.out.println("8. Create Invoice");
-        System.out.println("9. Update Invoice");
-        System.out.println("10. Cancel Invoice");
+        System.out.println("6. Read Delivery Person");
+        System.out.println("7. Update Delivery Person");
+        System.out.println("8. Delete Delivery Person");
+        System.out.println("9. Create Invoice");
+        System.out.println("10. Update Invoice");
+        System.out.println("11. Cancel Invoice");
+        System.out.println("12. View All Invoices");
         System.out.println("13. Create Publication");
         System.out.println("14. Read Publication");
         System.out.println("15. Update Publication");
@@ -117,6 +122,51 @@ public class CommandLine {
             System.out.println("ERROR: " + e.getMessage());
         }
     }
+	
+	private static boolean printDeliveryPersonTable(ResultSet rs) throws Exception {
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        System.out.println("Table: " + rs.getMetaData().getTableName(1));
+        for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+            System.out.printf("%30s", rs.getMetaData().getColumnName(i));
+        }
+        System.out.println();
+        while (rs.next()) {
+            String id = rs.getString("delivery_person_id");
+            String firstName = rs.getString("first_name");
+            String lastName = rs.getString("last_name");
+            String phone = rs.getString("phone_number");
+            String area = rs.getString("assigned_area");
+            String status = rs.getString("status");
+            
+            System.out.printf("%30s", id);
+            System.out.printf("%30s", firstName);
+            System.out.printf("%30s", lastName);
+            System.out.printf("%30s", phone);
+            System.out.printf("%30s", area);
+            System.out.printf("%30s", status);
+            System.out.println();
+        }
+        System.out.println("------------------------------------------------------------------------------------------------------");
+        
+        return true;
+    }
+	private static void readDeliveryPerson(Scanner keyboard, MySQLAccess dao) {
+        // Retrieve and print all delivery person records
+        try (ResultSet rSet = dao.retrieveAllDeliveryPersons()) { // Implement `retrieveAllDeliveryPersons` in `MySQLAccess`
+            if (rSet != null) {
+                boolean tablePrinted = printDeliveryPersonTable(rSet);
+                if (tablePrinted) {
+                    rSet.close();
+                }
+            } else {
+                System.out.println("No Records Found");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving delivery person records: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Unexpected error: " + e.getMessage());
+        }
+    }
 	private static void updateDeliveryPerson(Scanner keyboard, MySQLAccess dao) {
 	    // Implementation for updating delivery person details
 	    System.out.println("Enter Delivery Person ID to update:");
@@ -145,13 +195,157 @@ public class CommandLine {
 	        System.out.println("ERROR: " + e.getMessage());
 	    }
 	}
-
     private static void deleteDeliveryPerson(Scanner keyboard, MySQLAccess dao) {
         // Implementation for deleting delivery person
         System.out.println("Enter Delivery Person ID to delete:");
         String deleteId = keyboard.nextLine();
         boolean deleteResult = true;
     }
+    
+   private static void createInvoice(Scanner scanner, MySQLAccess dao) throws CustomerExceptionHandler {
+    System.out.println("Enter Invoice ID:");
+    String invoiceId = scanner.nextLine();
+    System.out.println("Enter Customer ID:");
+    String custId = scanner.nextLine();
+
+    System.out.println("Enter Payment Method (card/cash):");
+    String paymentMethod = scanner.nextLine();
+    System.out.println("Enter Order Date (YYYY-MM-DD):");
+    String dateString = scanner.nextLine();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    Date orderDate = null;
+    try {
+        orderDate = dateFormat.parse(dateString);
+    } catch (ParseException e) {
+        System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+    }
+    System.out.println("Enter Total Amount:");
+    double totalAmount = scanner.nextDouble();
+    scanner.nextLine(); // Consume newline
+    System.out.println("Enter Delivery ID (optional, leave blank if not applicable):");
+    String deliveryId = scanner.nextLine();
+    System.out.println("Enter Publication ID (optional, leave blank if not applicable):");
+    String publicationId = scanner.nextLine();
+    System.out.println("Enter Order Status:");
+    String orderStatus = scanner.nextLine();
+
+    // Ensure orderDate is not null before calling the constructor
+    if (orderDate != null) {
+        // Convert to java.sql.Date if necessary
+        java.sql.Date sqlDate = new java.sql.Date(orderDate.getTime());
+
+        Invoice newInvoice = new Invoice(invoiceId, custId, paymentMethod, sqlDate, totalAmount, deliveryId, publicationId, orderStatus);
+        
+        if (dao.insertInvoice(newInvoice)) {
+            System.out.println("Invoice created successfully.");
+        } else {
+            System.out.println("Failed to create invoice.");
+        }
+    } else {
+        System.out.println("Invoice creation failed due to invalid date.");
+    }
+}
+
+   private static void updateInvoice(Scanner scanner, MySQLAccess dao) throws CustomerExceptionHandler {
+	    System.out.println("Enter Invoice ID to update:");
+	    String invoiceId = scanner.nextLine();
+	    System.out.println("Enter New Customer ID:");
+	    String custId = scanner.nextLine();
+	    System.out.println("Enter Payment Method (card/cash):");
+	    String paymentMethod = scanner.nextLine();
+	    System.out.println("Enter New Order Date (YYYY-MM-DD):");
+	    String dateString = scanner.nextLine();
+	    
+	    Date orderDate = null;
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    try {
+	        orderDate = dateFormat.parse(dateString);
+	    } catch (ParseException e) {
+	        System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+	        return; // Exit or handle the invalid input case
+	    }
+
+	    System.out.println("Enter New Total Amount:");
+	    double totalAmount = 0.0;
+	    try {
+	        totalAmount = Double.parseDouble(scanner.nextLine());
+	    } catch (NumberFormatException e) {
+	        System.out.println("Invalid total amount. Please enter a valid number.");
+	        return;
+	    }
+
+	    System.out.println("Enter New Delivery ID (optional, leave blank if not applicable):");
+	    String deliveryId = scanner.nextLine();
+	    System.out.println("Enter New Publication ID (optional, leave blank if not applicable):");
+	    String publicationId = scanner.nextLine();
+	    System.out.println("Enter New Order Status:");
+	    String orderStatus = scanner.nextLine();
+
+	    Invoice updatedInvoice = new Invoice(invoiceId, custId, paymentMethod, orderDate, totalAmount, deliveryId, publicationId, orderStatus);
+	    
+	    if (dao.updateInvoiceDetails(updatedInvoice)) {
+	        System.out.println("Invoice updated successfully.");
+	    } else {
+	        System.out.println("Failed to update invoice.");
+	    }
+	}
+
+	private static void cancelInvoice(Scanner scanner, MySQLAccess dao) {
+	    System.out.println("Enter Invoice ID to cancel:");
+	    String invoiceId = scanner.nextLine();
+	    if (dao.deleteInvoiceById(invoiceId)) {
+	        System.out.println("Invoice cancelled successfully.");
+	    } else {
+	        System.out.println("Failed to cancel invoice.");
+	    }
+	}
+
+	private static void viewAllInvoices(Scanner scanner, MySQLAccess dao) {
+	    try (ResultSet rSet = dao.retrieveAllInvoices()) { // Implement `retrieveAllInvoices` in `MySQLAccess`
+	        if (rSet != null) {
+	            printInvoiceTable(rSet); // Call method to print invoice table
+	        } else {
+	            System.out.println("No Records Found");
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error retrieving invoice records: " + e.getMessage());
+	    } catch (Exception e) {
+	        System.out.println("Unexpected error: " + e.getMessage());
+	    }
+	}
+
+	private static boolean printInvoiceTable(ResultSet rs) throws Exception {
+	    System.out.println("------------------------------------------------------------------------------------------------------");
+	    System.out.println("Table: " + rs.getMetaData().getTableName(1));
+	    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+	        System.out.printf("%30s", rs.getMetaData().getColumnName(i));
+	    }
+	    System.out.println();
+	    while (rs.next()) {
+	        String invoiceId = rs.getString("invoice_id");
+	        String custId = rs.getString("customer_id");
+	        String paymentMethod = rs.getString("payment_method");
+	        Date orderDate = rs.getDate("order_date");
+	        double totalAmount = rs.getDouble("total_amount");
+	        String deliveryId = rs.getString("delivery_id");
+	        String publicationId = rs.getString("publication_id");
+	        String orderStatus = rs.getString("order_status");
+	
+	        System.out.printf("%30s", invoiceId);
+	        System.out.printf("%30s", custId);
+	        System.out.printf("%30s", paymentMethod);
+	        System.out.printf("%30s", orderDate);
+	        System.out.printf("%30.2f", totalAmount);
+	        System.out.printf("%30s", deliveryId);
+	        System.out.printf("%30s", publicationId);
+	        System.out.printf("%30s", orderStatus);
+	        System.out.println();
+	    }
+	    System.out.println("------------------------------------------------------------------------------------------------------");
+	    
+	    return true;
+	}
+
     
     private static void createPublication(Scanner keyboard, MySQLAccess dao) {
     	//Implementation for creating Publication
@@ -182,7 +376,7 @@ public class CommandLine {
         }
     }
     
-private static boolean printPublicationTable(ResultSet rs) throws Exception {
+    private static boolean printPublicationTable(ResultSet rs) throws Exception {
 		
 		//Print The Contents of the Full Customer Table
 		
@@ -350,12 +544,15 @@ private static void updatePublication(Scanner keyboard, MySQLAccess dao) {
 				        createDeliveryPerson(keyboard, dao);
 				        break;
 				case "6":
-				        updateDeliveryPerson(keyboard, dao);
+						readDeliveryPerson(keyboard,dao);
+				        
 				        break;
 				case "7":
-				        deleteDeliveryPerson(keyboard, dao);
+						updateDeliveryPerson(keyboard, dao);
+				       
 				        break;
 				case "8":
+					 	deleteDeliveryPerson(keyboard, dao);
 				        // Create invoice logic...
 				        break;
 				case "13":

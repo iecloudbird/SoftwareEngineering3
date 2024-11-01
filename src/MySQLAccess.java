@@ -172,6 +172,16 @@ import java.sql.SQLException;
 		    }
 		}
 
+		public ResultSet retrieveAllDeliveryPersons() {
+		    try {
+		        statement = connect.createStatement();
+		        resultSet = statement.executeQuery("SELECT * FROM newsagent.delivery_persons");
+		    } catch (Exception e) {
+		        resultSet = null;
+		        e.printStackTrace();  
+		    }
+		    return resultSet;
+		}
 		
 		public boolean updateDeliveryPersonDetails(DeliveryPerson deliveryPerson) {
 	        boolean updateSuccessful = false;
@@ -192,7 +202,141 @@ import java.sql.SQLException;
 	        } 
 	        return updateSuccessful;
 	    }
+		
+		//Invoices
+		public boolean insertInvoice(Invoice invoice) {
+		    String query = "INSERT INTO Invoices (invoice_id, cust_id, payment_method, order_date, total_amount) VALUES (?, ?, ?, ?, ?)";
+		    try {
+		        preparedStatement = connect.prepareStatement(query);
+		        preparedStatement.setString(1, invoice.getInvoiceId()); // Use getInvoiceId() for invoice ID
+		        preparedStatement.setString(2, invoice.getCustId()); // Use getCustId() for customer ID
+		        preparedStatement.setString(3, invoice.getPaymentMethod().getMethod()); // Use getPaymentMethod() to retrieve the payment method
+		        preparedStatement.setDate(4, new java.sql.Date(invoice.getOrderDate().getTime())); // Use getOrderDate() for order date
+		        preparedStatement.setDouble(5, invoice.getTotalAmount()); // Use getTotalAmount() for the total amount
 
+		        int rowsAffected = preparedStatement.executeUpdate();
+		        return rowsAffected > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false; 
+		    }
+		}
+
+		public ResultSet retrieveAllInvoices() {
+		    try {
+		        statement = connect.createStatement();
+		        resultSet = statement.executeQuery("SELECT * FROM invoices");
+		    } catch (Exception e) {
+		        resultSet = null;
+		        e.printStackTrace();
+		    }
+		    return resultSet;
+		}
+
+		public Invoice retrieveInvoiceById(String invoiceId) {
+		    Invoice invoice = null; // Initialize the Invoice object to null
+		    String query = "SELECT * FROM Invoices WHERE invoice_id = ?";
+		    try {
+		        preparedStatement = connect.prepareStatement(query);
+		        preparedStatement.setString(1, invoiceId); 
+		        resultSet = preparedStatement.executeQuery();
+
+		        if (resultSet.next()) { // Check if there is a result
+		            invoice = new Invoice();
+		            try {
+		                invoice.setInvoiceId(resultSet.getString("invoice_id"));
+		                invoice.setCustId(resultSet.getString("cust_id"));
+		                invoice.setPaymentMethod(resultSet.getString("payment_method")); // Assuming paymentMethod is stored as a string
+		                invoice.setOrderDate(resultSet.getDate("order_date")); // Get order date
+		                invoice.setTotalAmount(resultSet.getDouble("total_amount")); // Get total amount
+		            } catch (CustomerExceptionHandler e) {
+		                
+		                e.printStackTrace();
+		            }
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace(); // Log the SQL error for easier debugging
+		    } finally {
+		        // Close resources to avoid memory leaks
+		        try {
+		            if (resultSet != null) resultSet.close();
+		            if (preparedStatement != null) preparedStatement.close();
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return invoice; // Return the retrieved Invoice object or null if not found
+		}
+
+		public boolean updateInvoiceDetails(Invoice invoice) {
+		    boolean updateSuccessful = false;
+		    String query = "UPDATE Invoices SET cust_id = ?, payment_method = ?, order_date = ?, total_amount = ?, delivery_id = ?, publication_id = ?, order_status = ? WHERE invoice_id = ?";
+		    
+		    try {
+		        preparedStatement = connect.prepareStatement(query);
+		        preparedStatement.setString(1, invoice.getCustId());
+		        preparedStatement.setString(2, invoice.getPaymentMethod().getMethod());
+		        preparedStatement.setDate(3, new java.sql.Date(invoice.getOrderDate().getTime()));
+		        preparedStatement.setDouble(4, invoice.getTotalAmount());
+		        
+		        // Set optional fields, null if they were not provided
+		        if (invoice.getDeliveryId() != null && !invoice.getDeliveryId().isEmpty()) {
+		            preparedStatement.setString(5, invoice.getDeliveryId());
+		        } else {
+		            preparedStatement.setNull(5, java.sql.Types.VARCHAR); // or appropriate SQL type
+		        }
+		        
+		        if (invoice.getPublicationId() != null && !invoice.getPublicationId().isEmpty()) {
+		            preparedStatement.setString(6, invoice.getPublicationId());
+		        } else {
+		            preparedStatement.setNull(6, java.sql.Types.VARCHAR);
+		        }
+		        
+		        preparedStatement.setString(7, invoice.getOrderStatus());
+		        preparedStatement.setString(8, invoice.getInvoiceId());
+
+		        int rowsAffected = preparedStatement.executeUpdate();
+		        updateSuccessful = rowsAffected > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    return updateSuccessful;
+		}
+
+		public boolean deleteInvoiceById(String invoiceId) {
+		    boolean deleteSuccessful = true;
+		    try {
+		        preparedStatement = connect.prepareStatement("DELETE FROM Invoices WHERE invoice_id = ?");
+		        preparedStatement.setString(1, invoiceId);
+		        int rowsAffected = preparedStatement.executeUpdate();
+		        deleteSuccessful = rowsAffected > 0; 
+		    } catch (SQLException e) {
+		        deleteSuccessful = false; 
+		        e.printStackTrace(); 
+		    } finally {
+		        try {
+		            if (preparedStatement != null) {
+		                preparedStatement.close();
+		            }
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return deleteSuccessful; 
+		}
+
+		public boolean deleteAllInvoices() {
+		    boolean deleteSuccessful = true;
+		    try {
+		        preparedStatement = connect.prepareStatement("DELETE FROM invoices");
+		        preparedStatement.executeUpdate();
+		    } catch (Exception e) {
+		        deleteSuccessful = false;
+		        e.printStackTrace(); // Log the error for easier debugging
+		    }
+		    return deleteSuccessful;
+		}
+		
 		public boolean insertPublication(Publication publication) {
 		    String query = "INSERT INTO publications (publication_id, publication_name, stock_number, publication_price, publication_type, publication_frequency) VALUES (?, ?, ?, ?, ?, ?)";
 		    
