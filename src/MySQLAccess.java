@@ -1,5 +1,6 @@
 	import java.sql.Connection;
-	import java.sql.DriverManager;
+import java.sql.Date;
+import java.sql.DriverManager;
 	import java.sql.PreparedStatement;
 	import java.sql.Statement;
 	import java.sql.ResultSet;
@@ -246,22 +247,22 @@ import java.sql.SQLException;
 	        } 
 	        return updateSuccessful;
 	    }
-		public boolean deletePublicationById(String publication_id) {
+		public boolean deletePublicationById(String publicationId) {
 			
 			boolean deleteSucessfull = true;
 			
-			//Add Code here to call embedded SQL to insert Customer into DB
+			//Add Code here to call embedded SQL to insert publication into DB
 			
 			try {
-				String x = "DELETEALL";
+				
 				//Create prepared statement to issue SQL query to the database
-				if (publication_id == x)
+				if (publicationId == "DELETEALL")
 					//Delete all entries in Table
 					preparedStatement = connect.prepareStatement("delete from newsagent.publications");
 				else
-					//Delete a particular Customer
-				preparedStatement = connect.prepareStatement("DELETE FROM newsagent.publications WHERE publication_id = ?");
-				preparedStatement.setString(1, publication_id);
+					//Delete a particular publication
+					preparedStatement = connect.prepareStatement("DELETE FROM newsagent.publications WHERE publication_id = ?");
+				preparedStatement.setString(1, publicationId);
 	
 				preparedStatement.executeUpdate();
 			 
@@ -272,6 +273,238 @@ import java.sql.SQLException;
 			
 			return deleteSucessfull;
 			
+		}
+		public boolean deleteAllPublications() {
+			boolean deleteSuccessful = true;
+		    try {
+		        preparedStatement = connect.prepareStatement("DELETE FROM newsagent.publications");
+		        preparedStatement.executeUpdate();
+		        //System.out.println("All good");
+		    } catch (Exception e) {
+		        deleteSuccessful = false;
+		        e.printStackTrace();  // Log the error for easier debugging
+		    } finally {
+		        try {
+		            if (preparedStatement != null) {
+		                preparedStatement.close();
+		            }
+		            if (connect != null) {
+		                connect.close();
+		            }
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return deleteSuccessful;
+		}
+		public boolean insertOrder(Order order) {
+		    String query = "INSERT INTO orders (order_id, cust_id, delivery_id, publication_id, order_date, order_status) VALUES (?, ?, ?, ?, ?, ?)";
+		    
+		    try {
+		        preparedStatement = connect.prepareStatement(query);
+		        
+		        preparedStatement.setString(1, order.getOrderId());
+		        preparedStatement.setInt(2, order.getCustId());
+		        preparedStatement.setString(3, order.getDeliveryId());
+		        preparedStatement.setString(4, order.getPublicationId());
+		        preparedStatement.setDate(5, (Date) order.getOrderDate());
+		        preparedStatement.setObject(6, order.getOrderStatus());
+
+		        int rowsAffected = preparedStatement.executeUpdate();
+		        return rowsAffected > 0; // Return true if insert was successful
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false; // Return false if there was an error
+		    }
+		}
+		public ResultSet retrieveAllOrders() {
+			
+			//Add Code here to call embedded SQL to view Customer Details
+		
+			try {
+				statement = connect.createStatement();
+				resultSet = statement.executeQuery("Select * from newsagent.orders");
+			
+			}
+			catch (Exception e) {
+				resultSet = null;
+			}
+			return resultSet;
+		}
+		public boolean updateOrderDetails(Order order) {
+	        boolean updateSuccessful = false;
+	        String query = "UPDATE orders SET cust_id = ?, delivery_id = ?, publication_id = ?, order_date = ?, order_status = ? WHERE order_id = ?";
+	        try {
+	            preparedStatement = connect.prepareStatement(query);
+	            preparedStatement.setInt(1, order.getCustId());
+	            preparedStatement.setString(2, order.getDeliveryId());
+	            preparedStatement.setString(3, order.getPublicationId());
+	            preparedStatement.setDate(4, (Date)order.getOrderDate());
+	            preparedStatement.setObject(5, order.getOrderStatus());
+	            preparedStatement.setString(6, order.getOrderId());
+
+	            int rowsAffected = preparedStatement.executeUpdate();
+	            updateSuccessful = rowsAffected > 0; // Returns true if update was successful
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } 
+	        return updateSuccessful;
+	    }
+		public boolean deleteOrderById(String orderId) {
+			
+			boolean deleteSucessfull = true;
+			
+			//Add Code here to call embedded SQL to insert publication into DB
+			
+			try {
+				
+				//Create prepared statement to issue SQL query to the database
+				if (orderId == "DELETEALL")
+					//Delete all entries in Table
+					preparedStatement = connect.prepareStatement("delete from newsagent.orders");
+				else
+					//Delete a particular publication
+					preparedStatement = connect.prepareStatement("DELETE FROM newsagent.orders WHERE order_id = ?");
+				preparedStatement.setString(1, orderId);
+	
+				preparedStatement.executeUpdate();
+			 
+			}
+			catch (Exception e) {
+				deleteSucessfull = false;
+			}
+			
+			return deleteSucessfull;
+			
+		}
+		public boolean deleteAllOrders() {
+			boolean deleteSuccessful = true;
+		    try {
+		        preparedStatement = connect.prepareStatement("DELETE FROM newsagent.orders");
+		        preparedStatement.executeUpdate();
+		        //System.out.println("All good");
+		    } catch (Exception e) {
+		        deleteSuccessful = false;
+		        e.printStackTrace();  // Log the error for easier debugging
+		    } finally {
+		        try {
+		            if (preparedStatement != null) {
+		                preparedStatement.close();
+		            }
+		            if (connect != null) {
+		                connect.close();
+		            }
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return deleteSuccessful;
+		}
+		public boolean insertInvoice(Invoice invoice) {
+		    String query = "INSERT INTO invoices (invoice_id, cust_id, payment_method, order_date, total_amount, delivery_persons, publication_id, order_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		    
+		    try {
+		        preparedStatement = connect.prepareStatement(query);
+		        
+		        preparedStatement.setString(1, invoice.getInvoiceId());
+		        preparedStatement.setString(2, invoice.getCustId());
+		        preparedStatement.setObject(3, invoice.getPaymentMethod());
+		        preparedStatement.setDate(4, (Date) invoice.getOrderDate());
+		        preparedStatement.setDouble(5, invoice.getTotalAmount());
+		        preparedStatement.setString(6, invoice.getDeliveryId());
+		        preparedStatement.setString(7, invoice.getPublicationId());
+		        preparedStatement.setString(8, invoice.getOrderStatus());
+
+		        int rowsAffected = preparedStatement.executeUpdate();
+		        return rowsAffected > 0; // Return true if insert was successful
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false; // Return false if there was an error
+		    }
+		}
+		public ResultSet retrieveAllInvoices() {
+			
+			//Add Code here to call embedded SQL to view Customer Details
+		
+			try {
+				statement = connect.createStatement();
+				resultSet = statement.executeQuery("Select * from newsagent.invoices");
+			
+			}
+			catch (Exception e) {
+				resultSet = null;
+			}
+			return resultSet;
+		}
+		public boolean updateInvoiceDetails(Invoice invoice) {
+	        boolean updateSuccessful = false;
+	        String query = "UPDATE invoices SET cust_id = ?, payment_method = ?, order_date = ?, total_amount = ?, delivery_persons, publication_id, order_status WHERE invoice_id = ?";
+	        try {
+	            preparedStatement = connect.prepareStatement(query);
+	            preparedStatement.setString(1, invoice.getCustId());
+	            preparedStatement.setObject(2, invoice.getPaymentMethod());
+	            preparedStatement.setDate(3,(Date) invoice.getOrderDate());
+	            preparedStatement.setDouble(4, invoice.getTotalAmount());
+	            preparedStatement.setString(5, invoice.getDeliveryId());
+	            preparedStatement.setString(6, invoice.getPublicationId());
+	            preparedStatement.setString(7, invoice.getOrderStatus());
+
+	            int rowsAffected = preparedStatement.executeUpdate();
+	            updateSuccessful = rowsAffected > 0; // Returns true if update was successful
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } 
+	        return updateSuccessful;
+	    }
+		public boolean deleteInvoiceById(String invoiceId) {
+			
+			boolean deleteSucessfull = true;
+			
+			//Add Code here to call embedded SQL to insert order into DB
+			
+			try {
+				
+				//Create prepared statement to issue SQL query to the database
+				if (invoiceId == "DELETEALL")
+					//Delete all entries in Table
+					preparedStatement = connect.prepareStatement("delete from newsagent.invoices");
+				else
+					//Delete a particular order
+					preparedStatement = connect.prepareStatement("DELETE FROM newsagent.invoices WHERE invoice_id = ?");
+				preparedStatement.setString(1, invoiceId);
+	
+				preparedStatement.executeUpdate();
+			 
+			}
+			catch (Exception e) {
+				deleteSucessfull = false;
+			}
+			
+			return deleteSucessfull;
+			
+		}
+		public boolean deleteAllinvoices() {
+			boolean deleteSuccessful = true;
+		    try {
+		        preparedStatement = connect.prepareStatement("DELETE FROM newsagent.invoices");
+		        preparedStatement.executeUpdate();
+		        //System.out.println("All good");
+		    } catch (Exception e) {
+		        deleteSuccessful = false;
+		        e.printStackTrace();  // Log the error for easier debugging
+		    } finally {
+		        try {
+		            if (preparedStatement != null) {
+		                preparedStatement.close();
+		            }
+		            if (connect != null) {
+		                connect.close();
+		            }
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return deleteSuccessful;
 		}
 	}// end Class
 	

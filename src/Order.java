@@ -11,7 +11,7 @@ enum OrderStatus {
 
 public class Order {
 	private String orderId; //format : ORD0001
-	private String custId;
+	private int custId;
 	private String deliveryId; //deliveryPersonID format : DP/000
 	private String publicationId;
 	private Date orderDate;
@@ -22,10 +22,10 @@ public class Order {
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
-	public String getCustId() {
+	public int getCustId() {
 		return custId;
 	}
-	public void setCustId(String custId) {
+	public void setCustId(int custId) {
 		this.custId = custId;
 	}
 	public String getDeliveryId() {
@@ -54,14 +54,14 @@ public class Order {
 	}
 	public Order() {
 		this.orderId = null;
-		this.custId = null;
+		this.custId = 0;
 		this.deliveryId = null ;
 		this.publicationId = null;
 		this.orderDate = new Date();
         this.orderStatus = OrderStatus.PENDING;
 	}
 	
-	public Order(String orderId, String custId, String deliveryId, String publicationId, Date orderDate, OrderStatus orderStatus) throws CustomerExceptionHandler  {
+	public Order(String orderId, int custId, String deliveryId, String publicationId, Date orderDate, OrderStatus orderStatus) throws CustomerExceptionHandler  {
 		
 		// Validate Input
 		try {
@@ -99,20 +99,27 @@ public class Order {
             throw new CustomerExceptionHandler("Order Id format is invalid. Expected format: ORD0001");
         }
 	}
-	public static void validateCustId(String custId) throws CustomerExceptionHandler {
+	public static void validateCustId(int custId) throws CustomerExceptionHandler {
 		
 		//Agree Formating Rules on "Customer Id"
 		//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
 		
-		if (custId.isBlank() || custId.isEmpty())
-			throw new CustomerExceptionHandler("Customer Id NOT specified");
-		else if (custId.length() < 5)
-			throw new CustomerExceptionHandler("Customer Id does not meet minimum length requirements");
-		else if (custId.length() > 10)
-			throw new CustomerExceptionHandler("Customer Id exceeds maximum length requirements");
-		else if (!custId.matches("\\d+")) {
-            throw new CustomerExceptionHandler("Customer Id format is invalid. Expected format: integer");
-        }
+//		if (custId.isBlank() || custId.isEmpty())
+//			throw new CustomerExceptionHandler("Customer Id NOT specified");
+//		else if (custId.length() < 5)
+//			throw new CustomerExceptionHandler("Customer Id does not meet minimum length requirements");
+//		else if (custId.length() > 10)
+//			throw new CustomerExceptionHandler("Customer Id exceeds maximum length requirements");
+//		else if (!custId.matches("\\d+")) {
+//            throw new CustomerExceptionHandler("Customer Id format is invalid. Expected format: integer");
+//        }
+		if (custId == 0)
+		    throw new CustomerExceptionHandler("Customer Id NOT specified");
+		else if (String.valueOf(custId).length() > 10)
+		    throw new CustomerExceptionHandler("Customer Id exceeds maximum length requirements");
+		else if (custId < 0) {
+		    throw new CustomerExceptionHandler("Customer Id format is invalid. Expected format: positive integer");
+		}
 	}
 	public static void validateDeliveryId(String deliveryId) throws CustomerExceptionHandler {
 		
@@ -140,8 +147,8 @@ public class Order {
 			throw new CustomerExceptionHandler("Publication Id does not meet minimum length requirements");
 		else if (publicationId.length() > 7)
 			throw new CustomerExceptionHandler("Publication Id exceeds maximum length requirements");
-		else if (!publicationId.matches("PUB\\d{4}")) {
-	         throw new CustomerExceptionHandler("Publication Id format is invalid. Expected format: PUB0001");
+		else if (!publicationId.matches("PUB\\d{3}")) {
+	         throw new CustomerExceptionHandler("Publication Id format is invalid. Expected format: PUB001");
 	       }
 	}
 	 public static void validateOrderDate(Date orderDate) throws CustomerExceptionHandler {
