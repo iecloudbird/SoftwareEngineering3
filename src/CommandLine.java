@@ -43,6 +43,11 @@ public class CommandLine {
         System.out.println("23. Update Invoice");
         System.out.println("24. Delete Invoice");
         
+        System.out.println("25. Create Delivery Docket");
+        System.out.println("26. Read Delivery Docket");
+        System.out.println("27. Update Delivery Docket");
+        System.out.println("28. Delete Delivery Docket");
+        
 		System.out.println("99. Close the NewsAgent Application");
 		System.out.println("=============================================");
 		System.out.println(" ");
