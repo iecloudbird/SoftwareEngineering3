@@ -438,7 +438,7 @@ import java.sql.SQLException;
 		}
 		public boolean updateInvoiceDetails(Invoice invoice) {
 	        boolean updateSuccessful = false;
-	        String query = "UPDATE invoices SET cust_id = ?, payment_method = ?, order_date = ?, total_amount = ?, delivery_persons, publication_id, order_status WHERE invoice_id = ?";
+	        String query = "UPDATE invoices SET cust_id = ?, payment_method = ?, order_date = ?, total_amount = ?, delivery_persons = ?, publication_id = ?, order_status = ? WHERE invoice_id = ?";
 	        try {
 	            preparedStatement = connect.prepareStatement(query);
 	            preparedStatement.setString(1, invoice.getCustId());
@@ -487,6 +487,108 @@ import java.sql.SQLException;
 			boolean deleteSuccessful = true;
 		    try {
 		        preparedStatement = connect.prepareStatement("DELETE FROM newsagent.invoices");
+		        preparedStatement.executeUpdate();
+		        //System.out.println("All good");
+		    } catch (Exception e) {
+		        deleteSuccessful = false;
+		        e.printStackTrace();  // Log the error for easier debugging
+		    } finally {
+		        try {
+		            if (preparedStatement != null) {
+		                preparedStatement.close();
+		            }
+		            if (connect != null) {
+		                connect.close();
+		            }
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return deleteSuccessful;
+		}
+		public boolean insertDeliveryDocket(DeliveryDocket deliveryDocket) {
+		    String query = "INSERT INTO delivery_docket (docket_id, order_id, delivery_id, delivery_date, delivery_status, delivery_details) VALUES (?, ?, ?, ?, ?, ?)";
+		    
+		    try {
+		        preparedStatement = connect.prepareStatement(query);
+		        
+		        preparedStatement.setString(1, deliveryDocket.getDocketId());
+		        preparedStatement.setString(2, deliveryDocket.getOrderId());
+		        preparedStatement.setString(3, deliveryDocket.getDeliveryPersonId());
+		        //preparedStatement.setDate(4,(LocalDate) deliveryDocket.getDeliveryDate());
+		        preparedStatement.setString(5, deliveryDocket.getDeliveryStatus());
+		        preparedStatement.setString(6, deliveryDocket.getDetails());
+
+		        int rowsAffected = preparedStatement.executeUpdate();
+		        return rowsAffected > 0; // Return true if insert was successful
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false; // Return false if there was an error
+		    }
+		}
+		public ResultSet retrieveAllDeliveryDockets() {
+			
+			//Add Code here to call embedded SQL to view Customer Details
+		
+			try {
+				statement = connect.createStatement();
+				resultSet = statement.executeQuery("Select * from newsagent.delivery_docket");
+			
+			}
+			catch (Exception e) {
+				resultSet = null;
+			}
+			return resultSet;
+		}
+		public boolean updateDeliveryDocketDetails(DeliveryDocket deliveryDocket) {
+	        boolean updateSuccessful = false;
+	        String query = "UPDATE delivery_docket SET order_id = ?, delivery_id = ?, delivery_date = ?, delivery_status = ?, delivery_details = ? WHERE docket_id = ?";
+	        try {
+	            preparedStatement = connect.prepareStatement(query);
+	            preparedStatement.setString(1, deliveryDocket.getOrderId());
+	            preparedStatement.setString(2, deliveryDocket.getDeliveryPersonId());
+	            //preparedStatement.setDate(3,(LocalDate) deliveryDocket.getDeliveryDate());
+	            preparedStatement.setString(4, deliveryDocket.getDeliveryStatus());
+	            preparedStatement.setString(5, deliveryDocket.getDetails());
+
+	            int rowsAffected = preparedStatement.executeUpdate();
+	            updateSuccessful = rowsAffected > 0; // Returns true if update was successful
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } 
+	        return updateSuccessful;
+	    }
+		public boolean deleteDeliveryDocketById(String docketId) {
+			
+			boolean deleteSucessfull = true;
+			
+			//Add Code here to call embedded SQL to insert order into DB
+			
+			try {
+				
+				//Create prepared statement to issue SQL query to the database
+				if (docketId == "DELETEALL")
+					//Delete all entries in Table
+					preparedStatement = connect.prepareStatement("delete from newsagent.delivery_docket");
+				else
+					//Delete a particular order
+					preparedStatement = connect.prepareStatement("DELETE FROM newsagent.delivery_docket WHERE docket_id = ?");
+				preparedStatement.setString(1, docketId);
+	
+				preparedStatement.executeUpdate();
+			 
+			}
+			catch (Exception e) {
+				deleteSucessfull = false;
+			}
+			
+			return deleteSucessfull;
+			
+		}
+		public boolean deleteAllDeliveryDockets() {
+			boolean deleteSuccessful = true;
+		    try {
+		        preparedStatement = connect.prepareStatement("DELETE FROM newsagent.delivery_docket");
 		        preparedStatement.executeUpdate();
 		        //System.out.println("All good");
 		    } catch (Exception e) {

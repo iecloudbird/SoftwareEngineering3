@@ -20,3 +20,5 @@ INSERT INTO delivery_docket (docket_id, order_id, delivery_id, delivery_date, de
 ('DD001', 'ORD001', 'DP001', NOW(), TRUE, 'Delivered'),
 ('DD002', 'ORD002', 'DP002', NOW(), FALSE, 'Not Delivered'),
 ('DD003', 'ORD003', 'DP003', NOW(), TRUE, 'Delivered');
+
+SELECT * FROM delivery_docket;

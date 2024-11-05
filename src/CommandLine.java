@@ -319,7 +319,7 @@ private static void updatePublication(Scanner keyboard, MySQLAccess dao) {
     	//////////////////////////////////////////
     	String input = keyboard.next();
     	OrderStatus orderStatus;
-
+    	//new Date(); format to yyyy:mm:dd
     	try {
     	    orderStatus = OrderStatus.valueOf(input.toUpperCase());
     	} catch (IllegalArgumentException e) {
@@ -486,7 +486,7 @@ private static void updateOrder(Scanner keyboard, MySQLAccess dao) throws Custom
         try {
         	 Invoice invoice = new Invoice(invoice_id, cust_id, payment_method, order_date, total_amount, delivery_persons, publication_id, order_status);
              boolean insertResult = dao.insertInvoice(invoice);
-            System.out.println(insertResult ? "Publication Created" : "ERROR: Publication NOT Created");
+            System.out.println(insertResult ? "Invoice Created" : "ERROR: Invoice NOT Created");
         } catch (Exception e) {
             System.out.println("ERROR: " + e.getMessage());
         }
@@ -536,7 +536,7 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
     // Get updated details
     System.out.println("Enter Customer ID: \n");
     String cust_id = keyboard.nextLine();
-    System.out.println("Enter payment_method: \n");
+    System.out.println("Enter payment method: \n");
     String payment_method = keyboard.next();
     System.out.println("Enter Order Date: \n");
 //    Date order_date = keyboard.next();
@@ -592,6 +592,140 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
 		        System.out.println("Invoice Deleted");
 		    } else {
 		        System.out.println("ERROR: Invoice Details NOT Deleted or Do Not Exist");
+		    }
+		}
+	}
+	private static void createDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
+    	//Implementation for creating Publication
+    	System.out.println("Enter the Delivery Docket ID (format DD001): \n");
+    	String docket_id = keyboard.nextLine();
+        
+        System.out.println("Enter the Order ID: \n");
+        String order_id = keyboard.nextLine();
+        
+        System.out.println("Enter Delivery ID: \n");
+        String delivery_id = keyboard.next();
+        
+        System.out.println("Enter the Delivery Date: \n");
+        String delivery_date = keyboard.next();
+//        String dateString = keyboard.nextLine();
+//    	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
+//    	java.util.Date delivery_date = null;
+//    	try {
+//    		delivery_date = dateformat.parse(dateString);
+//    	} catch (ParseException e) {
+//    		// TODO Auto-generated catch block
+//    		e.printStackTrace();
+//    	} 
+        
+        System.out.println("Enter the Delivery Status: \n");
+        String delivery_status = keyboard.next();
+        
+        System.out.println("Enter the Delivery Details: \n");
+        String delivery_details = keyboard.next();
+        
+        
+        try {
+        	 DeliveryDocket deliveryDocket = new DeliveryDocket(docket_id, order_id, delivery_id, delivery_date, delivery_status, delivery_details);
+             boolean insertResult = dao.insertDeliveryDocket(deliveryDocket);
+            System.out.println(insertResult ? "Delivery Docket Created" : "ERROR: Delivery Docket NOT Created");
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+    
+private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
+		
+		//Print The Contents of the Full Delivery Dockets Table
+		
+		System.out.println("------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.println("Table: " + rs.getMetaData().getTableName(1));
+		for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+			System.out.printf("%30s",rs.getMetaData().getColumnName(i));
+		}
+		System.out.println();
+		while (rs.next()) {
+			String docket_id = rs.getString("docket_id");
+			String order_id = rs.getString("order_id");
+	        String delivery_id = rs.getString("delivery_id");
+	        Date delivery_date = rs.getDate("delivery_date");
+	        Double delivery_status = rs.getDouble("delivery_status");
+	        String delivery_details = rs.getString("delivery_details");
+	        
+			System.out.printf("%30s", docket_id);
+			System.out.printf("%30s", order_id);
+			System.out.printf("%30s", delivery_id);
+			System.out.printf("%30s", delivery_date);
+			System.out.printf("%30s", delivery_status); 
+	        System.out.printf("%30s", delivery_details);
+			System.out.println();
+		}// end while
+		System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+		
+		return true;
+		
+	}
+    
+private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
+    // Implementation for updating Delivery Docket details
+    System.out.println("Enter Delivery Docket ID to update:");
+    String docket_id = keyboard.nextLine();
+
+    // Get updated details
+    System.out.println("Enter Order ID: \n");
+    String order_id = keyboard.nextLine();
+    System.out.println("Enter delivery ID: \n");
+    String delivery_id = keyboard.next();
+    System.out.println("Enter Delivery Date: \n");
+    String delivery_date = keyboard.next();
+//    String dateString = keyboard.nextLine();
+//	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
+//	java.util.Date order_date = null;
+//	try {
+//		order_date = dateformat.parse(dateString);
+//	} catch (ParseException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	} 
+    System.out.println("Enter Delivery Status: \n");
+    String delivery_status = keyboard.next();
+    System.out.println("Enter Delivery Details: \n");
+    String delivery_details = keyboard.next();
+
+    try {
+        // Create a new Publication object with the updated details
+        DeliveryDocket deliveryDocket = new DeliveryDocket(docket_id, order_id, delivery_id, delivery_date, delivery_status, delivery_details);
+        boolean updateResult = dao.updateDeliveryDocketDetails(deliveryDocket); // You'll need to implement this method in MySQLAccess
+        System.out.println(updateResult ? "Delivery Docket Details Updated" : "ERROR: Delivery Docket Details NOT Updated");
+    } catch (Exception e) {
+        System.out.println("ERROR: " + e.getMessage());
+    }
+}
+	private static void deleteDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
+	    // Implementation for deleting publication
+//	    System.out.println("Enter Publication ID to delete:");
+//	    String deleteId = keyboard.nextLine();
+//	    boolean deleteResult = true;
+		//Delete Publication Record by ID
+		System.out.println("Enter Delivery Docket ID to be deleted or 'DELETEALL' to Clear all Rows:");
+		while (!keyboard.hasNext()) {
+		    System.out.println("Invalid input. Please enter a valid Delivery Docket ID or DELETEALL.");
+		    keyboard.next();  // Consume invalid input
+		}
+		String deleteDeliveryDocketId = keyboard.next().toUpperCase();
+		if (deleteDeliveryDocketId.compareTo("DELETEALL") == 0) {
+		    boolean deleteAllResult = dao.deleteAllinvoices();
+		    if (deleteAllResult) {
+		        System.out.println("Delivery Docket Table Emptied");
+		    } else {
+		        System.out.println("ERROR: Could not empty the table");
+		    }
+		} else {
+		    boolean deleteResult = dao.deletePublicationById(deleteDeliveryDocketId);
+		    if (deleteResult) {
+		        System.out.println("Delivery Docket Deleted");
+		    } else {
+		        System.out.println("ERROR: Delivery Docket Details NOT Deleted or Do Not Exist");
 		    }
 		}
 	}
@@ -772,6 +906,29 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
 					break;
 				case "24":
 					deleteInvoice(keyboard, dao);
+					break;
+				case "25":
+					createDeliveryDocket(keyboard, dao);
+						break;
+				case "26":
+					try (ResultSet rSet = dao.retrieveAllDeliveryDockets()) {
+					    if (rSet != null) {
+					        boolean tablePrinted = printDeliveryDocketTable(rSet);
+					        if (tablePrinted) {
+					            rSet.close();
+					        }
+					    } else {
+					        System.out.println("No Records Found");
+					    }
+					} catch (SQLException e) {
+					    System.out.println("Error retrieving delivery dockets: " + e.getMessage());
+					}
+					break;
+				case "27":
+					updateDeliveryDocket(keyboard, dao);
+					break;
+				case "28":
+					deleteDeliveryDocket(keyboard, dao);
 					break;
 				        
 				case "99":

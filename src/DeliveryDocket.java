@@ -65,6 +65,10 @@ public class DeliveryDocket {
     public String getDeliveryStatus() {
         return deliveryStatus;
     }
+    
+    public String getDetails() {
+        return details;
+    }
 
     public void setDocketId(String docketId) {
 		this.docketId = docketId;
