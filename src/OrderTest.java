@@ -9,36 +9,34 @@ public class OrderTest extends TestCase{
 	
 	// Test #: 1
     // Test Objective: Create an order with valid parameters.
-    // Inputs: orderId = "ORD0001", custId = "12345", deliveryId = "DP/001", 
-    //         publicationId = "PUB0001", orderDate = future date, 
+    // Inputs: orderId = "ORD0001", custId = "12345", deliveryId = "DP001", 
+    //         publicationId = "PUB001", orderDate = future date, 
     //         orderStatus = OrderStatus.PENDING.
     // Expected Output: Order object is created with matching parameters.
 	public void testCreateOrderSuccess() {
 		try {
-			
-			
-			// Valid parameters
-			 String orderId = "ORD0001";
-	         String custId = "12345";
-	         String deliveryId = "DP001";
-	         String publicationId = "PUB0001";
-	         Date orderDate = new Date(System.currentTimeMillis() + 10000);
-	         OrderStatus orderStatus = OrderStatus.PENDING;
-	         // Call method under test
-			 Order orderObj = new Order(orderId, custId, deliveryId, publicationId, orderDate, orderStatus);
-            
-            // Use getters to check for object creation
-			 assertEquals(orderId, orderObj.getOrderId());
-	         assertEquals(custId, orderObj.getCustId());
-	         assertEquals(deliveryId, orderObj.getDeliveryId());
-	         assertEquals(publicationId, orderObj.getPublicationId());
-	         assertEquals(orderDate, orderObj.getOrderDate());
-	         assertEquals(orderStatus, orderObj.getOrderStatus());
-		}
-		catch (CustomerExceptionHandler e) {
-			fail("Exception not expected");
-		}
-	}
+	        // Valid parameters
+	        String orderId = "ORD0001";
+	        int custId = 12345;
+	        String deliveryId = "DP001";
+	        String publicationId = "PUB001";
+	        Date orderDate = new Date(System.currentTimeMillis() + 10000);  // future date
+	        OrderStatus orderStatus = OrderStatus.PENDING;
+
+	        // Call method under test
+	        Order orderObj = new Order(orderId, custId, deliveryId, publicationId, orderDate, orderStatus);
+
+	        // Assertions to check if the object is created correctly
+	        assertEquals(orderId, orderObj.getOrderId());
+	        assertEquals(custId, orderObj.getCustId());
+	        assertEquals(deliveryId, orderObj.getDeliveryId());
+	        assertEquals(publicationId, orderObj.getPublicationId());
+	        assertEquals(orderDate, orderObj.getOrderDate());
+	        assertEquals(orderStatus, orderObj.getOrderStatus());
+	    } catch (CustomerExceptionHandler e) {
+	        fail("Exception not expected: " + e.getMessage());
+	    }
+    }
 	
 	// Test #: 2
     // Test Objective: Validate Order ID - Boundary case (1 character)
@@ -79,45 +77,48 @@ public class OrderTest extends TestCase{
         }
     }
     
-    // Test #: 5
-    // Test Objective: Validate Customer ID - Boundary case (1 character)
-    // Inputs: custId = "J"
-    // Expected Output: Exception with message "Customer Id does not meet minimum length requirements".
-    public void testInvalidCustIdLength() {
-        try {
-            Order.validateCustId("J");
-            fail("Exception expected");
-        } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Id does not meet minimum length requirements", e.getMessage());
-        }
-    }
-
-    // Test #: 6
-    // Test Objective: Validate Customer ID - Exceeds maximum length.
-    // Inputs: custId = "123456789012345678901234567890123456789012345678901"
-    // Expected Output: Exception with message "Customer Id exceeds maximum length requirements".
-    public void testCustIdExceedsMaxLength() {
-        try {
-            Order.validateCustId("123456789012345"); // Exceeds max length
-            fail("Exception expected");
-        } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Id exceeds maximum length requirements", e.getMessage());
-        }
-    }
-
-    // Test #: 7
-    // Test Objective: Validate Customer ID - Invalid format (not an integer).
-    // Inputs: custId = "abcde"
-    // Expected Output: Exception with message "Customer Id format is invalid. Expected format: integer".
-    public void testCustIdInvalidFormat() {
-        try {
-            Order.validateCustId("abcde"); // Invalid format
-            fail("Exception expected");
-        } catch (CustomerExceptionHandler e) {
-            assertEquals("Customer Id format is invalid. Expected format: integer", e.getMessage());
-        }
-    }
-
+	 // Test #: 5
+	 // Test Objective: Validate Customer ID with negative value
+	 // Inputs: custId = -1
+	 // Expected Output: Exception with message "Customer Id format is invalid. Expected format: positive integer".
+	 public void testInvalidCustIdLength() {
+	     try {
+	         Order.validateCustId(-1);  // Invalid input, negative number
+	         fail("Exception expected");
+	     } catch (CustomerExceptionHandler e) {
+	         assertEquals("Customer Id format is invalid. Expected format: positive integer", e.getMessage());
+	     }
+	 }
+	
+	 // Test #: 6
+	 // Test Objective: Validate Customer ID exceeding maximum length
+	 // Inputs: custId = 12345678911
+	 // Expected Output: Exception with message "Customer Id exceeds maximum length requirements".
+	 public void testCustIdExceedsMaxLength() {
+	     try {
+	         Order.validateCustId(1234567911); 
+	         fail("Exception expected");
+	     } catch (CustomerExceptionHandler e) {
+	         assertEquals("Customer Id exceeds maximum length requirements", e.getMessage());
+	     }
+	 }
+	
+	// Test #: 7
+	// Test Objective: Validate Customer ID with invalid format (non-integer input)
+	// Inputs: custId = "abcde"
+	// Expected Output: Exception with message "Customer Id format is invalid. Expected format: positive integer".
+	 public void testCustIdInvalidFormat() {
+		    try {
+		        int invalidCustId = Integer.parseInt("abcde"); 
+		        Order.validateCustId(invalidCustId);  
+		        fail("Exception expected for non-integer input");
+		    } catch (NumberFormatException ex) {
+		        assertTrue("Input 'abcde' should throw a NumberFormatException", true);
+		    } catch (CustomerExceptionHandler e) {
+		        assertEquals("Customer Id format is invalid. Expected format: positive integer", e.getMessage());
+		    }
+		}
+	
     // Test #: 8
     // Test Objective: Validate Delivery ID - Boundary case (1 character).
     // Inputs: deliveryId = "J"
@@ -185,14 +186,14 @@ public class OrderTest extends TestCase{
 
     // Test #: 13
     // Test Objective: Validate Publication ID - Invalid format.
-    // Inputs: publicationId = "PUB123"
+    // Inputs: publicationId = "PUBB01"
     // Expected Output: Exception with message "Publication Id format is invalid. Expected format: PUB0001".
     public void testPublicationIdInvalidFormat() {
         try {
-            Order.validatePublicationId("PUB123"); // Invalid format
+            Order.validatePublicationId("PUBB01"); // Invalid format
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Publication Id format is invalid. Expected format: PUB0001", e.getMessage());
+            assertEquals("Publication Id format is invalid. Expected format: PUB001", e.getMessage());
         }
     }
 

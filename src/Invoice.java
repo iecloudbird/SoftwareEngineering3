@@ -17,9 +17,9 @@ public class Invoice {
         this.paymentMethod = PaymentMethod.CARD; 
         this.orderDate = null;
         this.totalAmount = 0.0;
-        this.deliveryId = null;  // Optional
-        this.publicationId = null; // Optional
-        this.orderStatus = "Pending"; // Default status
+        this.deliveryId = null;  
+        this.publicationId = null; 
+        this.orderStatus = "Pending"; 
     }
 
     // Parameterized constructor

@@ -12,7 +12,7 @@ enum OrderStatus {
 public class Order {
 	private String orderId; //format : ORD0001
 	private int custId;
-	private String deliveryId; //deliveryPersonID format : DP/000
+	private String deliveryId; //deliveryPersonID format : DP000
 	private String publicationId;
 	private Date orderDate;
 	private OrderStatus orderStatus;
@@ -100,22 +100,9 @@ public class Order {
         }
 	}
 	public static void validateCustId(int custId) throws CustomerExceptionHandler {
-		
-		//Agree Formating Rules on "Customer Id"
-		//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
-		
-//		if (custId.isBlank() || custId.isEmpty())
-//			throw new CustomerExceptionHandler("Customer Id NOT specified");
-//		else if (custId.length() < 5)
-//			throw new CustomerExceptionHandler("Customer Id does not meet minimum length requirements");
-//		else if (custId.length() > 10)
-//			throw new CustomerExceptionHandler("Customer Id exceeds maximum length requirements");
-//		else if (!custId.matches("\\d+")) {
-//            throw new CustomerExceptionHandler("Customer Id format is invalid. Expected format: integer");
-//        }
 		if (custId == 0)
 		    throw new CustomerExceptionHandler("Customer Id NOT specified");
-		else if (String.valueOf(custId).length() > 10)
+		else if (custId > 100000)
 		    throw new CustomerExceptionHandler("Customer Id exceeds maximum length requirements");
 		else if (custId < 0) {
 		    throw new CustomerExceptionHandler("Customer Id format is invalid. Expected format: positive integer");

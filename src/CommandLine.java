@@ -246,7 +246,7 @@ public class CommandLine {
         String deleteId = keyboard.nextLine();
         boolean deleteResult = true;
     }
-    }
+    
 
 
 	private static void cancelInvoice(Scanner scanner, MySQLAccess dao) {
@@ -834,7 +834,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	}
 	//DELIVERY AREA CRUD 
 	// Insert a new delivery area
-    public static void insertDeliveryArea(Scanner scanner, MySQLAccess dao) {
+	private static void insertDeliveryArea(Scanner scanner, MySQLAccess dao) {
         try {
             System.out.print("Enter Area ID (AREA00): ");
             String areaId = scanner.nextLine();
@@ -855,13 +855,13 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
             // Insert into the database
             boolean result = dao.insertDeliveryArea(area);
             System.out.println(result ? "Delivery area inserted successfully!" : "Failed to insert delivery area.");
-        } catch (DeliveryAreaException | SQLException e) {
+        } catch (DeliveryAreaException e) {
             System.out.println("ERROR: " + e.getMessage());
         }
     }
     
 	// Print all delivery areas in CLI
-	public static void viewAllDeliveryAreas(MySQLAccess dao) {
+	private static void viewAllDeliveryAreas(MySQLAccess dao) {
 	    try (ResultSet rs = dao.getAllDeliveryAreas()) {  // Assume getAllDeliveryAreas() returns all delivery area records
 	        if (rs != null) {
 	            printDeliveryAreaTable(rs);
@@ -899,7 +899,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	}
 	
 	// Update a delivery area
-    public static void updateDeliveryArea(Scanner scanner, MySQLAccess dao) {
+    private static void updateDeliveryArea(Scanner scanner, MySQLAccess dao) {
         try {
             System.out.print("Enter Area ID to update: ");
             String areaId = scanner.nextLine();
@@ -920,13 +920,13 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
             // Update the database
             boolean result = dao.updateDeliveryArea(area);
             System.out.println(result ? "Delivery area updated successfully!" : "Failed to update delivery area.");
-        } catch (DeliveryAreaException | SQLException e) {
+        } catch (DeliveryAreaException e) {
             System.out.println("ERROR: " + e.getMessage());
         }
     }
 
     // Delete a delivery area
-    public static void deleteDeliveryArea(Scanner scanner, MySQLAccess dao) {
+    private static void deleteDeliveryArea(Scanner scanner, MySQLAccess dao) {
         System.out.print("Enter Area ID to delete: ");
         String areaId = scanner.nextLine();
 
@@ -994,7 +994,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	    return true;
 	}
 
-	public static void viewAllWarningLetters(MySQLAccess dao) {
+	private static void viewAllWarningLetters(MySQLAccess dao) {
 	    try (ResultSet rs = dao.getAllWarningLetters()) {  // Assume getAllWarningLetters() returns all warning letter records
 	        if (rs != null) {
 	            boolean tablePrinted = printWarningLetterTable(rs);
@@ -1053,7 +1053,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 
 	
 	//Newsagent CRUD
-	private static void createNewsagent(Scanner keyboard, MySQLAccess dao) {
+	private static void createNewsagent(Scanner keyboard, MySQLAccess dao) throws CustomerExceptionHandler {
 	    System.out.printf("Enter Agent Name: \n");
 	    String name = keyboard.nextLine();
 
@@ -1090,7 +1090,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	    }
 	}
 
-	private static void updateNewsagent(Scanner keyboard, MySQLAccess dao) {
+	private static void updateNewsagent(Scanner keyboard, MySQLAccess dao) throws CustomerExceptionHandler {
 	    System.out.printf("Enter Agent Name to update: \n");
 	    String name = keyboard.nextLine();
 
@@ -1170,7 +1170,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	    return true;
 	}
 
-	public static void viewAllStorageRecords(MySQLAccess dao) {
+	private static void viewAllStorageRecords(MySQLAccess dao) {
 	    try (ResultSet rs = dao.getAllStorage()) {  // Assume getAllStorage() returns all storage records
 	        if (rs != null) {
 	            boolean tablePrinted = printStorageTable(rs);
