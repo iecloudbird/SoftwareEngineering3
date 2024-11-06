@@ -21,32 +21,32 @@ public class CommandLine {
 		System.out.println("2. View ALL Customer Records");
 		System.out.println("3. Update Customer Record by ID");
         System.out.println("4. Delete Inactive Customer Records");
-        
+        //CRUD for Delivery Person
         System.out.println("5. Create Delivery Person");
         System.out.println("6. Read Delivery Person");
         System.out.println("7. Update Delivery Person");
         System.out.println("8. Delete Delivery Person");
-        
+      //CRUD for Invoice (Duplicate 1 of 2)
         System.out.println("9. Create Invoice");
         System.out.println("10. Update Invoice");
         System.out.println("11. Cancel Invoice");
         System.out.println("12. View All Invoices");
-        
+      //CRUD for Publication
         System.out.println("13. Create Publication");
         System.out.println("14. Read Publication");
         System.out.println("15. Update Publication");
         System.out.println("16. Delete Publication");
-        
+      //CRUD for Order
         System.out.println("17. Create Order");
         System.out.println("18. Read Order");
         System.out.println("19. Update Order");
         System.out.println("20. Delete Order");
-        
+      //CRUD for Invoice (Duplicate 2 of 2)
         System.out.println("21. Create Invoice");
         System.out.println("22. Read Invoice");
         System.out.println("23. Update Invoice");
         System.out.println("24. Delete Invoice");
-        
+        //CRUD for Delivery Docket
         System.out.println("25. Create Delivery Docket");
         System.out.println("26. Read Delivery Docket");
         System.out.println("27. Update Delivery Docket");
