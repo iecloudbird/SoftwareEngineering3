@@ -3,7 +3,8 @@ import java.sql.Date;
 import java.sql.DriverManager;
 	import java.sql.PreparedStatement;
 	import java.sql.Statement;
-	import java.sql.ResultSet;
+import java.util.*;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 	
 	
@@ -752,5 +753,222 @@ import java.sql.SQLException;
 		    }
 		    return deleteSuccessful;
 		}
+		
+		// Insert Delivery Area
+		public boolean insertDeliveryArea(DeliveryArea deliveryArea) {
+		    String query = "INSERT INTO delivery_areas (area_id, area_name, delivery_person_id, total_customers) VALUES (?, ?, ?, ?)";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {
+		        ps.setString(1, deliveryArea.getAreaId());
+		        ps.setString(2, deliveryArea.getAreaName());
+		        ps.setString(3, deliveryArea.getDeliveryPersonId());
+		        ps.setInt(4, deliveryArea.getTotalCustomers());
+		        return ps.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+
+		// Read All Delivery Areas
+		public ResultSet getAllDeliveryAreas() {
+		    String query = "SELECT * FROM delivery_areas";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {  
+		        return ps.executeQuery();  
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return null;
+		    }
+		}
+
+		// Update Delivery Area
+		public boolean updateDeliveryArea(DeliveryArea deliveryArea) {
+		    String query = "UPDATE delivery_areas SET area_name = ?, delivery_person_id = ?, total_customers = ? WHERE area_id = ?";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {
+		        ps.setString(1, deliveryArea.getAreaName());
+		        ps.setString(2, deliveryArea.getDeliveryPersonId());
+		        ps.setInt(3, deliveryArea.getTotalCustomers());
+		        ps.setString(4, deliveryArea.getAreaId());
+		        return ps.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+
+		// Delete Delivery Area
+		public boolean deleteDeliveryArea(String areaId) {
+		    String query = "DELETE FROM delivery_areas WHERE area_id = ?";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {
+		        ps.setString(1, areaId);
+		        return ps.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+		
+		
+		
+		// Insert Warning Letter
+	    public boolean insertWarningLetter(WarningLetter letter) {
+	        String query = "INSERT INTO warning_letter (letter_id, cust_id, cust_address, reason, due_amount) VALUES (?, ?, ?, ?, ?)";
+	        try (PreparedStatement ps = connect.prepareStatement(query)) {
+	            ps.setString(1, letter.getLetterId());
+	            ps.setInt(2, Integer.parseInt(letter.getCustId()));  // Assuming custId is stored as a String
+	            ps.setString(3, letter.getReason());
+	            ps.setDouble(4, letter.getDueAmount());
+	            ps.setDate(5, new java.sql.Date(letter.getIssueDate().getTime()));
+	            return ps.executeUpdate() > 0;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+	    }
+
+	    // Retrieve all Warning Letters
+	    public ResultSet getAllWarningLetters() {
+	        String query = "SELECT * FROM warning_letter";
+	        try (PreparedStatement ps = connect.prepareStatement(query)) {
+	            return ps.executeQuery();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+	    }
+
+	    // Update Warning Letter
+	    public boolean updateWarningLetter(WarningLetter letter) {
+	        String query = "UPDATE warning_letter SET cust_address = ?, reason = ?, due_amount = ? WHERE letter_id = ?";
+	        try (PreparedStatement ps = connect.prepareStatement(query)) {
+	            ps.setString(1, letter.getCustId());
+	            ps.setString(2, letter.getReason());
+	            ps.setDouble(3, letter.getDueAmount());
+	            ps.setString(4, letter.getLetterId());
+	            return ps.executeUpdate() > 0;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+	    }
+
+	    // Delete Warning Letter
+	    public boolean deleteWarningLetter(String letterId) {
+	        String query = "DELETE FROM warning_letter WHERE letter_id = ?";
+	        try (PreparedStatement ps = connect.prepareStatement(query)) {
+	            ps.setString(1, letterId);
+	            return ps.executeUpdate() > 0;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+	    }
+		
+		
+		// Insert Newsagent
+		public boolean insertNewsagent(Newsagent agent) {
+		    String query = "INSERT INTO newsagent (agent_name, agent_address, agent_phone, agent_email) VALUES (?, ?, ?, ?)";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {
+		        ps.setString(1, agent.getName());
+		        ps.setString(2, agent.getAddress());
+		        ps.setString(3, agent.getPhoneNumber());
+		        ps.setString(4, agent.getEmail());
+		        return ps.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+
+		// Retrieve Newsagent 
+		public ResultSet getNewsagent() throws CustomerExceptionHandler {
+		    String query = "SELECT * FROM newsagent";
+		    try {
+		        Statement stmt = connect.createStatement();
+		        return stmt.executeQuery(query);
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        throw new CustomerExceptionHandler("Error retrieving Newsagent data.");
+		    }
+		}
+
+		// Update Newsagent
+		public boolean updateNewsagent(Newsagent agent) {
+		    String query = "UPDATE newsagent SET agent_address = ?, agent_phone = ?, agent_email = ? WHERE agent_name = ?";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {
+		        ps.setString(1, agent.getAddress());
+		        ps.setString(2, agent.getPhoneNumber());
+		        ps.setString(3, agent.getEmail());
+		        ps.setString(4, agent.getName());
+		        return ps.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+
+		// Delete Newsagent
+		public boolean deleteNewsagent(String agentName) {
+		    String query = "DELETE FROM newsagent WHERE agent_name = ?";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {
+		        ps.setString(1, agentName);
+		        return ps.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+		
+		// Insert Storage
+		public boolean insertStorage(Storage storage) {
+		    String query = "INSERT INTO storage (storage_id, publication_id, description_details, capacity, current_stock) VALUES (?, ?, ?, ?, ?)";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {
+		        ps.setString(1, storage.getStorageId());
+		        ps.setString(2, storage.getPublicationId());
+		        ps.setString(3, storage.getDescription());
+		        ps.setInt(4, storage.getCapacity());
+		        ps.setInt(5, storage.getCurrentStockLevel());
+		        return ps.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+		
+		//Retrieve all storage records
+		public ResultSet getAllStorage() {
+		    String query = "SELECT * FROM storage";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {  
+		        return ps.executeQuery();  
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return null;
+		    }
+		}
+	    // Update Storage
+		public boolean updateStorage(Storage storage) {
+		    String query = "UPDATE storage SET description_details = ?, capacity = ?, current_stock = ? WHERE storage_id = ?";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {
+		        ps.setString(1, storage.getDescription());
+		        ps.setInt(2, storage.getCapacity());
+		        ps.setInt(3, storage.getCurrentStockLevel());
+		        ps.setString(4, storage.getStorageId());
+		        return ps.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+
+	    // Delete Storage
+	    public boolean deleteStorage(String storageId) {
+	        String query = "DELETE FROM storage WHERE storage_id = ?";
+	        try (PreparedStatement ps = connect.prepareStatement(query)) {
+	            ps.setString(1, storageId);
+	            return ps.executeUpdate() > 0;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+	    }
 	}// end Class
 	

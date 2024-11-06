@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 public class CommandLine {
@@ -26,22 +27,22 @@ public class CommandLine {
         System.out.println("6. Read Delivery Person");
         System.out.println("7. Update Delivery Person");
         System.out.println("8. Delete Delivery Person");
-      //CRUD for Invoice (Duplicate 1 of 2)
+        //CRUD for Invoice (Duplicate 1 of 2)
         System.out.println("9. Create Invoice");
         System.out.println("10. Update Invoice");
         System.out.println("11. Cancel Invoice");
         System.out.println("12. View All Invoices");
-      //CRUD for Publication
+        //CRUD for Publication
         System.out.println("13. Create Publication");
         System.out.println("14. Read Publication");
         System.out.println("15. Update Publication");
         System.out.println("16. Delete Publication");
-      //CRUD for Order
+        //CRUD for Order
         System.out.println("17. Create Order");
         System.out.println("18. Read Order");
         System.out.println("19. Update Order");
         System.out.println("20. Delete Order");
-      //CRUD for Invoice (Duplicate 2 of 2)
+        //CRUD for Invoice (Duplicate 2 of 2)
         System.out.println("21. Create Invoice");
         System.out.println("22. Read Invoice");
         System.out.println("23. Update Invoice");
@@ -51,7 +52,30 @@ public class CommandLine {
         System.out.println("26. Read Delivery Docket");
         System.out.println("27. Update Delivery Docket");
         System.out.println("28. Delete Delivery Docket");
+        //CRUD for Delivery Area
+        System.out.println("31. Create Delivery Area");
+        System.out.println("32. View All Delivery Areas");
+        System.out.println("33. Update Delivery Area by ID");
+        System.out.println("34. Delete Delivery Area by ID");
         
+        //CRUD for Warning Letter:
+        System.out.println("35. Create Warning Letter");
+        System.out.println("36. View All Warning Letters");
+        System.out.println("37. Update Warning Letter by ID");
+        System.out.println("38. Delete Warning Letter by ID");
+        
+        //CRUD for Newsagent
+        System.out.println("41. Create Newsagent");
+        System.out.println("42. View All Newsagents");
+        System.out.println("43. Update Newsagent by Name");
+        System.out.println("44. Delete Newsagent by Name");
+        
+        //CRUD for Storage
+        System.out.println("45. Create Storage Record");
+        System.out.println("46. View All Storage Records");
+        System.out.println("47. Update Storage Record by ID");
+        System.out.println("48. Delete Storage Record by ID");
+
 		System.out.println("99. Close the NewsAgent Application");
 		System.out.println("=============================================");
 		System.out.println(" ");
@@ -222,94 +246,8 @@ public class CommandLine {
         String deleteId = keyboard.nextLine();
         boolean deleteResult = true;
     }
-    
-   private static void createInvoice(Scanner scanner, MySQLAccess dao) throws CustomerExceptionHandler {
-    System.out.println("Enter Invoice ID:");
-    String invoiceId = scanner.nextLine();
-    System.out.println("Enter Customer ID:");
-    String custId = scanner.nextLine();
-
-    System.out.println("Enter Payment Method (card/cash):");
-    String paymentMethod = scanner.nextLine();
-    System.out.println("Enter Order Date (YYYY-MM-DD):");
-    String dateString = scanner.nextLine();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    Date orderDate = null;
-    try {
-        orderDate = dateFormat.parse(dateString);
-    } catch (ParseException e) {
-        System.out.println("Invalid date format. Please use YYYY-MM-DD.");
     }
-    System.out.println("Enter Total Amount:");
-    double totalAmount = scanner.nextDouble();
-    scanner.nextLine(); // Consume newline
-    System.out.println("Enter Delivery ID (optional, leave blank if not applicable):");
-    String deliveryId = scanner.nextLine();
-    System.out.println("Enter Publication ID (optional, leave blank if not applicable):");
-    String publicationId = scanner.nextLine();
-    System.out.println("Enter Order Status:");
-    String orderStatus = scanner.nextLine();
 
-    // Ensure orderDate is not null before calling the constructor
-    if (orderDate != null) {
-        // Convert to java.sql.Date if necessary
-        java.sql.Date sqlDate = new java.sql.Date(orderDate.getTime());
-
-        Invoice newInvoice = new Invoice(invoiceId, custId, paymentMethod, sqlDate, totalAmount, deliveryId, publicationId, orderStatus);
-        
-        if (dao.insertInvoice(newInvoice)) {
-            System.out.println("Invoice created successfully.");
-        } else {
-            System.out.println("Failed to create invoice.");
-        }
-    } else {
-        System.out.println("Invoice creation failed due to invalid date.");
-    }
-}
-
-   private static void updateInvoice(Scanner scanner, MySQLAccess dao) throws CustomerExceptionHandler {
-	    System.out.println("Enter Invoice ID to update:");
-	    String invoiceId = scanner.nextLine();
-	    System.out.println("Enter New Customer ID:");
-	    String custId = scanner.nextLine();
-	    System.out.println("Enter Payment Method (card/cash):");
-	    String paymentMethod = scanner.nextLine();
-	    System.out.println("Enter New Order Date (YYYY-MM-DD):");
-	    String dateString = scanner.nextLine();
-	    
-	    Date orderDate = null;
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	    try {
-	        orderDate = dateFormat.parse(dateString);
-	    } catch (ParseException e) {
-	        System.out.println("Invalid date format. Please use YYYY-MM-DD.");
-	        return; // Exit or handle the invalid input case
-	    }
-
-	    System.out.println("Enter New Total Amount:");
-	    double totalAmount = 0.0;
-	    try {
-	        totalAmount = Double.parseDouble(scanner.nextLine());
-	    } catch (NumberFormatException e) {
-	        System.out.println("Invalid total amount. Please enter a valid number.");
-	        return;
-	    }
-
-	    System.out.println("Enter New Delivery ID (optional, leave blank if not applicable):");
-	    String deliveryId = scanner.nextLine();
-	    System.out.println("Enter New Publication ID (optional, leave blank if not applicable):");
-	    String publicationId = scanner.nextLine();
-	    System.out.println("Enter New Order Status:");
-	    String orderStatus = scanner.nextLine();
-
-	    Invoice updatedInvoice = new Invoice(invoiceId, custId, paymentMethod, orderDate, totalAmount, deliveryId, publicationId, orderStatus);
-	    
-	    if (dao.updateInvoiceDetails(updatedInvoice)) {
-	        System.out.println("Invoice updated successfully.");
-	    } else {
-	        System.out.println("Failed to update invoice.");
-	    }
-	}
 
 	private static void cancelInvoice(Scanner scanner, MySQLAccess dao) {
 	    System.out.println("Enter Invoice ID to cancel:");
@@ -334,39 +272,6 @@ public class CommandLine {
 	        System.out.println("Unexpected error: " + e.getMessage());
 	    }
 	}
-
-	private static boolean printInvoiceTable(ResultSet rs) throws Exception {
-	    System.out.println("------------------------------------------------------------------------------------------------------");
-	    System.out.println("Table: " + rs.getMetaData().getTableName(1));
-	    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-	        System.out.printf("%30s", rs.getMetaData().getColumnName(i));
-	    }
-	    System.out.println();
-	    while (rs.next()) {
-	        String invoiceId = rs.getString("invoice_id");
-	        String custId = rs.getString("customer_id");
-	        String paymentMethod = rs.getString("payment_method");
-	        Date orderDate = rs.getDate("order_date");
-	        double totalAmount = rs.getDouble("total_amount");
-	        String deliveryId = rs.getString("delivery_id");
-	        String publicationId = rs.getString("publication_id");
-	        String orderStatus = rs.getString("order_status");
-	
-	        System.out.printf("%30s", invoiceId);
-	        System.out.printf("%30s", custId);
-	        System.out.printf("%30s", paymentMethod);
-	        System.out.printf("%30s", orderDate);
-	        System.out.printf("%30.2f", totalAmount);
-	        System.out.printf("%30s", deliveryId);
-	        System.out.printf("%30s", publicationId);
-	        System.out.printf("%30s", orderStatus);
-	        System.out.println();
-	    }
-	    System.out.println("------------------------------------------------------------------------------------------------------");
-	    
-	    return true;
-	}
-
     
     private static void createPublication(Scanner keyboard, MySQLAccess dao) {
     	//Implementation for creating Publication
@@ -927,6 +832,396 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		    }
 		}
 	}
+	//DELIVERY AREA CRUD 
+	// Insert a new delivery area
+    public static void insertDeliveryArea(Scanner scanner, MySQLAccess dao) {
+        try {
+            System.out.print("Enter Area ID (AREA00): ");
+            String areaId = scanner.nextLine();
+
+            System.out.print("Enter Area Name: ");
+            String areaName = scanner.nextLine();
+
+            System.out.print("Enter Delivery Person ID (DP000): ");
+            String deliveryPersonId = scanner.nextLine();
+
+            System.out.print("Enter Total Customers: ");
+            int totalCustomers = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            // Create the DeliveryArea object
+            DeliveryArea area = new DeliveryArea(areaId, areaName, deliveryPersonId, totalCustomers);
+
+            // Insert into the database
+            boolean result = dao.insertDeliveryArea(area);
+            System.out.println(result ? "Delivery area inserted successfully!" : "Failed to insert delivery area.");
+        } catch (DeliveryAreaException | SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+    
+	// Print all delivery areas in CLI
+	public static void viewAllDeliveryAreas(MySQLAccess dao) {
+	    try (ResultSet rs = dao.getAllDeliveryAreas()) {  // Assume getAllDeliveryAreas() returns all delivery area records
+	        if (rs != null) {
+	            printDeliveryAreaTable(rs);
+	            rs.close();
+	        } else {
+	            System.out.println("No Delivery Areas Found");
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("ERROR: Failed to retrieve delivery areas.");
+	        e.printStackTrace();
+	    }
+	}
+
+	// Print Delivery Area Table
+	private static void printDeliveryAreaTable(ResultSet rs) throws SQLException {
+	    System.out.println("--------------------------------------------------------------------------------------------------------");
+	    System.out.println("Table: " + rs.getMetaData().getTableName(1));
+	    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+	        System.out.printf("%30s", rs.getMetaData().getColumnName(i));
+	    }
+	    System.out.println();
+	    while (rs.next()) {
+	        String areaId = rs.getString("area_id");
+	        String areaName = rs.getString("area_name");
+	        String deliveryPersonId = rs.getString("delivery_person_id");
+	        int totalCustomers = rs.getInt("total_customers");
+
+	        System.out.printf("%30s", areaId);
+	        System.out.printf("%30s", areaName);
+	        System.out.printf("%30s", deliveryPersonId);
+	        System.out.printf("%30d", totalCustomers);
+	        System.out.println();
+	    }
+	    System.out.println("--------------------------------------------------------------------------------------------------------");
+	}
+	
+	// Update a delivery area
+    public static void updateDeliveryArea(Scanner scanner, MySQLAccess dao) {
+        try {
+            System.out.print("Enter Area ID to update: ");
+            String areaId = scanner.nextLine();
+
+            System.out.print("Enter New Area Name: ");
+            String areaName = scanner.nextLine();
+
+            System.out.print("Enter New Delivery Person ID: ");
+            String deliveryPersonId = scanner.nextLine();
+
+            System.out.print("Enter New Total Customers: ");
+            int totalCustomers = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            // Create the DeliveryArea object with updated details
+            DeliveryArea area = new DeliveryArea(areaId, areaName, deliveryPersonId, totalCustomers);
+
+            // Update the database
+            boolean result = dao.updateDeliveryArea(area);
+            System.out.println(result ? "Delivery area updated successfully!" : "Failed to update delivery area.");
+        } catch (DeliveryAreaException | SQLException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    // Delete a delivery area
+    public static void deleteDeliveryArea(Scanner scanner, MySQLAccess dao) {
+        System.out.print("Enter Area ID to delete: ");
+        String areaId = scanner.nextLine();
+
+        boolean result = dao.deleteDeliveryArea(areaId);
+        System.out.println(result ? "Delivery area deleted successfully!" : "Failed to delete delivery area.");
+    }
+	
+	//Warning letter CRUD:
+	private static void insertWarningLetter(Scanner scanner, MySQLAccess dao) {
+	    System.out.print("Enter Warning Letter ID: ");
+	    String letterId = scanner.nextLine();
+
+	    System.out.print("Enter Customer ID: ");
+	    String custId = scanner.nextLine();
+
+	    System.out.print("Enter Customer Address: ");
+	    String custAddress = scanner.nextLine();
+
+	    System.out.print("Enter Reason: ");
+	    String reason = scanner.nextLine();
+
+	    System.out.print("Enter Due Amount: ");
+	    double dueAmount = scanner.nextDouble();
+	    scanner.nextLine(); // Consume newline
+
+	    System.out.print("Enter Issue Date (YYYY-MM-DD): ");
+	    String issueDateStr = scanner.nextLine();
+	    Date issueDate = Date.valueOf(issueDateStr);  // Assuming proper date format
+
+	    try {
+	        // Create a new WarningLetter object
+	        WarningLetter letter = new WarningLetter(letterId, custId, custAddress, reason, dueAmount, issueDate);
+
+	        // Insert the WarningLetter into the database
+	        boolean result = dao.insertWarningLetter(letter);
+	        System.out.println(result ? "Warning letter inserted successfully!" : "Failed to insert warning letter.");
+	    } catch (CustomerExceptionHandler e) {
+	        System.out.println("ERROR: " + e.getMessage());
+	    }
+	}
+	private static boolean printWarningLetterTable(ResultSet rs) throws SQLException {
+	    System.out.println("------------------------------------------------------------------------------------------------------");
+	    System.out.println("Table: " + rs.getMetaData().getTableName(1));
+	    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+	        System.out.printf("%30s", rs.getMetaData().getColumnName(i));
+	    }
+	    System.out.println();
+	    while (rs.next()) {
+	        String letterId = rs.getString("letter_id");
+	        String custId = rs.getString("cust_id");
+	        String custAddress = rs.getString("cust_address");
+	        String reason = rs.getString("reason");
+	        double dueAmount = rs.getDouble("due_amount");
+	        Date issueDate = rs.getDate("issue_date");
+
+	        System.out.printf("%30s", letterId);
+	        System.out.printf("%30s", custId);
+	        System.out.printf("%30s", custAddress);
+	        System.out.printf("%30s", reason);
+	        System.out.printf("%30.2f", dueAmount);
+	        System.out.printf("%30s", issueDate);
+	        System.out.println();
+	    }
+	    System.out.println("------------------------------------------------------------------------------------------------------");
+	    return true;
+	}
+
+	public static void viewAllWarningLetters(MySQLAccess dao) {
+	    try (ResultSet rs = dao.getAllWarningLetters()) {  // Assume getAllWarningLetters() returns all warning letter records
+	        if (rs != null) {
+	            boolean tablePrinted = printWarningLetterTable(rs);
+	            if (tablePrinted) {
+	                rs.close();
+	            }
+	        } else {
+	            System.out.println("No Warning Letters Found");
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("ERROR: Failed to retrieve warning letters.");
+	        e.printStackTrace();
+	    }
+	}
+
+	private static void updateWarningLetter(Scanner scanner, MySQLAccess dao) {
+	    System.out.print("Enter Warning Letter ID to update: ");
+	    String letterId = scanner.nextLine();
+
+	    System.out.print("Enter New Customer ID: ");
+	    String custId = scanner.nextLine();
+
+	    System.out.print("Enter New Customer Address: ");
+	    String custAddress = scanner.nextLine();
+
+	    System.out.print("Enter New Reason: ");
+	    String reason = scanner.nextLine();
+
+	    System.out.print("Enter New Due Amount: ");
+	    double dueAmount = scanner.nextDouble();
+	    scanner.nextLine(); // Consume newline
+
+	    System.out.print("Enter New Issue Date (YYYY-MM-DD): ");
+	    String issueDateStr = scanner.nextLine();
+	    Date issueDate = Date.valueOf(issueDateStr);
+
+	    try {
+	        // Create a new WarningLetter object with updated information
+	        WarningLetter letter = new WarningLetter(letterId, custId, custAddress, reason, dueAmount, issueDate);
+
+	        // Update the WarningLetter in the database
+	        boolean result = dao.updateWarningLetter(letter);
+	        System.out.println(result ? "Warning letter updated successfully!" : "Failed to update warning letter.");
+	    } catch (CustomerExceptionHandler e) {
+	        System.out.println("ERROR: " + e.getMessage());
+	    }
+	}
+
+	private static void deleteWarningLetter(Scanner scanner, MySQLAccess dao) {
+	    System.out.print("Enter Warning Letter ID to delete: ");
+	    String letterId = scanner.nextLine();
+
+	    boolean result = dao.deleteWarningLetter(letterId);
+	    System.out.println(result ? "Warning letter deleted successfully!" : "Failed to delete warning letter.");
+	}
+
+	
+	//Newsagent CRUD
+	private static void createNewsagent(Scanner keyboard, MySQLAccess dao) {
+	    System.out.printf("Enter Agent Name: \n");
+	    String name = keyboard.nextLine();
+
+	    System.out.printf("Enter Agent Address: \n");
+	    String address = keyboard.nextLine();
+
+	    System.out.printf("Enter Agent Phone Number: \n");
+	    String phone = keyboard.nextLine();
+
+	    System.out.printf("Enter Agent Email: \n");
+	    String email = keyboard.nextLine();
+
+	    Newsagent agent = new Newsagent(name, address, phone, email);
+	    boolean result = dao.insertNewsagent(agent);
+	    System.out.println(result ? "Newsagent created successfully!" : "ERROR: Failed to create newsagent.");
+	}
+
+	private static void viewAllNewsagents(MySQLAccess dao) {
+	    try (ResultSet rs = dao.getNewsagent()) { 
+	        while (rs.next()) {
+	            String name = rs.getString("agent_name");
+	            String address = rs.getString("agent_address");
+	            String phone = rs.getString("agent_phone");
+	            String email = rs.getString("agent_email");
+
+	            System.out.println("Name: " + name);
+	            System.out.println("Address: " + address);
+	            System.out.println("Phone: " + phone);
+	            System.out.println("Email: " + email);
+	            System.out.println("--------------------");
+	        }
+	    } catch (SQLException | CustomerExceptionHandler e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	private static void updateNewsagent(Scanner keyboard, MySQLAccess dao) {
+	    System.out.printf("Enter Agent Name to update: \n");
+	    String name = keyboard.nextLine();
+
+	    System.out.printf("Enter New Address: \n");
+	    String address = keyboard.nextLine();
+
+	    System.out.printf("Enter New Phone Number: \n");
+	    String phone = keyboard.nextLine();
+
+	    System.out.printf("Enter New Email: \n");
+	    String email = keyboard.nextLine();
+
+	    Newsagent agent = new Newsagent(name, address, phone, email);
+	    boolean result = dao.updateNewsagent(agent);
+	    System.out.println(result ? "Newsagent updated successfully!" : "ERROR: Failed to update newsagent.");
+	}
+
+	private static void deleteNewsagent(Scanner keyboard, MySQLAccess dao) {
+	    System.out.printf("Enter Agent Name to delete: \n");
+	    String name = keyboard.nextLine();
+
+	    boolean result = dao.deleteNewsagent(name);
+	    System.out.println(result ? "Newsagent deleted successfully!" : "ERROR: Failed to delete newsagent.");
+	}
+	
+	//STORAGE CRUD CLI METHOD:
+	private static void createStorage(Scanner keyboard, MySQLAccess dao) {
+        System.out.printf("Enter Storage ID (format ST001): \n");
+        String storageId = keyboard.nextLine().toUpperCase();
+
+        System.out.printf("Enter Publication ID (format PUB001): \n");
+        String publicationId = keyboard.nextLine().toUpperCase();
+
+        System.out.printf("Enter Description Details: \n");
+        String description = keyboard.nextLine();
+
+        System.out.printf("Enter Capacity: \n");
+        int capacity = keyboard.nextInt();
+        keyboard.nextLine(); // Consume newline
+
+        System.out.printf("Enter Current Stock Level: \n");
+        int currentStockLevel = keyboard.nextInt();
+        keyboard.nextLine(); // Consume newline
+
+        Storage storage = new Storage(storageId, publicationId, description, capacity, currentStockLevel);
+        
+        try {
+            boolean result = dao.insertStorage(storage);
+            System.out.println(result ? "Storage record created successfully!" : "ERROR: Storage record creation failed.");
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+	private static boolean printStorageTable(ResultSet rs) throws SQLException {
+	    System.out.println("------------------------------------------------------------------------------------------------------");
+	    System.out.println("Table: " + rs.getMetaData().getTableName(1));
+	    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+	        System.out.printf("%30s", rs.getMetaData().getColumnName(i));
+	    }
+	    System.out.println();
+	    while (rs.next()) {
+	        String storageId = rs.getString("storage_id");
+	        String publicationId = rs.getString("publication_id");
+	        String description = rs.getString("description_details");
+	        int capacity = rs.getInt("capacity");
+	        int currentStockLevel = rs.getInt("current_stock");
+
+	        System.out.printf("%30s", storageId);
+	        System.out.printf("%30s", publicationId);
+	        System.out.printf("%30s", description);
+	        System.out.printf("%30d", capacity);
+	        System.out.printf("%30d", currentStockLevel);
+	        System.out.println();
+	    }
+	    System.out.println("------------------------------------------------------------------------------------------------------");
+	    return true;
+	}
+
+	public static void viewAllStorageRecords(MySQLAccess dao) {
+	    try (ResultSet rs = dao.getAllStorage()) {  // Assume getAllStorage() returns all storage records
+	        if (rs != null) {
+	            boolean tablePrinted = printStorageTable(rs);
+	            if (tablePrinted) {
+	                rs.close();
+	            }
+	        } else {
+	            System.out.println("No Storage Records Found");
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error retrieving storage records: " + e.getMessage());
+	    } catch (Exception e) {
+	        System.out.println("Unexpected error: " + e.getMessage());
+	    }
+	}
+
+    private static void updateStorageRecord(Scanner keyboard, MySQLAccess dao) {
+        System.out.printf("Enter Storage ID to update: \n");
+        String storageId = keyboard.nextLine().toUpperCase();
+
+        System.out.printf("Enter New Description Details: \n");
+        String description = keyboard.nextLine();
+
+        System.out.printf("Enter New Capacity: \n");
+        int capacity = keyboard.nextInt();
+        keyboard.nextLine(); // Consume newline
+
+        System.out.printf("Enter New Current Stock Level: \n");
+        int currentStockLevel = keyboard.nextInt();
+        keyboard.nextLine(); // Consume newline
+
+        try {
+            Storage storage = new Storage(storageId, null, description, capacity, currentStockLevel);
+            boolean result = dao.updateStorage(storage);
+            System.out.println(result ? "Storage record updated successfully!" : "ERROR: Storage record update failed.");
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    private static void deleteStorageRecord(Scanner keyboard, MySQLAccess dao) {
+        System.out.printf("Enter Storage ID to delete: \n");
+        String storageId = keyboard.nextLine().toUpperCase();
+
+        try {
+            boolean result = dao.deleteStorage(storageId);
+            System.out.println(result ? "Storage record deleted successfully!" : "ERROR: Storage record deletion failed.");
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
 	public static void main(String[] args) {
 		
 		//Create the Database Object
@@ -1131,7 +1426,61 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 				case "28":
 					deleteDeliveryDocket(keyboard, dao);
 					break;
-				        
+					// Delivery Area CRUD
+			    case "31":
+			        insertDeliveryArea(keyboard, dao);
+			        break;
+			    case "32":
+			        viewAllDeliveryAreas(dao);
+			        break;
+			    case "33":
+			        updateDeliveryArea(keyboard, dao);
+			        break;
+			    case "34":
+			        deleteDeliveryArea(keyboard, dao);
+			        break;
+			        
+			    // Warning Letter CRUD
+			    case "35":
+			        insertWarningLetter(keyboard, dao);
+			        break;
+			    case "36":
+			        viewAllWarningLetters(dao);
+			        break;
+			    case "37":
+			        updateWarningLetter(keyboard, dao);
+			        break;
+			    case "38":
+			        deleteWarningLetter(keyboard, dao);
+			        break;
+			        
+			    // Newsagent CRUD
+			    case "41":
+			        createNewsagent(keyboard, dao);
+			        break;
+			    case "42":
+			        viewAllNewsagents(dao);
+			        break;
+			    case "43":
+			        updateNewsagent(keyboard, dao);
+			        break;
+			    case "44":
+			        deleteNewsagent(keyboard, dao);
+			        break;
+			        
+			    // Storage CRUD
+			    case "45":
+			        createStorage(keyboard, dao);
+			        break;
+			    case "46":
+			        viewAllStorageRecords(dao);
+			        break;
+			    case "47":
+			        updateStorageRecord(keyboard, dao);
+			        break;
+			    case "48":
+			        deleteStorageRecord(keyboard, dao);
+			        
 				case "99":
 					System.out.println("Are you sure you want to exit? (yes/no): ");
 					String exitConfirmation = keyboard.nextLine();
