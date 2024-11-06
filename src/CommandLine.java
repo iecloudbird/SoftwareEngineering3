@@ -21,14 +21,17 @@ public class CommandLine {
 		System.out.println("2. View ALL Customer Records");
 		System.out.println("3. Update Customer Record by ID");
         System.out.println("4. Delete Inactive Customer Records");
+        
         System.out.println("5. Create Delivery Person");
         System.out.println("6. Read Delivery Person");
         System.out.println("7. Update Delivery Person");
         System.out.println("8. Delete Delivery Person");
+        
         System.out.println("9. Create Invoice");
         System.out.println("10. Update Invoice");
         System.out.println("11. Cancel Invoice");
         System.out.println("12. View All Invoices");
+        
         System.out.println("13. Create Publication");
         System.out.println("14. Read Publication");
         System.out.println("15. Update Publication");
