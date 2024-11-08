@@ -3,6 +3,7 @@ import java.sql.Date;
 import java.sql.DriverManager;
 	import java.sql.PreparedStatement;
 	import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -528,7 +529,8 @@ import java.sql.SQLException;
 		        preparedStatement.setString(1, deliveryDocket.getDocketId());
 		        preparedStatement.setString(2, deliveryDocket.getOrderId());
 		        preparedStatement.setString(3, deliveryDocket.getDeliveryPersonId());
-		        //preparedStatement.setDate(4,(LocalDate) deliveryDocket.getDeliveryDate());
+		        
+		        preparedStatement.setString(4, LocalDate.now().toString());
 		        preparedStatement.setString(5, deliveryDocket.getDeliveryStatus());
 		        preparedStatement.setString(6, deliveryDocket.getDetails());
 

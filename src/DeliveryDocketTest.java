@@ -145,8 +145,8 @@ public class DeliveryDocketTest extends TestCase{
     // Expected Output: Updated delivery status.
     public void testUpdateDeliveryStatus() throws DeliveryDocketException {
         DeliveryDocket docket = new DeliveryDocket("DD00001", "ORD001", "DP001", "30/10/2024", "Out for delivery", "Test delivery");
-        docket.updateDeliveryStatus("Delivered");
-        assertEquals("Delivered", docket.getDeliveryStatus());
+        docket.updateDeliveryStatus("Not delivered");
+        assertEquals("Not delivered", docket.getDeliveryStatus());
     }
 
     // Test #: 14

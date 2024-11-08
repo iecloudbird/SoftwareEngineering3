@@ -700,17 +700,17 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
 	}
 	private static void createDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
     	//Implementation for creating Publication
-    	System.out.println("Enter the Delivery Docket ID (format DD001): \n");
+    	System.out.println("Enter the Delivery Docket ID (format DD00001): \n");
     	String docket_id = keyboard.nextLine();
         
         System.out.println("Enter the Order ID: \n");
         String order_id = keyboard.nextLine();
         
         System.out.println("Enter Delivery ID: \n");
-        String delivery_id = keyboard.next();
+        String delivery_id = keyboard.nextLine();
         
-        System.out.println("Enter the Delivery Date: \n");
-        String delivery_date = keyboard.next();
+//        System.out.println("Enter the Delivery Date: \n");
+        String delivery_date = LocalDate.now().toString();
 //        String dateString = keyboard.nextLine();
 //    	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
 //    	java.util.Date delivery_date = null;
@@ -722,14 +722,14 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
 //    	} 
         
         System.out.println("Enter the Delivery Status: \n");
-        String delivery_status = keyboard.next();
+        String delivery_status = keyboard.nextLine();
         
         System.out.println("Enter the Delivery Details: \n");
-        String delivery_details = keyboard.next();
+        String delivery_details = keyboard.nextLine();
         
         
         try {
-        	 DeliveryDocket deliveryDocket = new DeliveryDocket(docket_id, order_id, delivery_id, delivery_date, delivery_status, delivery_details);
+        	 DeliveryDocket deliveryDocket = new DeliveryDocket(docket_id, order_id, delivery_id, delivery_date ,delivery_status, delivery_details);
              boolean insertResult = dao.insertDeliveryDocket(deliveryDocket);
             System.out.println(insertResult ? "Delivery Docket Created" : "ERROR: Delivery Docket NOT Created");
         } catch (Exception e) {
@@ -752,7 +752,7 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 			String order_id = rs.getString("order_id");
 	        String delivery_id = rs.getString("delivery_id");
 	        Date delivery_date = rs.getDate("delivery_date");
-	        Double delivery_status = rs.getDouble("delivery_status");
+	        String delivery_status = rs.getString("delivery_status");
 	        String delivery_details = rs.getString("delivery_details");
 	        
 			System.out.printf("%30s", docket_id);
