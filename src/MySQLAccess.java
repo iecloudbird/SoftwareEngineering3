@@ -437,15 +437,13 @@ import java.sql.SQLException;
 		}
 		
 		public ResultSet retrieveAllInvoices() {
-			
-			//Add Code here to call embedded SQL to view Customer Details
-		
 			try {
 				statement = connect.createStatement();
 				resultSet = statement.executeQuery("Select * from newsagent.invoices");
 			
 			}
 			catch (Exception e) {
+				e.printStackTrace();
 				resultSet = null;
 			}
 			return resultSet;
@@ -543,12 +541,9 @@ import java.sql.SQLException;
 		}
 		public ResultSet retrieveAllDeliveryDockets() {
 			
-			//Add Code here to call embedded SQL to view Customer Details
-		
 			try {
 				statement = connect.createStatement();
 				resultSet = statement.executeQuery("Select * from newsagent.delivery_docket");
-			
 			}
 			catch (Exception e) {
 				resultSet = null;
@@ -642,12 +637,13 @@ import java.sql.SQLException;
 		// Read All Delivery Areas
 		public ResultSet getAllDeliveryAreas() {
 		    String query = "SELECT * FROM delivery_areas";
-		    try (PreparedStatement ps = connect.prepareStatement(query)) {  
-		        return ps.executeQuery();  
+		    try  {  
+		    	statement = connect.createStatement();
+	        	resultSet = statement.executeQuery(query); 
 		    } catch (SQLException e) {
-		        e.printStackTrace();
-		        return null;
+		    	resultSet = null;
 		    }
+	        return resultSet;
 		}
 
 		// Update Delivery Area
@@ -697,13 +693,13 @@ import java.sql.SQLException;
 
 	    // Retrieve all Warning Letters
 	    public ResultSet getAllWarningLetters() {
-	        String query = "SELECT * FROM warning_letter";
-	        try (PreparedStatement ps = connect.prepareStatement(query)) {
-	            return ps.executeQuery();
+	        try {
+	        	statement = connect.createStatement();
+	        	resultSet = statement.executeQuery("SELECT * FROM warning_letter");
 	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            return null;
+	        	resultSet = null;
 	        }
+	        return resultSet;
 	    }
 
 	    // Update Warning Letter
@@ -790,13 +786,13 @@ import java.sql.SQLException;
 		
 		// Insert Storage
 		public boolean insertStorage(Storage storage) {
-		    String query = "INSERT INTO storage (storage_id, publication_id, description_details, capacity, current_stock) VALUES (?, ?, ?, ?, ?)";
+		    String query = "INSERT INTO storage (storage_id, publication_id, description_details, current_stock) VALUES (?, ?, ?, ?)";
 		    try (PreparedStatement ps = connect.prepareStatement(query)) {
 		        ps.setString(1, storage.getStorageId());
 		        ps.setString(2, storage.getPublicationId());
 		        ps.setString(3, storage.getDescription());
-		        ps.setInt(4, storage.getCapacity());
-		        ps.setInt(5, storage.getCurrentStockLevel());
+//		        ps.setInt(4, storage.getCapacity());
+		        ps.setInt(4, storage.getCurrentStockLevel());
 		        return ps.executeUpdate() > 0;
 		    } catch (SQLException e) {
 		        e.printStackTrace();
@@ -806,14 +802,15 @@ import java.sql.SQLException;
 		
 		//Retrieve all storage records
 		public ResultSet getAllStorage() {
-		    String query = "SELECT * FROM storage";
-		    try (PreparedStatement ps = connect.prepareStatement(query)) {  
-		        return ps.executeQuery();  
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		        return null;
+		    try {  
+		    	statement = connect.createStatement();
+				resultSet = statement.executeQuery("Select * from storage");
+		    } catch (Exception e) {
+		        resultSet = null;
 		    }
+		    return resultSet;
 		}
+		
 	    // Update Storage
 		public boolean updateStorage(Storage storage) {
 		    String query = "UPDATE storage SET description_details = ?, capacity = ?, current_stock = ? WHERE storage_id = ?";

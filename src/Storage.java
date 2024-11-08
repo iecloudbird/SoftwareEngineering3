@@ -5,11 +5,11 @@ public class Storage {
     private int capacity;            
     private int currentStockLevel;    
 
-    public Storage(String storageId, String publicationId, String description, int capacity, int currentStockLevel) {
+    public Storage(String storageId, String publicationId, String description, int currentStockLevel) {
         this.storageId = storageId;
         this.publicationId = publicationId;
         this.description = description;
-        this.capacity = capacity;
+//        this.capacity = capacity;
         this.currentStockLevel = currentStockLevel;
     }
 
@@ -55,15 +55,15 @@ public class Storage {
     }
 
     // Method to add stock to the storage
-    public boolean addStock(int quantity) {
-        if (currentStockLevel + quantity <= capacity) {
-            currentStockLevel += quantity;
-            return true;
-        } else {
-            System.out.println("Cannot add stock: Exceeds capacity.");
-            return false;
-        }
-    }
+//    public boolean addStock(int quantity) {
+//        if (currentStockLevel + quantity <= capacity) {
+//            currentStockLevel += quantity;
+//            return true;
+//        } else {
+//            System.out.println("Cannot add stock: Exceeds capacity.");
+//            return false;
+//        }
+//    }
 
     // Method to remove stock from the storage
     public boolean removeStock(int quantity) {
@@ -81,7 +81,7 @@ public class Storage {
         System.out.println("Storage ID: " + storageId);
         System.out.println("Publication ID: " + publicationId);
         System.out.println("Description: " + description);
-        System.out.println("Capacity: " + capacity);
+//        System.out.println("Capacity: " + capacity);
         System.out.println("Current Stock Level: " + currentStockLevel);
     }
 }

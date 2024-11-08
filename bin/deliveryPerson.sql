@@ -11,16 +11,9 @@ CREATE TABLE delivery_persons (
     last_name VARCHAR(25) NOT NULL,
     phone_number CHAR(10) NOT NULL,
     assigned_area VARCHAR(100) NOT NULL,
-    status ENUM('Out for delivery', 'Returned', 'Inactive') NOT NULL-- ,
-    -- FOREIGN KEY (delivery_person_id) REFERENCES delivery_persons(delivery_person_id) ON DELETE CASCADE
+    status ENUM('Out for delivery', 'Returned', 'Inactive') NOT NULL ,
 );
 
--- SELECT 
---     delivery_person_id
--- FROM 
---     newsagent.delivery_docket, delivery_areas
--- WHERE 
---     REFERENCED_TABLE_NAME = 'delivery_persons';
     
 INSERT INTO delivery_persons (delivery_person_id, first_name, last_name, phone_number, assigned_area, status) VALUES
 ('DP001', 'Michael', 'Smith', '5551111111', 'Downtown1', 'Out for delivery');

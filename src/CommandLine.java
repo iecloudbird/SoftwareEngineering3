@@ -980,14 +980,14 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	        String custAddress = rs.getString("cust_address");
 	        String reason = rs.getString("reason");
 	        double dueAmount = rs.getDouble("due_amount");
-	        Date issueDate = rs.getDate("issue_date");
+//	        Date issueDate = rs.getDate("issue_date");
 
 	        System.out.printf("%30s", letterId);
 	        System.out.printf("%30s", custId);
 	        System.out.printf("%30s", custAddress);
 	        System.out.printf("%30s", reason);
 	        System.out.printf("%30.2f", dueAmount);
-	        System.out.printf("%30s", issueDate);
+//	        System.out.printf("%30s", issueDate);
 	        System.out.println();
 	    }
 	    System.out.println("------------------------------------------------------------------------------------------------------");
@@ -995,7 +995,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	}
 
 	private static void viewAllWarningLetters(MySQLAccess dao) {
-	    try (ResultSet rs = dao.getAllWarningLetters()) {  // Assume getAllWarningLetters() returns all warning letter records
+	    try (ResultSet rs = dao.getAllWarningLetters()) { 
 	        if (rs != null) {
 	            boolean tablePrinted = printWarningLetterTable(rs);
 	            if (tablePrinted) {
@@ -1008,6 +1008,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	        System.out.println("ERROR: Failed to retrieve warning letters.");
 	        e.printStackTrace();
 	    }
+	   
 	}
 
 	private static void updateWarningLetter(Scanner scanner, MySQLAccess dao) {
@@ -1127,15 +1128,15 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
         System.out.printf("Enter Description Details: \n");
         String description = keyboard.nextLine();
 
-        System.out.printf("Enter Capacity: \n");
-        int capacity = keyboard.nextInt();
-        keyboard.nextLine(); // Consume newline
+//        System.out.printf("Enter Capacity: \n");
+//        int capacity = keyboard.nextInt();
+//        keyboard.nextLine(); // Consume newline
 
         System.out.printf("Enter Current Stock Level: \n");
         int currentStockLevel = keyboard.nextInt();
         keyboard.nextLine(); // Consume newline
 
-        Storage storage = new Storage(storageId, publicationId, description, capacity, currentStockLevel);
+        Storage storage = new Storage(storageId, publicationId, description,currentStockLevel);
         
         try {
             boolean result = dao.insertStorage(storage);
@@ -1156,13 +1157,13 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	        String storageId = rs.getString("storage_id");
 	        String publicationId = rs.getString("publication_id");
 	        String description = rs.getString("description_details");
-	        int capacity = rs.getInt("capacity");
+//	        int capacity = rs.getInt("capacity");
 	        int currentStockLevel = rs.getInt("current_stock");
 
 	        System.out.printf("%30s", storageId);
 	        System.out.printf("%30s", publicationId);
 	        System.out.printf("%30s", description);
-	        System.out.printf("%30d", capacity);
+//	        System.out.printf("%30d", capacity);
 	        System.out.printf("%30d", currentStockLevel);
 	        System.out.println();
 	    }
@@ -1175,7 +1176,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	        if (rs != null) {
 	            boolean tablePrinted = printStorageTable(rs);
 	            if (tablePrinted) {
-	                rs.close();
+//	                rs.close();
 	            }
 	        } else {
 	            System.out.println("No Storage Records Found");
@@ -1194,16 +1195,16 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
         System.out.printf("Enter New Description Details: \n");
         String description = keyboard.nextLine();
 
-        System.out.printf("Enter New Capacity: \n");
-        int capacity = keyboard.nextInt();
-        keyboard.nextLine(); // Consume newline
+//        System.out.printf("Enter New Capacity: \n");
+//        int capacity = keyboard.nextInt();
+//        keyboard.nextLine(); // Consume newline
 
         System.out.printf("Enter New Current Stock Level: \n");
         int currentStockLevel = keyboard.nextInt();
         keyboard.nextLine(); // Consume newline
 
         try {
-            Storage storage = new Storage(storageId, null, description, capacity, currentStockLevel);
+            Storage storage = new Storage(storageId, null, description, currentStockLevel);
             boolean result = dao.updateStorage(storage);
             System.out.println(result ? "Storage record updated successfully!" : "ERROR: Storage record update failed.");
         } catch (Exception e) {
