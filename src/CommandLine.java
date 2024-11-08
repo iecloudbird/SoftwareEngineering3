@@ -18,67 +18,68 @@ public class CommandLine {
 		System.out.println(" ");
 		System.out.println("=============================================");
 		System.out.println("Please choose ONE of the following options:");
-		System.out.println("1. Create Customer Account");
-		System.out.println("2. View ALL Customer Records");
-		System.out.println("3. Update Customer Record by ID");
-        System.out.println("4. Delete Inactive Customer Records");
-        //CRUD for Delivery Person
-        System.out.println("5. Create Delivery Person");
-        System.out.println("6. Read Delivery Person");
-        System.out.println("7. Update Delivery Person");
-        System.out.println("8. Delete Delivery Person");
-        //CRUD for Invoice (Duplicate 1 of 2)
-        System.out.println("9. Create Invoice");
-        System.out.println("10. Update Invoice");
-        System.out.println("11. Cancel Invoice");
-        System.out.println("12. View All Invoices");
-        //CRUD for Publication
-        System.out.println("13. Create Publication");
-        System.out.println("14. Read Publication");
-        System.out.println("15. Update Publication");
-        System.out.println("16. Delete Publication");
-        //CRUD for Order
-        System.out.println("17. Create Order");
-        System.out.println("18. Read Order");
-        System.out.println("19. Update Order");
-        System.out.println("20. Delete Order");
-        //CRUD for Invoice (Duplicate 2 of 2)
-        System.out.println("21. Create Invoice");
-        System.out.println("22. Read Invoice");
-        System.out.println("23. Update Invoice");
-        System.out.println("24. Delete Invoice");
-        //CRUD for Delivery Docket
-        System.out.println("25. Create Delivery Docket");
-        System.out.println("26. Read Delivery Docket");
-        System.out.println("27. Update Delivery Docket");
-        System.out.println("28. Delete Delivery Docket");
-        //CRUD for Delivery Area
-        System.out.println("31. Create Delivery Area");
-        System.out.println("32. View All Delivery Areas");
-        System.out.println("33. Update Delivery Area by ID");
-        System.out.println("34. Delete Delivery Area by ID");
-        
-        //CRUD for Warning Letter:
-        System.out.println("35. Create Warning Letter");
-        System.out.println("36. View All Warning Letters");
-        System.out.println("37. Update Warning Letter by ID");
-        System.out.println("38. Delete Warning Letter by ID");
-        
-        //CRUD for Newsagent
-        System.out.println("41. Create Newsagent");
-        System.out.println("42. View All Newsagents");
-        System.out.println("43. Update Newsagent by Name");
-        System.out.println("44. Delete Newsagent by Name");
-        
-        //CRUD for Storage
-        System.out.println("45. Create Storage Record");
-        System.out.println("46. View All Storage Records");
-        System.out.println("47. Update Storage Record by ID");
-        System.out.println("48. Delete Storage Record by ID");
+//		System.out.println("1. Create Customer Account");
+//		System.out.println("2. View ALL Customer Records");
+//		System.out.println("3. Update Customer Record by ID");
+//        System.out.println("4. Delete Inactive Customer Records");
+//        //CRUD for Delivery Person
+//        System.out.println("5. Create Delivery Person");
+//        System.out.println("6. Read Delivery Person");
+//        System.out.println("7. Update Delivery Person");
+//        System.out.println("8. Delete Delivery Person");
+//        //CRUD for Invoice (Duplicate 1 of 2)
+//        System.out.println("9. Create Invoice");
+//        System.out.println("10. Update Invoice");
+//        System.out.println("11. Cancel Invoice");
+//        System.out.println("12. View All Invoices");
+//        //CRUD for Publication
+//        System.out.println("13. Create Publication");
+//        System.out.println("14. Read Publication");
+//        System.out.println("15. Update Publication");
+//        System.out.println("16. Delete Publication");
+//        //CRUD for Order
+//        System.out.println("17. Create Order");
+//        System.out.println("18. Read Order");
+//        System.out.println("19. Update Order");
+//        System.out.println("20. Delete Order");
+//        //CRUD for Invoice (Duplicate 2 of 2)
+//        System.out.println("21. Create Invoice");
+//        System.out.println("22. Read Invoice");
+//        System.out.println("23. Update Invoice");
+//        System.out.println("24. Delete Invoice");
+//        //CRUD for Delivery Docket
+//        System.out.println("25. Create Delivery Docket");
+//        System.out.println("26. Read Delivery Docket");
+//        System.out.println("27. Update Delivery Docket");
+//        System.out.println("28. Delete Delivery Docket");
+//        //CRUD for Delivery Area
+//        System.out.println("31. Create Delivery Area");
+//        System.out.println("32. View All Delivery Areas");
+//        System.out.println("33. Update Delivery Area by ID");
+//        System.out.println("34. Delete Delivery Area by ID");
+//        
+//        //CRUD for Warning Letter:
+//        System.out.println("35. Create Warning Letter");
+//        System.out.println("36. View All Warning Letters");
+//        System.out.println("37. Update Warning Letter by ID");
+//        System.out.println("38. Delete Warning Letter by ID");
+//        
+//        //CRUD for Newsagent
+//        System.out.println("41. Create Newsagent");
+//        System.out.println("42. View All Newsagents");
+//        System.out.println("43. Update Newsagent by Name");
+//        System.out.println("44. Delete Newsagent by Name");
+//        
+//        //CRUD for Storage
+//        System.out.println("45. Create Storage Record");
+//        System.out.println("46. View All Storage Records");
+//        System.out.println("47. Update Storage Record by ID");
+//        System.out.println("48. Delete Storage Record by ID");
 
 		System.out.println("99. Close the NewsAgent Application");
-		System.out.println("=============================================");
 		System.out.println(" ");
+//		System.out.println("=============================================");
+//		System.out.println(" ");
 		///////////////////////////////////////////////////////////////////
 		System.out.println("101. Customer CRUD Actions");
 		System.out.println("102. Delivery Person CRUD Actions");
@@ -1505,6 +1506,24 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					
 				case "101":
 					customerCRUD();
+				case "102":
+					DPCRUD();
+				case "103":
+					InvoiceCRUD();
+				case "104":
+					PublicationCRUD();
+				case "105":
+					OrderCRUD();
+				case "106":
+					DDCRUD();
+				case "107":
+					DACRUD();
+				case "108":
+					WLCRUD();
+				case "109":
+					NewsagentCRUD();
+				case "110":
+					StorageCRUD();
 			
 				default:
 					System.out.println("No Valid Function Selected");
@@ -1625,6 +1644,10 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 							    }
 							}
 							break;
+						case "55":
+							//main(String[] args);
+							Happy(functionNumber);
+							break;
 					        
 						case "99":
 							System.out.println("Are you sure you want to exit? (yes/no): ");
@@ -1635,8 +1658,8 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 							}
 							break;
 							
-						case "101":
-							customerCRUD();
+//						case "101":
+//							customerCRUD();
 					
 						default:
 							System.out.println("No Valid Function Selected");
@@ -1656,6 +1679,72 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	}
 
 
+	private static void Happy(String functionNumber) {
+		// TODO Auto-generated method stub
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					//String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						listCustomerFuctionalityAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+//						
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+						case "101":
+							customerCRUD();
+						case "102":
+							DPCRUD();
+						case "103":
+							InvoiceCRUD();
+						case "104":
+							PublicationCRUD();
+						case "105":
+							OrderCRUD();
+						case "106":
+							DDCRUD();
+						case "107":
+							DACRUD();
+						case "108":
+							WLCRUD();
+						case "109":
+							NewsagentCRUD();
+						case "110":
+							StorageCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+	}
+
+
 	private static void listCustomerCRUDAvailable() {
 		// TODO Auto-generated method stub
 		System.out.println(" ");
@@ -1665,6 +1754,799 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("2. View ALL Customer Records");
 		System.out.println("3. Update Customer Record by ID");
         System.out.println("4. Delete Inactive Customer Records");
+	}
+	private static void DPCRUD() {
+		// TODO Auto-generated method stub
+		//System.out.println("Hello");
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						//listCustomerFuctionalityAvailable();
+						listDPCRUDAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+						case "1":
+					        createDeliveryPerson(keyboard, dao);
+					        break;
+					case "2":
+							readDeliveryPerson(keyboard,dao);
+					        
+					        break;
+					case "3":
+							updateDeliveryPerson(keyboard, dao);
+					       
+					        break;
+					case "4":
+						 	deleteDeliveryPerson(keyboard, dao);
+					        // Create invoice logic...
+					        break;
+					case "55":
+						//main(String[] args);
+						Happy(functionNumber);
+						break;
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+//						case "101":
+//							customerCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+				
+				}
+			
+				catch(Exception e) {
+					System.out.println("PROGRAM TERMINATED - ERROR MESSAGE:" + e.getMessage());
+				} // end try-catch
+	}
+
+
+	private static void listDPCRUDAvailable() {
+		// TODO Auto-generated method stub
+		System.out.println(" ");
+		System.out.println("=============================================");
+		System.out.println("Please choose ONE of the following options:");
+		System.out.println("1. Create Delivery Person Account");
+		System.out.println("2. View ALL Delivery Person Records");
+		System.out.println("3. Update Delivery Person Record by ID");
+        System.out.println("4. Delete Inactive Delivery Person Records");
+        System.out.println("55. Go Back");
+	}
+	private static void InvoiceCRUD() {
+		// TODO Auto-generated method stub
+		//System.out.println("Hello");
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						//listCustomerFuctionalityAvailable();
+						listInvoiceCRUDAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+						case "1":
+					        createInvoice(keyboard, dao);
+					        break;
+					case "2":
+						try (ResultSet rSet = dao.retrieveAllInvoices()) {
+						    if (rSet != null) {
+						        boolean tablePrinted = printInvoiceTable(rSet);
+						        if (tablePrinted) {
+						            rSet.close();
+						        }
+						    } else {
+						        System.out.println("No Records Found");
+						    }
+						} catch (SQLException e) {
+						    System.out.println("Error retrieving Invoice records: " + e.getMessage());
+						}
+						break;
+					case "3":
+							updateInvoice(keyboard, dao);
+					       
+					        break;
+					case "4":
+						 	deleteInvoice(keyboard, dao);
+					        // Create invoice logic...
+					        break;
+					case "55":
+						//main(String[] args);
+						Happy(functionNumber);
+						break;
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+//						case "101":
+//							customerCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+				
+				}
+			
+				catch(Exception e) {
+					System.out.println("PROGRAM TERMINATED - ERROR MESSAGE:" + e.getMessage());
+				} // end try-catch
+	}
+
+
+	private static void listInvoiceCRUDAvailable() {
+		// TODO Auto-generated method stub
+		System.out.println(" ");
+		System.out.println("=============================================");
+		System.out.println("Please choose ONE of the following options:");
+		System.out.println("1. Create Invoice Account");
+		System.out.println("2. View ALL Invoice Records");
+		System.out.println("3. Update Invoice Record by ID");
+        System.out.println("4. Delete Invoice Records");
+        System.out.println("55. Go Back");
+	}
+	private static void PublicationCRUD() {
+		// TODO Auto-generated method stub
+		//System.out.println("Hello");
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						//listCustomerFuctionalityAvailable();
+						listPublicationCRUDAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+						case "1":
+					        createPublication(keyboard, dao);
+					        break;
+					case "2":
+						try (ResultSet rSet = dao.retrieveAllPublications()) {
+						    if (rSet != null) {
+						        boolean tablePrinted = printPublicationTable(rSet);
+						        if (tablePrinted) {
+						            rSet.close();
+						        }
+						    } else {
+						        System.out.println("No Records Found");
+						    }
+						} catch (SQLException e) {
+						    System.out.println("Error retrieving Publication records: " + e.getMessage());
+						}
+						break;
+					case "3":
+							updatePublication(keyboard, dao);
+					       
+					        break;
+					case "4":
+						 	deletePublication(keyboard, dao);
+					        // Create invoice logic...
+					        break;
+					case "55":
+						//main(String[] args);
+						Happy(functionNumber);
+						break;
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+//						case "101":
+//							customerCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+				
+				}
+			
+				catch(Exception e) {
+					System.out.println("PROGRAM TERMINATED - ERROR MESSAGE:" + e.getMessage());
+				} // end try-catch
+	}
+
+
+	private static void listPublicationCRUDAvailable() {
+		// TODO Auto-generated method stub
+		System.out.println(" ");
+		System.out.println("=============================================");
+		System.out.println("Please choose ONE of the following options:");
+		System.out.println("1. Create Publication Account");
+		System.out.println("2. View ALL Publication Records");
+		System.out.println("3. Update Publication Record by ID");
+        System.out.println("4. Delete Publication Records");
+        System.out.println("55. Go Back");
+	}
+	private static void OrderCRUD() {
+		// TODO Auto-generated method stub
+		//System.out.println("Hello");
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						//listCustomerFuctionalityAvailable();
+						listOrderCRUDAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+						case "1":
+					        createOrder(keyboard, dao);
+					        break;
+					case "2":
+						try (ResultSet rSet = dao.retrieveAllOrders()) {
+						    if (rSet != null) {
+						        boolean tablePrinted = printOrderTable(rSet);
+						        if (tablePrinted) {
+						            rSet.close();
+						        }
+						    } else {
+						        System.out.println("No Records Found");
+						    }
+						} catch (SQLException e) {
+						    System.out.println("Error retrieving Orders records: " + e.getMessage());
+						}
+						break;
+					case "3":
+							updateOrder(keyboard, dao);
+					       
+					        break;
+					case "4":
+						 	deleteOrder(keyboard, dao);
+					        // Create invoice logic...
+					        break;
+					case "55":
+						//main(String[] args);
+						Happy(functionNumber);
+						break;
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+//						case "101":
+//							customerCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+				
+				}
+			
+				catch(Exception e) {
+					System.out.println("PROGRAM TERMINATED - ERROR MESSAGE:" + e.getMessage());
+				} // end try-catch
+	}
+
+
+	private static void listOrderCRUDAvailable() {
+		// TODO Auto-generated method stub
+		System.out.println(" ");
+		System.out.println("=============================================");
+		System.out.println("Please choose ONE of the following options:");
+		System.out.println("1. Create Order Account");
+		System.out.println("2. View ALL Order Records");
+		System.out.println("3. Update Order Record by ID");
+        System.out.println("4. Delete Order Record");
+        System.out.println("55. Go Back");
+	}
+	private static void DDCRUD() {
+		// TODO Auto-generated method stub
+		//System.out.println("Hello");
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						//listCustomerFuctionalityAvailable();
+						listDDCRUDAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+						case "1":
+					        createDeliveryDocket(keyboard, dao);
+					        break;
+					case "2":
+						try (ResultSet rSet = dao.retrieveAllDeliveryDockets()) {
+						    if (rSet != null) {
+						        boolean tablePrinted = printDeliveryDocketTable(rSet);
+						        if (tablePrinted) {
+						            rSet.close();
+						        }
+						    } else {
+						        System.out.println("No Records Found");
+						    }
+						} catch (SQLException e) {
+						    System.out.println("Error retrieving DeliveryDocket records: " + e.getMessage());
+						}
+						break;
+					case "3":
+							updateDeliveryDocket(keyboard, dao);
+					       
+					        break;
+					case "4":
+						 	deleteDeliveryDocket(keyboard, dao);
+					        // Create invoice logic...
+					        break;
+					case "55":
+						//main(String[] args);
+						Happy(functionNumber);
+						break;
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+//						case "101":
+//							customerCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+				
+				}
+			
+				catch(Exception e) {
+					System.out.println("PROGRAM TERMINATED - ERROR MESSAGE:" + e.getMessage());
+				} // end try-catch
+	}
+
+
+	private static void listDDCRUDAvailable() {
+		// TODO Auto-generated method stub
+		System.out.println(" ");
+		System.out.println("=============================================");
+		System.out.println("Please choose ONE of the following options:");
+		System.out.println("1. Create Delivery Docket Record");
+		System.out.println("2. View ALL Delivery Docket Records");
+		System.out.println("3. Update Delivery Docket Record by ID");
+        System.out.println("4. Delete Delivery Docket Records");
+        System.out.println("55. Go Back");
+	}
+	private static void DACRUD() {
+		// TODO Auto-generated method stub
+		//System.out.println("Hello");
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						//listCustomerFuctionalityAvailable();
+						listDACRUDAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+						case "1":
+					        insertDeliveryArea(keyboard, dao);
+					        break;
+					    case "2":
+					        viewAllDeliveryAreas(dao);
+					        break;
+					    case "3":
+					        updateDeliveryArea(keyboard, dao);
+					        break;
+					    case "4":
+					        deleteDeliveryArea(keyboard, dao);
+					        break;
+					case "55":
+						//main(String[] args);
+						Happy(functionNumber);
+						break;
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+//						case "101":
+//							customerCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+				
+				}
+			
+				catch(Exception e) {
+					System.out.println("PROGRAM TERMINATED - ERROR MESSAGE:" + e.getMessage());
+				} // end try-catch
+	}
+
+
+	private static void listDACRUDAvailable() {
+		// TODO Auto-generated method stub
+		System.out.println(" ");
+		System.out.println("=============================================");
+		System.out.println("Please choose ONE of the following options:");
+		System.out.println("1. Create Delivery Area Account");
+		System.out.println("2. View ALL Delivery Area Records");
+		System.out.println("3. Update Delivery Area Record by ID");
+        System.out.println("4. Delete Inactive Area Person Records");
+        System.out.println("55. Go Back");
+	}
+	private static void WLCRUD() {
+		// TODO Auto-generated method stub
+		//System.out.println("Hello");
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						//listCustomerFuctionalityAvailable();
+						listWLCRUDAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+						case "1":
+					        insertWarningLetter(keyboard, dao);
+					        break;
+					    case "2":
+					        viewAllWarningLetters(dao);
+					        break;
+					    case "3":
+					        updateWarningLetter(keyboard, dao);
+					        break;
+					    case "4":
+					        deleteWarningLetter(keyboard, dao);
+					        break;
+					case "55":
+						//main(String[] args);
+						Happy(functionNumber);
+						break;
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+//						case "101":
+//							customerCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+				
+				}
+			
+				catch(Exception e) {
+					System.out.println("PROGRAM TERMINATED - ERROR MESSAGE:" + e.getMessage());
+				} // end try-catch
+	}
+
+
+	private static void listWLCRUDAvailable() {
+		// TODO Auto-generated method stub
+		System.out.println(" ");
+		System.out.println("=============================================");
+		System.out.println("Please choose ONE of the following options:");
+		System.out.println("1. Create Warning Letter");
+		System.out.println("2. View ALL Warning Letters");
+		System.out.println("3. Update Warning Letter");
+        System.out.println("4. Delete Warning Letter");
+        System.out.println("55. Go Back");
+	}
+	private static void NewsagentCRUD() {
+		// TODO Auto-generated method stub
+		//System.out.println("Hello");
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						//listCustomerFuctionalityAvailable();
+						listNewsagentCRUDAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+						case "1":
+					        createNewsagent(keyboard, dao);
+					        break;
+					    case "2":
+					        viewAllNewsagents(dao);
+					        break;
+					    case "3":
+					        updateNewsagent(keyboard, dao);
+					        break;
+					    case "4":
+					        deleteNewsagent(keyboard, dao);
+					        break;
+					case "55":
+						//main(String[] args);
+						Happy(functionNumber);
+						break;
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+//						case "101":
+//							customerCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+				
+				}
+			
+				catch(Exception e) {
+					System.out.println("PROGRAM TERMINATED - ERROR MESSAGE:" + e.getMessage());
+				} // end try-catch
+	}
+
+
+	private static void listNewsagentCRUDAvailable() {
+		// TODO Auto-generated method stub
+		System.out.println(" ");
+		System.out.println("=============================================");
+		System.out.println("Please choose ONE of the following options:");
+		System.out.println("1. Create Newsagent Account");
+		System.out.println("2. View ALL Newsagent Records");
+		System.out.println("3. Update Newsagent Record by ID");
+        System.out.println("4. Delete Newsagent Records");
+        System.out.println("55. Go Back");
+	}
+	private static void StorageCRUD() {
+		// TODO Auto-generated method stub
+		//System.out.println("Hello");
+		//Create the Database Object
+		
+				try {
+					
+					MySQLAccess dao = new MySQLAccess();
+
+					// Configure System for Running
+					Scanner keyboard = new Scanner(System.in); 
+					String functionNumber = "-99";
+					boolean keepAppOpen = true;
+				
+					while (keepAppOpen == true) {
+					
+						//Present list of functionality and get selection
+						//listCustomerFuctionalityAvailable();
+						listStorageCRUDAvailable();
+						functionNumber = keyboard.next();
+						keyboard.nextLine(); 
+				
+						switch (functionNumber) {
+				
+						// Newsagent CRUD
+						case "1":
+					        createStorage(keyboard, dao);
+					        break;
+					    case "2":
+					        viewAllStorageRecords(dao);
+					        break;
+					    case "3":
+					        updateStorageRecord(keyboard, dao);
+					        break;
+					    case "4":
+					        deleteStorageRecord(keyboard, dao);
+					case "55":
+						//main(String[] args);
+						Happy(functionNumber);
+						break;
+					        
+						case "99":
+							System.out.println("Are you sure you want to exit? (yes/no): ");
+							String exitConfirmation = keyboard.nextLine();
+							if (exitConfirmation.equalsIgnoreCase("yes")) {
+							    keepAppOpen = false;
+							    System.out.println("Closing the Application");
+							}
+							break;
+							
+//						case "101":
+//							customerCRUD();
+					
+						default:
+							System.out.println("No Valid Function Selected");
+							break;
+						} // end switch
+				
+					}// end while
+				
+					//Tidy up Resources
+					keyboard.close();
+				
+				}
+			
+				catch(Exception e) {
+					System.out.println("PROGRAM TERMINATED - ERROR MESSAGE:" + e.getMessage());
+				} // end try-catch
+	}
+
+
+	private static void listStorageCRUDAvailable() {
+		// TODO Auto-generated method stub
+		System.out.println(" ");
+		System.out.println("=============================================");
+		System.out.println("Please choose ONE of the following options:");
+		System.out.println("1. Create Storage Record");
+		System.out.println("2. View ALL Storage Records");
+		System.out.println("3. Update Storage Record by ID");
+        System.out.println("4. Delete Storage Records");
+        System.out.println("55. Go Back");
 	}
 	
 	
