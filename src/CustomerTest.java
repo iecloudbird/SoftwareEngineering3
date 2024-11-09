@@ -1,9 +1,13 @@
 import junit.framework.TestCase;
 
 /*
- * Customer Test Cases
- * 1) Ensure Best Practices is applied to the codes (Meaning names, comments etc...),
- * 2) 
+ * Customer Test Cases Summary
+ * 
+ * Entity: Customer 
+ * Objective: Ensure 100%/full coverage test cases using EP and BA
+ * BA (Boundary Analysis): 8 Test Cases
+ * EP (Equivalence Partitioning): 12 Test Cases
+ * 
  */
 
 public class CustomerTest extends TestCase {
@@ -207,6 +211,85 @@ public class CustomerTest extends TestCase {
 	        assertEquals("Customer PhoneNumber does not meet numeric format requirements", e.getMessage());
 	    }
 	}
+	
+	// Test #: 15
+	// Test Objective: Catch an invalid customer name exceeding max length
+	// Inputs: custName = "A".repeat(51)
+	// Expected Output: Exception with message "Customer Name exceeds maximum length requirements"
+	public void testInvalidCustomerNameExceedsMax() {
+	    try {
+	        Customer.validateName("A".repeat(51));
+	        fail("Exception expected");
+	    } catch (CustomerExceptionHandler e) {
+	        assertEquals("Customer Name exceeds maximum length requirements", e.getMessage());
+	    }
+	}
+	
+	// Test #: 16
+	// Test Objective: Catch an invalid customer address exceeding max length
+	// Inputs: custAddr = "B".repeat(61)
+	// Expected Output: Exception with message "Customer Address exceeds maximum length requirements"
+	public void testInvalidCustomerAddressExceedsMax() {
+	    try {
+	        Customer.validateAddress("B".repeat(61));
+	        fail("Exception expected");
+	    } catch (CustomerExceptionHandler e) {
+	        assertEquals("Customer Address exceeds maximum length requirements", e.getMessage());
+	    }
+	}
+
+	// Test #: 17
+	// Test Objective: Catch an invalid customer phone number exceeding max length
+	// Inputs: custPhone = "1234567890123456" (16 digits)
+	// Expected Output: Exception with message "Customer PhoneNumber exceeds maximum length requirements"
+	public void testInvalidCustomerPhoneNumberExceedsMax() {
+	    try {
+	        Customer.validatePhoneNumber("1234567890123456");
+	        fail("Exception expected");
+	    } catch (CustomerExceptionHandler e) {
+	        assertEquals("Customer PhoneNumber exceeds maximum length requirements", e.getMessage());
+	    }
+	}
+
+	// Test #: 18
+	// Test Objective: Catch an invalid email without "@" symbol
+	// Inputs: email = "invalidemail.com"
+	// Expected Output: Exception with message "Invalid email format"
+	public void testInvalidEmailMissingAtSymbol() {
+	    try {
+	        Customer.validateEmail("invalidemail.com");
+	        fail("Exception expected");
+	    } catch (CustomerExceptionHandler e) {
+	        assertEquals("Invalid email format", e.getMessage());
+	    }
+	}
+
+	// Test #: 19
+	// Test Objective: Validate subscription status is correctly set
+	// Inputs: subscriptionStatus = true
+	// Expected Output: Subscription status is true
+	public void testSubscriptionStatusTrue() {
+	    try {
+	        Customer custObj = new Customer("Jane Doe", "Dublin", "0851234567", "jane@example.com", true);
+	        assertTrue(custObj.getSubscriptionStatus());
+	    } catch (CustomerExceptionHandler e) {
+	        fail("Exception not expected");
+	    }
+	}
+
+	// Test #: 20
+	// Test Objective: Validate subscription status is correctly set
+	// Inputs: subscriptionStatus = false
+	// Expected Output: Subscription status is false
+	public void testSubscriptionStatusFalse() {
+	    try {
+	        Customer custObj = new Customer("Jane Doe", "Dublin", "0851234567", "jane@example.com", false);
+	        assertFalse(custObj.getSubscriptionStatus());
+	    } catch (CustomerExceptionHandler e) {
+	        fail("Exception not expected");
+	    }
+	}
+	
 }
 
 		

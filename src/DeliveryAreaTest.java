@@ -1,5 +1,28 @@
 import junit.framework.TestCase;
 
+/*
+ * DeliveryArea Test Cases Summary
+ * 
+ * Entity: DeliveryArea
+ * Objective: Ensure 100%/full coverage test cases using EP and BA
+ * BA (Boundary Analysis): 9 Test Cases
+ * EP (Equivalence Partitioning): 10 Test Cases
+ * 
+ * Boundary Analysis (BA): 9 Test Cases
+ * - Valid and Invalid Length: 2
+ * - Edge Cases for totalCustomers (0 and Integer.MAX_VALUE): 2
+ * - Format Validation (missing leading zero): 2
+ * - Post-Creation Parameter Changes: 2
+ * - Upper/Lowercase Validation: 1
+ * 
+ * Equivalence Partitioning (EP): 10 Test Cases
+ * - Valid Constructor: 1
+ * - Invalid Formats (Area ID, Delivery Person ID): 4
+ * - Null and Empty Values: 3
+ * - Uppercase/Lowercase Validation: 2
+ * 
+ */
+
 public class DeliveryAreaTest extends TestCase {
 
     // Test #: 1
@@ -170,4 +193,63 @@ public class DeliveryAreaTest extends TestCase {
             assertEquals("Delivery Person ID must match the format: DP000.", e.getMessage());
         }
     }
+    
+	 // Test #: 15
+	 // Test Objective: Verify areaId format with leading lowercase letters.
+	 // Inputs: areaId = "area01" (lowercase instead of uppercase)
+	 // Expected Output: DeliveryAreaException thrown.
+	 public void testInvalidAreaIdLowerCase() {
+	     try {
+	         new DeliveryArea("area01", "Central", "DP001", 10);
+	         fail("Exception expected");
+	     } catch (DeliveryAreaException e) {
+	         assertEquals("Area ID must match the format: AREA00.", e.getMessage());
+	     }
+	 }
+	
+	 // Test #: 16
+	 // Test Objective: Verify deliveryPersonId format with lowercase prefix.
+	 // Inputs: deliveryPersonId = "dp001" (lowercase instead of uppercase)
+	 // Expected Output: DeliveryAreaException thrown.
+	 public void testInvalidDeliveryPersonIdLowerCase() {
+	     try {
+	         new DeliveryArea("AREA01", "Central", "dp001", 10);
+	         fail("Exception expected");
+	     } catch (DeliveryAreaException e) {
+	         assertEquals("Delivery Person ID must match the format: DP000.", e.getMessage());
+	     }
+	 }
+	
+	 // Test #: 17
+	 // Test Objective: Verify totalCustomers set to maximum integer value.
+	 // Inputs: totalCustomers = Integer.MAX_VALUE
+	 // Expected Output: DeliveryArea object created successfully.
+	 public void testTotalCustomersMaxInt() throws DeliveryAreaException {
+	     DeliveryArea area = new DeliveryArea("AREA01", "Central", "DP001", Integer.MAX_VALUE);
+	     assertEquals(Integer.MAX_VALUE, area.getTotalCustomers());
+	 }
+	
+	 // Test #: 18
+	 // Test Objective: Verify setAreaId after creation with a valid new value.
+	 // Inputs: areaId = "AREA02"
+	 // Expected Output: areaId updated successfully.
+	 public void testSetValidAreaId() throws DeliveryAreaException {
+	     DeliveryArea area = new DeliveryArea("AREA01", "Central", "DP001", 10);
+	     area.setAreaId("AREA02");
+	     assertEquals("AREA02", area.getAreaId());
+	 }
+	
+	 // Test #: 19
+	 // Test Objective: Verify setAreaId with an invalid format after creation.
+	 // Inputs: areaId = "INVALID"
+	 // Expected Output: DeliveryAreaException thrown.
+	 public void testSetInvalidAreaIdAfterCreation() {
+	     try {
+	         DeliveryArea area = new DeliveryArea("AREA01", "Central", "DP001", 10);
+	         area.setAreaId("INVALID");
+	         fail("Exception expected");
+	     } catch (DeliveryAreaException e) {
+	         assertEquals("Area ID must match the format: AREA00.", e.getMessage());
+	     }
+	 }
 }
