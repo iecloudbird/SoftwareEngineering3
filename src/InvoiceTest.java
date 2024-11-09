@@ -1,26 +1,51 @@
+import java.time.LocalDate;
 import java.util.Date;
 import junit.framework.TestCase;
+
+/*
+ * Invoice Test Cases Summary
+ * 
+ * Entity: Invoice
+ * Objective: Ensure 100% full coverage test cases using EP and BA
+ * 
+ * Total Test Cases: 28
+ * 
+ * Boundary Analysis (BA): 14 Test Cases
+ * - Valid and Invalid Length for invoiceId and customerId: 5
+ * - Edge Cases for totalAmount (0 and Integer.MAX_VALUE): 3
+ * - Format Validation (date format for orderDate): 2
+ * - Valid and Invalid paymentStatus: 4
+ * 
+ * Equivalence Partitioning (EP): 14 Test Cases
+ * - Valid and Invalid Constructor: 1
+ * - Invalid Formats for invoiceId, customerId, deliveryId, publicationId: 6
+ * - Null and Empty Values for paymentMethod, orderStatus, orderDate: 5
+ * - Valid and Invalid Total Amount: 3
+ * - Validations for valid formats of Delivery ID and Publication ID: 2
+ * - Valid and Invalid Order Status: 6
+ */
+
 
 public class InvoiceTest extends TestCase {
 
 	// Test #: 1
 	// Test Objective: Verify successful creation of an Invoice object with valid inputs
-	// Inputs: invoiceId = "INV0001", custId = "123", paymentMethod = "card", orderDate = current date, totalAmount = 100.0, deliveryId = "DP001", publicationId = "PUB001", orderStatus = "Pending"
+	// Inputs: invoiceId = "INV0001", custId = "123", paymentMethod = "card", orderDate = current date, totalAmount = 100.0, deliveryId = "DD00001", publicationId = "PUB001", orderStatus = "Pending"
 	// Expected Output: Invoice object created with correct details, all fields matching expected values
 	public void testCreateInvoiceSuccess() {
-		Date orderDate = new Date();
+		 LocalDate orderDate = LocalDate.now();
 		
 		 try {
-			 	Invoice invoiceObj = new Invoice("INV0001", "123", "card", orderDate, 100.0, "DP001", "PUB001", "Pending");
-		        assertEquals("INV0001", invoiceObj.getInvoiceId());
-		        assertEquals("123", invoiceObj.getCustId());
-		        assertEquals(PaymentMethod.CARD, invoiceObj.getPaymentMethod());
-		        assertTrue("Order dates do not match", 
-		                   orderDate.getTime() == invoiceObj.getOrderDate().getTime());
-		        assertEquals(100.0, invoiceObj.getTotalAmount(), 0.001); // Use delta for double comparison
-		        assertEquals("DP001", invoiceObj.getDeliveryId());
-		        assertEquals("PUB001", invoiceObj.getPublicationId());
-		        assertEquals("Pending", invoiceObj.getOrderStatus());
+			 Invoice invoiceObj = new Invoice("INV0001", "123", "card", orderDate, 100.0, "DD00001", "PUB001", "Pending");
+			 assertEquals("INV0001", invoiceObj.getInvoiceId());
+		     assertEquals("123", invoiceObj.getCustId());
+		     assertEquals(PaymentMethod.CARD, invoiceObj.getPaymentMethod());  // This now correctly matches the enum
+		     assertTrue("Order dates do not match", 
+		                   orderDate.equals(invoiceObj.getOrderDate()));  // Using LocalDate.equals for comparison
+		     assertEquals(100.0, invoiceObj.getTotalAmount(), 0.001);  // Use delta for double comparison
+		     assertEquals("DD00001", invoiceObj.getDeliveryId());
+		     assertEquals("PUB001", invoiceObj.getPublicationId());
+		     assertEquals("Pending", invoiceObj.getOrderStatus());
 		    } catch (CustomerExceptionHandler e) {
 		    	
 		        fail("Exception not expected: " + e.getMessage());
@@ -245,16 +270,16 @@ public class InvoiceTest extends TestCase {
             Invoice.validateDeliveryId("INVALID");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
-            assertEquals("Delivery ID must follow the format DP000", e.getMessage());
+            assertEquals("Delivery ID must follow the format DD00000", e.getMessage());
         }
     }
  // Test #: 21
  // Test Objective: Validate that an invalid Publication ID format throws an exception
- // Inputs: publicationId = "INVALID" (incorrect format)
+ // Inputs: deliveryId = "DD00001"" (incorrect format)
  // Expected Output: Exception with message "Publication ID must follow the format PUB001"
     public void testInvalidDeliveryId_ValidFormat() {
         try {
-            Invoice.validateDeliveryId("DP123"); // Valid
+            Invoice.validateDeliveryId("DD00001"); // Valid
         } catch (CustomerExceptionHandler e) {
             fail("Exception not expected");
         }
@@ -304,7 +329,7 @@ public class InvoiceTest extends TestCase {
  // Expected Output: Exception with message "Order Status must be between 5 and 60 characters"
     public void testInvalidOrderStatus_TooShort() {
         try {
-            Invoice.validateOrderStatus("New"); // Invalid: Too short
+            Invoice.validateOrderStatus("New");
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
             assertEquals("Order Status must be between 5 and 60 characters", e.getMessage());
@@ -316,7 +341,7 @@ public class InvoiceTest extends TestCase {
  // Expected Output: Exception with message "Order Status must be between 5 and 60 characters"
     public void testInvalidOrderStatus_TooLong() {
         try {
-            Invoice.validateOrderStatus("This order status is definitely longer than sixty characters."); // Invalid: Too long
+            Invoice.validateOrderStatus("This order status is definitely longer than sixty characters."); 
             fail("Exception expected");
         } catch (CustomerExceptionHandler e) {
             assertEquals("Order Status must be between 5 and 60 characters", e.getMessage());
@@ -324,7 +349,7 @@ public class InvoiceTest extends TestCase {
     }
  // Test #: 26
  // Test Objective: Verify that a valid Order Status within character limits does not throw an exception
- // Inputs: orderStatus = "Pending" (valid)
+ // Inputs: orderStatus = "Pending" 
  // Expected Output: No exception thrown
     public void testInvalidOrderStatus_Valid() {
         try {
@@ -333,4 +358,31 @@ public class InvoiceTest extends TestCase {
             fail("Exception not expected");
         }
     }
+    
+	 // Test #: 27
+	 // Test Objective: Verify that an invoice can be created with a total amount of Integer.MAX_VALUE
+	 // Inputs: totalAmount = Integer.MAX_VALUE
+	 // Expected Output: Invoice object is created with totalAmount = Integer.MAX_VALUE
+	 public void testMaxTotalAmount() {
+	     try {
+	         Invoice invoiceObj = new Invoice("INV1001", "123", "card", LocalDate.now(), Integer.MAX_VALUE, "DD00001", "PUB001", "Pending");
+	         assertEquals(Integer.MAX_VALUE, invoiceObj.getTotalAmount(), 0.001);
+	     } catch (CustomerExceptionHandler e) {
+	         fail("Exception not expected: " + e.getMessage());
+	     }
+	 }
+	
+	 // Test #: 28
+	 // Test Objective: Validate the order date format for a valid date
+	 // Inputs: orderDate = "2024-11-09" (valid format)
+	 // Expected Output: No exception thrown
+	 public void testValidOrderDateFormat() {
+	     try {
+	         LocalDate validOrderDate = LocalDate.parse("2024-11-09");
+	         Invoice.validateOrderDate(validOrderDate); // Valid format
+	     } catch (CustomerExceptionHandler e) {
+	         fail("Exception not expected");
+	     }
+	 }
+
 }

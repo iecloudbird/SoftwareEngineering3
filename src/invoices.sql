@@ -20,8 +20,8 @@ CREATE TABLE Invoices (
 INSERT INTO Invoices (invoice_id, cust_id, payment_method, order_date, total_amount
 , delivery_persons, publication_id, order_status
 ) VALUES
-('INV0001', 'CUST001', 'Credit Card', '2024-10-01', 150.00
-, 'DP001', 'PUB001', 'PENDING'
+('INV0001', '1', 'card', '2024-10-01', 150.00
+, 'DD00001', 'PUB001', 'PENDING'
 ); -- ,
 -- ('INV0002', 'CUST002', 'Debit Card', '2024-10-02', 250.50),
 -- ('INV0003', 'CUST003', 'PayPal', '2024-10-03', 75.20),

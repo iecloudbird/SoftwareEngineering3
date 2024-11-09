@@ -5,14 +5,14 @@ import junit.framework.TestCase;
  * 
  * Entity: DeliveryArea
  * Objective: Ensure 100%/full coverage test cases using EP and BA
- * BA (Boundary Analysis): 9 Test Cases
- * EP (Equivalence Partitioning): 10 Test Cases
+ * BA (Boundary Analysis): 11 Test Cases
+ * EP (Equivalence Partitioning): 11 Test Cases
  * 
  * Boundary Analysis (BA): 9 Test Cases
  * - Valid and Invalid Length: 2
  * - Edge Cases for totalCustomers (0 and Integer.MAX_VALUE): 2
  * - Format Validation (missing leading zero): 2
- * - Post-Creation Parameter Changes: 2
+ * - Post-Creation Parameter Changes: 3
  * - Upper/Lowercase Validation: 1
  * 
  * Equivalence Partitioning (EP): 10 Test Cases
@@ -239,17 +239,47 @@ public class DeliveryAreaTest extends TestCase {
 	     assertEquals("AREA02", area.getAreaId());
 	 }
 	
-	 // Test #: 19
-	 // Test Objective: Verify setAreaId with an invalid format after creation.
-	 // Inputs: areaId = "INVALID"
-	 // Expected Output: DeliveryAreaException thrown.
-	 public void testSetInvalidAreaIdAfterCreation() {
-	     try {
-	         DeliveryArea area = new DeliveryArea("AREA01", "Central", "DP001", 10);
-	         area.setAreaId("INVALID");
-	         fail("Exception expected");
-	     } catch (DeliveryAreaException e) {
-	         assertEquals("Area ID must match the format: AREA00.", e.getMessage());
-	     }
-	 }
+	// Test #: 19
+	    // Test Objective: Verify setAreaName after creation with a valid new value.
+	    // Inputs: areaName = "North"
+	    // Expected Output: Area name successfully updated to "North".
+	    public void testSetAreaNameValidUpdate() throws DeliveryAreaException {
+	        DeliveryArea area = new DeliveryArea("AREA01", "Central", "DP001", 10);
+	        area.setAreaName("North");
+	        assertEquals("North", area.getAreaName());
+	    }
+
+	    // Test #: 20
+	    // Test Objective: Verify setDeliveryPersonId after creation with a valid new value.
+	    // Inputs: deliveryPersonId = "DP002"
+	    // Expected Output: Delivery Person ID successfully updated to "DP002".
+	    public void testSetDeliveryPersonIdValidUpdate() throws DeliveryAreaException {
+	        DeliveryArea area = new DeliveryArea("AREA01", "Central", "DP001", 10);
+	        area.setDeliveryPersonId("DP002");
+	        assertEquals("DP002", area.getDeliveryPersonId());
+	    }
+
+	    // Test #: 21
+	    // Test Objective: Verify setTotalCustomers after creation with a valid new value.
+	    // Inputs: totalCustomers = 15
+	    // Expected Output: Total customers successfully updated to 15.
+	    public void testSetTotalCustomersValidUpdate() throws DeliveryAreaException {
+	        DeliveryArea area = new DeliveryArea("AREA01", "Central", "DP001", 10);
+	        area.setTotalCustomers(15);
+	        assertEquals(15, area.getTotalCustomers());
+	    }
+
+	    // Test #: 22
+	    // Test Objective: Verify that setTotalCustomers does not accept negative values after creation.
+	    // Inputs: totalCustomers = -5
+	    // Expected Output: DeliveryAreaException thrown.
+	    public void testSetTotalCustomersNegativeValue() {
+	        try {
+	            DeliveryArea area = new DeliveryArea("AREA01", "Central", "DP001", 10);
+	            area.setTotalCustomers(-5);
+	            fail("Exception expected");
+	        } catch (DeliveryAreaException e) {
+	            assertEquals("Total customers cannot be negative.", e.getMessage());
+	        }
+	    }
 }

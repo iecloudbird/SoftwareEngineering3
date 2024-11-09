@@ -3,6 +3,27 @@ import java.time.format.DateTimeFormatter;
 
 import junit.framework.TestCase;
 	
+/*
+ * DeliveryDocket Test Cases Summary
+ * 
+ * Entity: DeliveryDocket
+ * Objective: Ensure 100%/full coverage test cases using EP and BA
+ * BA (Boundary Analysis): 10 Test Cases
+ * EP (Equivalence Partitioning): 6 Test Cases
+ * 
+ * Boundary Analysis (BA): 10 Test Cases
+ * - Valid and Invalid Length for docketId and orderId: 4
+ * - Edge Cases for totalCustomers (0 and Integer.MAX_VALUE): 2
+ * - Format Validation (date format): 2
+ * - Valid and Invalid deliveryStatus: 2
+ * 
+ * Equivalence Partitioning (EP): 6 Test Cases
+ * - Valid and Invalid Constructor: 1
+ * - Invalid Formats (Area ID, Delivery Person ID): 2
+ * - Null and Empty Values for details: 2
+ * - Uppercase/Lowercase Validation: 1
+ * 
+ */
 
 public class DeliveryDocketTest extends TestCase{
 	   // Test #: 1
@@ -150,16 +171,34 @@ public class DeliveryDocketTest extends TestCase{
     }
 
     // Test #: 14
-    // Test Objective: Update delivery status with an invalid status.
-    // Inputs: newDeliveryStatus = "Pending".
-    // Expected Output: DeliveryDocketException thrown.
+    // Test Objective: Test for updating delivery status to an invalid option.
+    // Inputs: new deliveryStatus = "InvalidStatus"
+    // Expected Output: DeliveryDocketException thrown with message "Invalid delivery status. Valid options: Delivered, Out for delivery, Not delivered".
     public void testUpdateDeliveryStatusInvalid() {
         try {
-        	 DeliveryDocket docket = new DeliveryDocket("DD00001", "ORD001", "DP001", "30/10/2024", "Out for delivery", "Test delivery");
-            docket.updateDeliveryStatus("Pending");
+            DeliveryDocket docket = new DeliveryDocket("DD00001", "ORD001", "DP001", "30/10/2024", "Out for delivery", "Test delivery");
+            docket.updateDeliveryStatus("InvalidStatus");
             fail("Exception expected");
         } catch (DeliveryDocketException e) {
             assertEquals("Invalid delivery status. Valid options: Delivered, Out for delivery, Not delivered", e.getMessage());
         }
+    }
+    
+    // Test #: 15
+    // Test Objective: Test details field handling (non-null).
+    // Inputs: details = "Test delivery details"
+    // Expected Output: details field is set to "Test delivery details".
+    public void testDetailsField() throws DeliveryDocketException {
+        DeliveryDocket docket = new DeliveryDocket("DD00001", "ORD001", "DP001", "30/10/2024", "Out for delivery", "Test delivery details");
+        assertEquals("Test delivery details", docket.getDetails());
+    }
+
+    // Test #: 16
+    // Test Objective: Test that null details field does not throw an exception.
+    // Inputs: details = null
+    // Expected Output: details field is set to null.
+    public void testNullDetailsField() throws DeliveryDocketException {
+        DeliveryDocket docket = new DeliveryDocket("DD00001", "ORD001", "DP001", "30/10/2024", "Out for delivery", null);
+        assertNull(docket.getDetails());
     }
 }

@@ -1,6 +1,25 @@
 import junit.framework.TestCase;
 
 
+/*
+ * Newsagent Test Cases Summary
+ * 
+ * Entity: Newsagent
+ * Objective: Ensure 100% full coverage test cases using Equivalence Partitioning (EP) and Boundary Analysis (BA)
+ * 
+* Total Test Cases: 22
+ * 
+ * Boundary Analysis (BA): 12 Test Cases
+ * - Valid and Invalid Length for name and address: 4
+ * - Edge Cases for phoneNumber (minimum and maximum lengths): 5
+ * - Edge Cases for email length: 3
+ * 
+ * Equivalence Partitioning (EP): 10 Test Cases
+ * - Valid and Invalid Constructor and object creation: 2
+ * - Invalid Formats for name, address, phone number, and email: 6
+ * - Validations for valid formats of phone number: 1
+ */
+
 public class NewsagentTest extends TestCase {
 	
 	//Test #: 1
@@ -96,7 +115,7 @@ public class NewsagentTest extends TestCase {
     // Inputs: email = "a@p"
     // Expected Output: Exception Message: "Customer Email does not meet minimum length requirements"
     
-	 public void testInvalidNewsagentEmailFormat() {
+	public void testInvalidNewsagentEmailFormat() {
 	        try {
 	            Newsagent.validateEmail("a@p");
 	            fail("Exception expected");
@@ -188,6 +207,111 @@ public class NewsagentTest extends TestCase {
             assertEquals("Phone number must contain only digits.", e.getMessage());
         }
     }
+	
+	// Test #: 15
+    // Test Objective: Catch excessive name length
+    // Inputs: name = "A" repeated 51 times
+    // Expected Output: Exception Message: "Name must not exceed 50 characters."
+    public void testInvalidNewsagentNameMaxLength() {
+        try {
+            Newsagent.validateName("A".repeat(51)); // 51 characters.
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Name must not exceed 50 characters.", e.getMessage());
+        }
+    }
+
+    // Test #: 16
+    // Test Objective: Validate name exactly 50 characters (max boundary)
+    // Inputs: name = "A" repeated 50 times
+    // Expected Output: No exception expected, name is valid
+    public void testValidNewsagentNameMaximumBoundary() {
+        try {
+            Newsagent.validateName("A".repeat(50)); // Exactly 50 characters
+            assertTrue(true);
+        } catch (CustomerExceptionHandler e) {
+            fail("Exception not expected");
+        }
+    }
+
+    // Test #: 17
+    // Test Objective: Catch excessive phone number length
+    // Inputs: phone number = "1234567890123456" (16 characters)
+    // Expected Output: Exception Message: "Phone number must not exceed 15 digits."
+    public void testInvalidNewsagentPhoneNumberMaxLength() {
+        try {
+            Newsagent.validatePhoneNumber("1234567890123456"); // 16 characters
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Phone number must not exceed 15 digits.", e.getMessage());
+        }
+    }
+
+    // Test #: 18
+    // Test Objective: Validate maximum valid phone number length (15 characters)
+    // Inputs: phone number = "123456789012345" (15 characters)
+    // Expected Output: No exception expected, phone number is valid
+    public void testValidNewsagentPhoneNumberMaxBoundary() {
+        try {
+            Newsagent.validatePhoneNumber("123456789012345"); // Exactly 15 characters
+            assertTrue(true);
+        } catch (CustomerExceptionHandler e) {
+            fail("Exception not expected");
+        }
+    }
+
+    // Test #: 19
+    // Test Objective: Catch excessive address length
+    // Inputs: address = "A" repeated 61 times 
+    // Expected Output: Exception Message: "Address must not exceed 60 characters."
+    public void testInvalidNewsagentAddressMaxLength() {
+        try {
+            Newsagent.validateAddress("A".repeat(61)); // 61 characters
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Address must not exceed 60 characters.", e.getMessage());
+        }
+    }
+
+    // Test #: 20
+    // Test Objective: Validate maximum valid address length (60 characters)
+    // Inputs: address = "A" repeated 60 times
+    // Expected Output: No exception expected, address is valid
+    public void testValidNewsagentAddressMaxBoundary() {
+        try {
+            Newsagent.validateAddress("A".repeat(60)); // Exactly 60 characters
+            assertTrue(true);
+        } catch (CustomerExceptionHandler e) {
+            fail("Exception not expected");
+        }
+    }
+
+    // Test #: 21
+    // Test Objective: Validate email of exactly 50 characters before domain
+    // Inputs: email = "A" repeated 39 times + "@domain.com" (total 50 char)
+    // Expected Output: No exception expected, email is valid
+    public void testValidEmailMaximumBoundary() {
+        try {
+            Newsagent.validateEmail("A".repeat(39) + "@domain.com"); // Length 39 before @
+            assertTrue(true);
+        } catch (CustomerExceptionHandler e) {
+            fail("Exception not expected");
+        }
+    }
+
+    // Test #: 22
+    // Test Objective: Validate excessive email length
+    // Inputs: email = "A" repeated 40 times before domain
+    // Expected Output: Exception Message: "Email must not exceed 50 characters."
+    public void testInvalidEmailTooLong() {
+        try {
+            Newsagent.validateEmail("A".repeat(40) + "@domain.com"); // TOTAL 51 EXCEEDS UPPER LIMIT
+            fail("Exception expected");
+        } catch (CustomerExceptionHandler e) {
+            assertEquals("Email must not exceed 50 characters.", e.getMessage());
+        }
+    }
+
 }
 
 		

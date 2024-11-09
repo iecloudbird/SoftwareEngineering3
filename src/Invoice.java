@@ -1,14 +1,14 @@
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Invoice {
     private String invoiceId;          // Unique identifier for the invoice
     private String custId;             // Unique identifier for the customer
     private PaymentMethod paymentMethod;       // Payment method (e.g., card, cash)
-    private Date orderDate;             // Date of the order
+    private LocalDate orderDate;             // Date of the order
     private double totalAmount;         // Total amount of the invoice
-    private String deliveryId;          // Unique identifier for the delivery (optional)
-    private String publicationId;       // Unique identifier for the publication (optional)
-    private String orderStatus;         // Status of the order (optional)
+    private String deliveryId;          // Delivery Docket (DD00000)
+    private String publicationId;       //
+    private String orderStatus;         // 
 
     // Default constructor
     public Invoice() {
@@ -23,7 +23,7 @@ public class Invoice {
     }
 
     // Parameterized constructor
-    public Invoice(String invoiceId, String custId, String paymentMethod, Date orderDate, double totalAmount,
+    public Invoice(String invoiceId, String custId, String paymentMethod, LocalDate orderDate, double totalAmount,
                    String deliveryId, String publicationId, String orderStatus) throws CustomerExceptionHandler {
         
         validateInvoiceId(invoiceId);
@@ -72,11 +72,11 @@ public class Invoice {
         this.paymentMethod = PaymentMethod.fromString(paymentMethod); // Use enum validation
     }
 
-    public Date getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) throws CustomerExceptionHandler {
+    public void setOrderDate(LocalDate orderDate) throws CustomerExceptionHandler {
         validateOrderDate(orderDate);
         this.orderDate = orderDate;
     }
@@ -139,7 +139,7 @@ public class Invoice {
         PaymentMethod.fromString(paymentMethod);
     }
 
-    public static void validateOrderDate(Date orderDate) throws CustomerExceptionHandler {
+    public static void validateOrderDate(LocalDate orderDate) throws CustomerExceptionHandler {
         if (orderDate == null) {
             throw new CustomerExceptionHandler("Order Date NOT specified");
         }
@@ -152,9 +152,9 @@ public class Invoice {
     }
 
     public static void validateDeliveryId(String deliveryId) throws CustomerExceptionHandler {
-        // Optional validation: you can adjust this logic as per your requirements
-        if (deliveryId != null && !deliveryId.matches("DP\\d{3}")) {
-            throw new CustomerExceptionHandler("Delivery ID must follow the format DP000");
+        // Optional validation: Adjusted logic to match Delivery Docket ID format
+        if (deliveryId != null && !deliveryId.matches("DD\\d{5}")) {
+            throw new CustomerExceptionHandler("Delivery ID must follow the format DD00000");
         }
     }
 

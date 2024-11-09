@@ -1,5 +1,23 @@
 import junit.framework.TestCase;
 	
+/*
+ * Delivery Person Test Cases Summary
+ * 
+ * Entity: DeliveryPerson
+ * Objective: Ensure complete coverage of test cases using Equivalence Partitioning (EP) and Boundary Analysis (BA)
+ * 
+ * Total Test Cases: 15
+ * 
+ * Boundary Analysis (BA): 8 Test Cases
+ * - Minimum and Maximum Length for firstName: 3
+ * - Minimum and Maximum Length for lastName: 3
+ * - Valid Phone Number Length: 2
+ * - Valid Assigned Area Format: 1
+ * 
+ * Equivalence Partitioning (EP): 7 Test Cases
+ * - Valid and Invalid Constructor: 1
+ * - Invalid Formats for firstName, lastName, deliveryPersonId, phoneNumber, assignedArea, and status: 6
+ */
 
 public class DeliveryPersonTest extends TestCase{
 

@@ -6,49 +6,9 @@ public class Newsagent {
 	private String address;
 	private String phoneNumber;
 	private String email;
-
-	void setId(int custId) {
-		id = custId;
-	}
-	
-	void setName(String custName) {
-		name = custName;
-	}
-	
-	void setAddress(String custAddr) {
-		address = custAddr;
-	}
-	
-	void setPhoneNumber(String custPhone) {
-		phoneNumber = custPhone;
-	}
-	
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	int getId() {
-		return id;
-	}
-	
-	String getName() {
-		return name;
-	}
-	
-	String getAddress() {
-		return address;
-	}
-	
-	String getPhoneNumber() {
-		return phoneNumber;
-		
-	}
 	
 	public Newsagent() {
+		this.id = 0;
 		this.address =null;
 		this.name = null;
 		this.phoneNumber = null;
@@ -62,7 +22,7 @@ public class Newsagent {
 		// Validate Input
 		try {
 			
-			// Validate input
+			// Validate Input
 	        validateName(name);
 	        validateAddress(address);
 	        validatePhoneNumber(phoneNumber);
@@ -80,6 +40,45 @@ public class Newsagent {
 		}
 	
 	}
+    public void setId(int newsagentId) {
+        this.id = newsagentId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setName(String newsagentName) {
+        this.name = newsagentName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setAddress(String newsagentAddress) {
+        this.address = newsagentAddress;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setPhoneNumber(String newsagentPhoneNumber) {
+        this.phoneNumber = newsagentPhoneNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 	
 	public static void validateName(String name) throws CustomerExceptionHandler {
         if (name == null || name.isBlank()) {
