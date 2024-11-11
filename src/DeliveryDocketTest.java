@@ -77,9 +77,15 @@ public class DeliveryDocketTest extends TestCase{
     // Inputs: orderId = "ORD000", other valid parameters.
     // Expected Output: DeliveryDocket object created with orderId = "ORD000".
     public void testOrderIdMinLength() throws DeliveryDocketException {
-        DeliveryDocket docket = new DeliveryDocket("DD00001", "ORD000", "DP001", "30/10/2024", "Out for delivery", "Test delivery");
-        assertEquals("ORD000", docket.getOrderId());
+    	try {
+            DeliveryDocket docket = new DeliveryDocket("DD00001", "ORD000", "DP001", "30/10/2024", "Out for delivery", "Test delivery");
+            assertEquals("ORD000", docket.getOrderId());
+        } catch (DeliveryDocketException e) {
+            fail("Exception not expected for valid orderId format: " + e.getMessage());
+        }
     }
+    
+    //No Max Length test for OrderId because for ID we only accepting one format, throw same exeception.
 
     // Test #: 6
     // Test Objective: Equivalence partitioning for invalid orderId format.

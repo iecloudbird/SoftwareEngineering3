@@ -8,19 +8,19 @@ import junit.framework.TestCase;
  * Entity: Invoice
  * Objective: Ensure 100% full coverage test cases using EP and BA
  * 
- * Total Test Cases: 28
+ * Total Test Cases: 32
  * 
  * Boundary Analysis (BA): 14 Test Cases
  * - Valid and Invalid Length for invoiceId and customerId: 5
- * - Edge Cases for totalAmount (0 and Integer.MAX_VALUE): 3
+ * - Edge Cases for totalAmount (0 and Integer.MAX_VALUE): 4
  * - Format Validation (date format for orderDate): 2
  * - Valid and Invalid paymentStatus: 4
  * 
- * Equivalence Partitioning (EP): 14 Test Cases
+ * Equivalence Partitioning (EP): 18 Test Cases
  * - Valid and Invalid Constructor: 1
  * - Invalid Formats for invoiceId, customerId, deliveryId, publicationId: 6
  * - Null and Empty Values for paymentMethod, orderStatus, orderDate: 5
- * - Valid and Invalid Total Amount: 3
+ * - Valid and Invalid Total Amount: 4
  * - Validations for valid formats of Delivery ID and Publication ID: 2
  * - Valid and Invalid Order Status: 6
  */
@@ -95,7 +95,7 @@ public class InvoiceTest extends TestCase {
 	 // Test Objective: Verify that a correctly formatted Invoice ID does not throw an exception
 	 // Inputs: invoiceId = "INV1234" (valid format)
 	 // Expected Output: No exception thrown
-    public void testInvalidInvoiceId_ValidFormat() {
+    public void testValidInvoiceId() {
         try {
             Invoice.validateInvoiceId("INV1234"); // Valid format
         } catch (CustomerExceptionHandler e) {
@@ -309,57 +309,108 @@ public class InvoiceTest extends TestCase {
         }
     }
 
- // Test #: 23
- // Test Objective: Validate that a blank Order Status throws an exception
- // Inputs: orderStatus = "  " (blank string)
- // Expected Output: Exception with message "Order Status must be between 5 and 60 characters"
-
-    public void testInvalidOrderStatus_Invalid() {
-        try {
-            Invoice.validateOrderStatus("  "); // Invalid: Blank
-            fail("Exception expected");
-        } catch (CustomerExceptionHandler e) {
-            assertEquals("Order Status must be between 5 and 60 characters", e.getMessage());
-        }
-    }
-
- // Test #: 24
- // Test Objective: Validate that an Order Status shorter than 5 characters throws an exception
- // Inputs: orderStatus = "New" (too short)
- // Expected Output: Exception with message "Order Status must be between 5 and 60 characters"
-    public void testInvalidOrderStatus_TooShort() {
-        try {
-            Invoice.validateOrderStatus("New");
-            fail("Exception expected");
-        } catch (CustomerExceptionHandler e) {
-            assertEquals("Order Status must be between 5 and 60 characters", e.getMessage());
-        }
-    }
- // Test #: 25
- // Test Objective: Validate that an Order Status longer than 60 characters throws an exception
- // Inputs: orderStatus = "This order status is definitely longer than sixty characters." (too long)
- // Expected Output: Exception with message "Order Status must be between 5 and 60 characters"
-    public void testInvalidOrderStatus_TooLong() {
-        try {
-            Invoice.validateOrderStatus("This order status is definitely longer than sixty characters."); 
-            fail("Exception expected");
-        } catch (CustomerExceptionHandler e) {
-            assertEquals("Order Status must be between 5 and 60 characters", e.getMessage());
-        }
-    }
- // Test #: 26
- // Test Objective: Verify that a valid Order Status within character limits does not throw an exception
- // Inputs: orderStatus = "Pending" 
- // Expected Output: No exception thrown
-    public void testInvalidOrderStatus_Valid() {
-        try {
-            Invoice.validateOrderStatus("Pending"); // Valid
-        } catch (CustomerExceptionHandler e) {
-            fail("Exception not expected");
-        }
-    }
-    
+	 // Test #: 23
+	 // Test Objective: Validate that a blank Order Status throws an exception
+	 // Inputs: orderStatus = "  " (blank string)
+	 // Expected Output: Exception with message "Order Status NOT specified"
+	 public void testInvalidOrderStatus_Blank() {
+	     try {
+	         Invoice.validateOrderStatus("  "); // Invalid: Blank
+	         fail("Exception expected");
+	     } catch (CustomerExceptionHandler e) {
+	         assertEquals("Order Status NOT specified", e.getMessage());
+	     }
+	 }
+	
+	 // Test #: 24
+	 // Test Objective: Validate that an Order Status shorter than 5 characters throws an exception
+	 // Inputs: orderStatus = "New" (too short)
+	 // Expected Output: Exception with message "Order Status must be between 5 and 60 characters"
+	 public void testInvalidOrderStatus_TooShort() {
+	     try {
+	         Invoice.validateOrderStatus("New");
+	         fail("Exception expected");
+	     } catch (CustomerExceptionHandler e) {
+	         assertEquals("Order Status must be between 5 and 60 characters", e.getMessage());
+	     }
+	 }
+	
+	 // Test #: 25
+	 // Test Objective: Validate that an Order Status longer than 60 characters throws an exception
+	 // Inputs: orderStatus = "This order status is definitely longer than sixty characters." (too long)
+	 // Expected Output: Exception with message "Order Status must be between 5 and 60 characters"
+	 public void testInvalidOrderStatus_TooLong() {
+	     try {
+	         Invoice.validateOrderStatus("This order status is definitely longer than sixty characters.");
+	         fail("Exception expected");
+	     } catch (CustomerExceptionHandler e) {
+	         assertEquals("Order Status must be between 5 and 60 characters", e.getMessage());
+	     }
+	 }
+	
+	 // Test #: 26
+	 // Test Objective: Verify that an invalid Order Status outside of acceptable values throws an exception
+	 // Inputs: orderStatus = "Processing" (invalid status)
+	 // Expected Output: Exception with message "Invalid Order Status. Accepted values are: Pending, Paid, Cancelled, Refunded"
+	 public void testInvalidOrderStatus_InvalidValue() {
+	     try {
+	         Invoice.validateOrderStatus("Processing"); // Invalid: Not in accepted values
+	         fail("Exception expected");
+	     } catch (CustomerExceptionHandler e) {
+	         assertEquals("Invalid Order Status. Accepted values are: Pending, Paid, Cancelled, Refunded", e.getMessage());
+	     }
+	 }
+	
 	 // Test #: 27
+	 // Test Objective: Verify that a valid Order Status within character limits does not throw an exception
+	 // Inputs: orderStatus = "Pending" 
+	 // Expected Output: No exception thrown
+	 public void testValidOrderStatus() {
+	     try {
+	         Invoice.validateOrderStatus("Pending"); // Valid
+	     } catch (CustomerExceptionHandler e) {
+	         fail("Exception not expected");
+	     }
+	 }
+
+	// Test #: 28
+	// Test Objective: Verify that a valid Order Status "Paid" does not throw an exception
+	// Inputs: orderStatus = "Paid"
+	// Expected Output: No exception thrown
+	public void testValidOrderStatus_Paid() {
+	    try {
+	        Invoice.validateOrderStatus("Paid"); // Valid With boundary 4 characters
+	    } catch (CustomerExceptionHandler e) {
+	        fail("Exception not expected");
+	    }
+	}
+
+	// Test #: 29
+	// Test Objective: Verify that a valid Order Status "Cancelled" does not throw an exception
+	// Inputs: orderStatus = "Cancelled"
+	// Expected Output: No exception thrown
+	public void testValidOrderStatus_Cancelled() {
+	    try {
+	        Invoice.validateOrderStatus("Cancelled"); // Valid
+	    } catch (CustomerExceptionHandler e) {
+	        fail("Exception not expected");
+	    }
+	}
+
+	// Test #: 30
+	// Test Objective: Verify that a valid Order Status "Refunded" does not throw an exception
+	// Inputs: orderStatus = "Refunded"
+	// Expected Output: No exception thrown
+	public void testValidOrderStatus_Refunded() {
+	    try {
+	        Invoice.validateOrderStatus("Refunded"); // Valid
+	    } catch (CustomerExceptionHandler e) {
+	        fail("Exception not expected");
+	    }
+	}
+	//No Max boundary due to limited choice of order status, therefore tested all possibilities.
+	
+	 // Test #: 31
 	 // Test Objective: Verify that an invoice can be created with a total amount of Integer.MAX_VALUE
 	 // Inputs: totalAmount = Integer.MAX_VALUE
 	 // Expected Output: Invoice object is created with totalAmount = Integer.MAX_VALUE
@@ -372,7 +423,7 @@ public class InvoiceTest extends TestCase {
 	     }
 	 }
 	
-	 // Test #: 28
+	 // Test #: 32
 	 // Test Objective: Validate the order date format for a valid date
 	 // Inputs: orderDate = "2024-11-09" (valid format)
 	 // Expected Output: No exception thrown

@@ -8,7 +8,7 @@ public class Invoice {
     private double totalAmount;         // Total amount of the invoice
     private String deliveryId;          // Delivery Docket (DD00000)
     private String publicationId;       //
-    private String orderStatus;         // 
+    private String orderStatus;         // Accept: Pending,Paid,Cancelled,Refunded
 
     // Default constructor
     public Invoice() {
@@ -110,8 +110,9 @@ public class Invoice {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus; // Optional, no validation required
+    public void setOrderStatus(String orderStatus) throws CustomerExceptionHandler {
+    	validateOrderStatus(orderStatus);
+        this.orderStatus = orderStatus; 
     }
 
     // Validation methods
@@ -166,10 +167,20 @@ public class Invoice {
     }
 
     public static void validateOrderStatus(String orderStatus) throws CustomerExceptionHandler {
-        // Optional validation: you can adjust this logic as per your requirements
-        if (orderStatus != null && (orderStatus.isBlank() || orderStatus.length() < 5 || orderStatus.length() > 60)) {
-            throw new CustomerExceptionHandler("Order Status must be between 5 and 60 characters");
-        }
+    	 if (orderStatus == null || orderStatus.isBlank()) {
+    	       throw new CustomerExceptionHandler("Order Status NOT specified");
+    	    }
+    	    
+    	 if (orderStatus.length() < 4 || orderStatus.length() > 60) {
+    	      throw new CustomerExceptionHandler("Order Status must be between 5 and 60 characters");
+    	   }
+    	    
+    	 if (!orderStatus.equalsIgnoreCase("Pending") &&
+    	      !orderStatus.equalsIgnoreCase("Paid") &&
+    	      !orderStatus.equalsIgnoreCase("Cancelled") &&
+    	      !orderStatus.equalsIgnoreCase("Refunded")) {
+    	      throw new CustomerExceptionHandler("Invalid Order Status. Accepted values are: Pending, Paid, Cancelled, Refunded");
+    	   }
     }
 
     @Override

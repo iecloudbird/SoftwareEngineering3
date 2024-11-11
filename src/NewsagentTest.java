@@ -17,7 +17,7 @@ import junit.framework.TestCase;
  * Equivalence Partitioning (EP): 10 Test Cases
  * - Valid and Invalid Constructor and object creation: 2
  * - Invalid Formats for name, address, phone number, and email: 6
- * - Validations for valid formats of phone number: 1
+ * - Validations for valid formats of phone number: 2
  */
 
 public class NewsagentTest extends TestCase {
