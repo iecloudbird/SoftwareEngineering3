@@ -64,8 +64,14 @@ public class Publication {
     }
 
     public static void validateDeliveryFrequency(String deliveryFrequency) throws PublicationException {
-        if (deliveryFrequency == null || deliveryFrequency.length() == 0) {
+    	if (deliveryFrequency == null || deliveryFrequency.length() == 0) {
             throw new PublicationException("Delivery frequency must be specified.");
+        }
+        if (deliveryFrequency.matches("\\d+")) {
+            throw new PublicationException("Delivery frequency must be specified in a valid format.");
+        }
+        if (deliveryFrequency.length() < 3) {
+            throw new PublicationException("Delivery frequency must be at least 3 characters.");
         }
     }
 }
