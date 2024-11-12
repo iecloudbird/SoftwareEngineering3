@@ -575,17 +575,17 @@ private static void updateOrder(Scanner keyboard, MySQLAccess dao) throws Custom
         System.out.println("Enter Payment Method: \n");
         String payment_method = keyboard.next();
         
-        System.out.println("Enter the Order Date: \n");
+//        System.out.println("Enter the Order Date: \n");
         //String order_date = keyboard.next();
-        String dateString = keyboard.nextLine();
-    	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
-    	java.util.Date order_date = null;
-    	try {
-    		order_date = dateformat.parse(dateString);
-    	} catch (ParseException e) {
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    	} 
+//        String dateString = keyboard.nextLine();
+//    	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
+    	LocalDate order_date = LocalDate.now();
+//    	try {
+//    		order_date = dateformat.parse(dateString);
+//    	} catch (ParseException e) {
+//    		// TODO Auto-generated catch block
+//    		e.printStackTrace();
+//    	} 
         
         System.out.println("Enter the Total Amount: \n");
         Double total_amount = keyboard.nextDouble();
@@ -654,17 +654,17 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
     String cust_id = keyboard.nextLine();
     System.out.println("Enter payment method: \n");
     String payment_method = keyboard.next();
-    System.out.println("Enter Order Date: \n");
+//    System.out.println("Enter Order Date: \n");
 //    Date order_date = keyboard.next();
-    String dateString = keyboard.nextLine();
-	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
-	java.util.Date order_date = null;
-	try {
-		order_date = dateformat.parse(dateString);
-	} catch (ParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} 
+//    String dateString = keyboard.nextLine();
+//	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
+	LocalDate order_date = LocalDate.now();
+//	try {
+//		order_date = dateformat.parse(dateString);
+//	} catch (ParseException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	} 
     System.out.println("Enter Total Amount: \n");
     Double total_amount = keyboard.nextDouble();
     System.out.println("Enter Delivery Person: \n");
@@ -1131,7 +1131,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	}
 	
 	//STORAGE CRUD CLI METHOD:
-	private static void createStorage(Scanner keyboard, MySQLAccess dao) {
+	private static void createStorage(Scanner keyboard, MySQLAccess dao) throws Storage.StorageException {
         System.out.printf("Enter Storage ID (format ST001): \n");
         String storageId = keyboard.nextLine().toUpperCase();
 
@@ -1141,15 +1141,15 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
         System.out.printf("Enter Description Details: \n");
         String description = keyboard.nextLine();
 
-//        System.out.printf("Enter Capacity: \n");
-//        int capacity = keyboard.nextInt();
-//        keyboard.nextLine(); // Consume newline
+        System.out.printf("Enter Capacity: \n");
+        int capacity = keyboard.nextInt();
+        keyboard.nextLine(); // Consume newline
 
         System.out.printf("Enter Current Stock Level: \n");
         int currentStockLevel = keyboard.nextInt();
         keyboard.nextLine(); // Consume newline
 
-        Storage storage = new Storage(storageId, publicationId, description,currentStockLevel);
+        Storage storage = new Storage(storageId, publicationId, description,capacity,currentStockLevel);
         
         try {
             boolean result = dao.insertStorage(storage);
@@ -1204,20 +1204,23 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
     private static void updateStorageRecord(Scanner keyboard, MySQLAccess dao) {
         System.out.printf("Enter Storage ID to update: \n");
         String storageId = keyboard.nextLine().toUpperCase();
+        
+        System.out.printf("Enter Publication ID to update: \n");
+        String publicationId = keyboard.nextLine().toUpperCase();
 
         System.out.printf("Enter New Description Details: \n");
         String description = keyboard.nextLine();
 
-//        System.out.printf("Enter New Capacity: \n");
-//        int capacity = keyboard.nextInt();
-//        keyboard.nextLine(); // Consume newline
+        System.out.printf("Enter New Capacity: \n");
+        int capacity = keyboard.nextInt();
+        keyboard.nextLine(); // Consume newline
 
         System.out.printf("Enter New Current Stock Level: \n");
         int currentStockLevel = keyboard.nextInt();
         keyboard.nextLine(); // Consume newline
 
         try {
-            Storage storage = new Storage(storageId, null, description, currentStockLevel);
+            Storage storage = new Storage(storageId, publicationId, description, capacity, currentStockLevel);
             boolean result = dao.updateStorage(storage);
             System.out.println(result ? "Storage record updated successfully!" : "ERROR: Storage record update failed.");
         } catch (Exception e) {
@@ -1759,6 +1762,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Customer Record by ID");
         System.out.println("4. Delete Inactive Customer Records");
         System.out.println("55. Go back.");
+        System.out.println("99. Close Application");
 	}
 	private static void DPCRUD() {
 		// TODO Auto-generated method stub
@@ -1844,6 +1848,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Delivery Person Record by ID");
         System.out.println("4. Delete Inactive Delivery Person Records");
         System.out.println("55. Go Back");
+        System.out.println("99. Close Application");
 	}
 	private static void InvoiceCRUD() {
 		// TODO Auto-generated method stub
@@ -1939,6 +1944,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Invoice Record by ID");
         System.out.println("4. Delete Invoice Records");
         System.out.println("55. Go Back");
+        System.out.println("99. Close Application");
 	}
 	private static void PublicationCRUD() {
 		// TODO Auto-generated method stub
@@ -2034,6 +2040,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Publication Record by ID");
         System.out.println("4. Delete Publication Records");
         System.out.println("55. Go Back");
+        System.out.println("99. Close Application");
 	}
 	private static void OrderCRUD() {
 		// TODO Auto-generated method stub
@@ -2129,6 +2136,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Order Record by ID");
         System.out.println("4. Delete Order Record");
         System.out.println("55. Go Back");
+        System.out.println("99. Close Application");
 	}
 	private static void DDCRUD() {
 		// TODO Auto-generated method stub
@@ -2224,6 +2232,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Delivery Docket Record by ID");
         System.out.println("4. Delete Delivery Docket Records");
         System.out.println("55. Go Back");
+        System.out.println("99. Close Application");
 	}
 	private static void DACRUD() {
 		// TODO Auto-generated method stub
@@ -2306,6 +2315,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Delivery Area Record by ID");
         System.out.println("4. Delete Inactive Area Person Records");
         System.out.println("55. Go Back");
+        System.out.println("99. Close Application");
 	}
 	private static void WLCRUD() {
 		// TODO Auto-generated method stub
@@ -2388,6 +2398,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Warning Letter");
         System.out.println("4. Delete Warning Letter");
         System.out.println("55. Go Back");
+        System.out.println("99. Close Application");
 	}
 	private static void NewsagentCRUD() {
 		// TODO Auto-generated method stub
@@ -2470,6 +2481,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Newsagent Record by ID");
         System.out.println("4. Delete Newsagent Records");
         System.out.println("55. Go Back");
+        System.out.println("99. Close Application");
 	}
 	private static void StorageCRUD() {
 		// TODO Auto-generated method stub
@@ -2552,6 +2564,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("3. Update Storage Record by ID");
         System.out.println("4. Delete Storage Records");
         System.out.println("55. Go Back");
+        System.out.println("99. Close Application");
 	}
 	
 	
