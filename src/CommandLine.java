@@ -1649,7 +1649,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 							break;
 						case "55":
 							//main(String[] args);
-							Happy();
+							GoBack();
 							break;
 					        
 						case "99":
@@ -1682,7 +1682,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	}
 
 
-	private static void Happy() {
+	private static void GoBack() {
 		// TODO Auto-generated method stub
 		//Create the Database Object
 		
@@ -1805,7 +1805,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					        break;
 					case "55":
 						//main(String[] args);
-						Happy();
+						GoBack();
 						break;
 					        
 						case "99":
@@ -1901,7 +1901,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					        break;
 					case "55":
 						//main(String[] args);
-						Happy();
+						GoBack();
 						break;
 					        
 						case "99":
@@ -1997,7 +1997,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					        break;
 					case "55":
 						//main(String[] args);
-						Happy();
+						GoBack();
 						break;
 					        
 						case "99":
@@ -2093,7 +2093,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					        break;
 					case "55":
 						//main(String[] args);
-						Happy();
+						GoBack();
 						break;
 					        
 						case "99":
@@ -2189,7 +2189,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					        break;
 					case "55":
 						//main(String[] args);
-						Happy();
+						GoBack();
 						break;
 					        
 						case "99":
@@ -2272,7 +2272,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					        break;
 					case "55":
 						//main(String[] args);
-						Happy();
+						GoBack();
 						break;
 					        
 						case "99":
@@ -2355,7 +2355,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					        break;
 					case "55":
 						//main(String[] args);
-						Happy();
+						GoBack();
 						break;
 					        
 						case "99":
@@ -2438,7 +2438,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					        break;
 					case "55":
 						//main(String[] args);
-						Happy();
+						GoBack();
 						break;
 					        
 						case "99":
@@ -2521,7 +2521,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 					        deleteStorageRecord(keyboard, dao);
 					case "55":
 						//main(String[] args);
-						Happy();
+						GoBack();
 						break;
 					        
 						case "99":
