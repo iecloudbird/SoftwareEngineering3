@@ -18,3 +18,4 @@ INSERT INTO customers (customer_name, customer_address, customer_phone, customer
 ('John Doe', '123 Elm St, Springfield', '5551234567', 'john.doe@example.com', TRUE),
 ('Jane Smith', '456 Oak St, Springfield', '5559876543', 'jane.smith@example.com', FALSE),
 ('Alice Johnson', '789 Pine St, Springfield', '5555555555', 'alice.johnson@example.com', TRUE);
+Select * from customers;

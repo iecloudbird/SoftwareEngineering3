@@ -135,13 +135,13 @@ public class CommandLine {
         keyboard.nextLine();
         
         // Get updated details
-        System.out.printf("Enter New Customer Name: \n");
+        System.out.printf("Enter New Customer Name (Length: 2-50): \n");
         String custName = keyboard.nextLine();
-        System.out.printf("Enter New Customer Address: \n");
+        System.out.printf("Enter New Customer Address (Length: 5-60): \n");
         String custAddr = keyboard.nextLine();
-        System.out.printf("Enter New Customer PhoneNumber: \n");
+        System.out.printf("Enter New Customer PhoneNumber (Length: 7-15): \n");
         String custPhoneNumber = keyboard.nextLine();
-        System.out.printf("Enter New Customer Email: \n");
+        System.out.printf("Enter New Customer Email (Length: 5-50): \n");
         String custEmail = keyboard.nextLine();
         
         try {
@@ -154,19 +154,19 @@ public class CommandLine {
 	
 	private static void createDeliveryPerson(Scanner keyboard, MySQLAccess dao) {
         // Implementation for creating a delivery person
-		System.out.printf("Enter Delivery Person First Name: \n");
+		System.out.printf("Enter Delivery Person First Name (Length: 1-15): \n");
         String firstName = keyboard.nextLine();
         
-        System.out.printf("Enter Delivery Person Last Name: \n");
+        System.out.printf("Enter Delivery Person Last Name (Length: 1-25): \n");
         String lastName = keyboard.nextLine();
         
         System.out.printf("Enter Delivery Person ID (format DP/123): \n");
         String id = keyboard.nextLine().toUpperCase();
         
-        System.out.printf("Enter Delivery Person Phone Number: \n");
+        System.out.printf("Enter Delivery Person Phone Number (Length: 10): \n");
         String phone = keyboard.nextLine();
         
-        System.out.printf("Enter Assigned Area: \n");
+        System.out.printf("Enter Assigned Area (format AREA00): \n");
         String area = keyboard.nextLine();
         
         System.out.printf("Enter Status (Out for delivery/Returned/Inactive): \n");
@@ -227,17 +227,17 @@ public class CommandLine {
     }
 	private static void updateDeliveryPerson(Scanner keyboard, MySQLAccess dao) {
 	    // Implementation for updating delivery person details
-	    System.out.println("Enter Delivery Person ID to update:");
+	    System.out.println("Enter Delivery Person ID to update (format DP000):");
 	    String updateId = keyboard.nextLine();
 
 	    // Get updated details
-	    System.out.printf("Enter New Delivery Person First Name: \n");
+	    System.out.printf("Enter New Delivery Person First Name (Length: 1-15): \n");
 	    String firstName = keyboard.nextLine();
-	    System.out.printf("Enter New Delivery Person Last Name: \n");
+	    System.out.printf("Enter New Delivery Person Last Name (Length: 1-25): \n");
 	    String lastName = keyboard.nextLine();
 	    System.out.printf("Enter New Delivery Person Phone Number (10 digits): \n");
 	    String phone = keyboard.nextLine();
-	    System.out.printf("Enter New Assigned Area: \n");
+	    System.out.printf("Enter New Assigned Area (format AREA00): \n");
 	    String area = keyboard.nextLine();
 	    System.out.printf("Enter New Status (Out for delivery/Returned/Inactive): \n");
 	    String status = keyboard.nextLine();
@@ -1263,13 +1263,13 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		
 				case "1":
 					//Get Customer Details from the User
-					System.out.printf("Enter Customer Name: \n");
+					System.out.printf("Enter Customer Name (Length: 2-50): \n");
 					String custName = keyboard.nextLine();
-					System.out.printf("Enter Customer Address: \n");
+					System.out.printf("Enter Customer Address (Length: 5-60): \n");
 					String custAddr = keyboard.nextLine();
-					System.out.printf("Enter Customer PhoneNumber: \n");
+					System.out.printf("Enter Customer PhoneNumber (Length: 7-15): \n");
 					String custphoneNumber = keyboard.nextLine();
-					System.out.printf("Enter Customer Email: \n");
+					System.out.printf("Enter Customer Email (Length: 5-50): \n");
 					String custEmail = keyboard.nextLine();
 					System.out.println("Is the customer subscribed? (true/false): ");
 					while (!keyboard.hasNextBoolean()) {
@@ -1574,13 +1574,13 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 				
 						case "1":
 							//Get Customer Details from the User
-							System.out.printf("Enter Customer Name: \n");
+							System.out.printf("Enter Customer Name (Length: 2-50): \n");
 							String custName = keyboard.nextLine();
-							System.out.printf("Enter Customer Address: \n");
+							System.out.printf("Enter Customer Address (Length: 5-60): \n");
 							String custAddr = keyboard.nextLine();
-							System.out.printf("Enter Customer PhoneNumber: \n");
+							System.out.printf("Enter Customer PhoneNumber (Length: 7-15): \n");
 							String custphoneNumber = keyboard.nextLine();
-							System.out.printf("Enter Customer Email: \n");
+							System.out.printf("Enter Customer Email (Length: 5-50): \n");
 							String custEmail = keyboard.nextLine();
 							System.out.println("Is the customer subscribed? (true/false): ");
 							while (!keyboard.hasNextBoolean()) {

@@ -188,7 +188,7 @@ import java.sql.SQLException;
 		
 		public boolean updateDeliveryPersonDetails(DeliveryPerson deliveryPerson) {
 	        boolean updateSuccessful = false;
-	        String query = "UPDATE delivery_person SET first_name = ?, last_name = ?, phone_number = ?, assigned_area = ?, status = ? WHERE delivery_person_id = ?";
+	        String query = "UPDATE delivery_persons SET first_name = ?, last_name = ?, phone_number = ?, assigned_area = ?, status = ? WHERE delivery_person_id = ?";
 	        try {
 	            preparedStatement = connect.prepareStatement(query);
 	            preparedStatement.setString(1, deliveryPerson.getFirstName());
@@ -206,7 +206,56 @@ import java.sql.SQLException;
 	        return updateSuccessful;
 	    }	
 
-		
+		public boolean deleteDeliveryPersonById(String deleteId) {
+			
+			boolean deleteSucessfull = true;
+			
+			//Add Code here to call embedded SQL to insert publication into DB
+			
+			try {
+				
+				//Create prepared statement to issue SQL query to the database
+				if (deleteId == "DELETEALL")
+					//Delete all entries in Table
+					preparedStatement = connect.prepareStatement("delete from newsagent.delivery_persons");
+				else
+					//Delete a particular publication
+					preparedStatement = connect.prepareStatement("DELETE FROM newsagent.delivery_persons WHERE delivery_person_id = ?");
+				preparedStatement.setString(1, deleteId);
+	
+				preparedStatement.executeUpdate();
+			 
+			}
+			catch (Exception e) {
+				deleteSucessfull = false;
+			}
+			
+			return deleteSucessfull;
+			
+		}
+		public boolean deleteAllDeliveryPersons() {
+			boolean deleteSuccessful = true;
+		    try {
+		        preparedStatement = connect.prepareStatement("DELETE FROM newsagent.delivery_persons");
+		        preparedStatement.executeUpdate();
+		        //System.out.println("All good");
+		    } catch (Exception e) {
+		        deleteSuccessful = false;
+		        e.printStackTrace();  // Log the error for easier debugging
+		    } finally {
+		        try {
+		            if (preparedStatement != null) {
+		                preparedStatement.close();
+		            }
+		            if (connect != null) {
+		                connect.close();
+		            }
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return deleteSuccessful;
+		}
 
 		public boolean insertPublication(Publication publication) {
 		    String query = "INSERT INTO publications (publication_id, publication_name, stock_number, publication_price, publication_type, publication_frequency) VALUES (?, ?, ?, ?, ?, ?)";
