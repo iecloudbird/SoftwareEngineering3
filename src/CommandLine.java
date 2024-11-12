@@ -1742,6 +1742,10 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 				
 					//Tidy up Resources
 					keyboard.close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}//finally{}
 	}
 
 
@@ -1754,6 +1758,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 		System.out.println("2. View ALL Customer Records");
 		System.out.println("3. Update Customer Record by ID");
         System.out.println("4. Delete Inactive Customer Records");
+        System.out.println("55. Go back.");
 	}
 	private static void DPCRUD() {
 		// TODO Auto-generated method stub
