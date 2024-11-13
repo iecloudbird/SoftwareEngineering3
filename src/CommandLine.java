@@ -257,7 +257,12 @@ public class CommandLine {
         // Implementation for deleting delivery person
         System.out.println("Enter Delivery Person ID to delete:");
         String deleteId = keyboard.nextLine();
-        boolean deleteResult = true;
+        if(dao.deleteDeliveryPersonById(deleteId)) {
+            boolean deleteResult = true;
+        }
+        else {
+        	System.out.println("Id does not exist, come on man.");
+        }
     }
     
 
