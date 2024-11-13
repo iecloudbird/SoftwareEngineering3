@@ -15,8 +15,8 @@ import junit.framework.TestCase;
  * - Valid Formats for publicationId and type: 4
  * 
  * Equivalence Partitioning (EP): 10 Test Cases
- * - Valid and Invalid Constructor and object creation: 3
- * - Invalid Formats for title, publicationId, type, and deliveryFrequency: 6
+ * - Valid and Invalid Constructor and object creation: 2
+ * - Invalid Formats for title, publicationId, type, and deliveryFrequency: 4
  * - Validations for acceptable formats of publicationId and type: 3
  * - Validations for deliveryFrequency specification: 2
  */
@@ -132,32 +132,48 @@ public class PublicationTest extends TestCase {
             assertEquals("Type must be either 'Newspaper' or 'Magazine'.", e.getMessage());
         }
     }
+    
+    // Test Case #: 10
+    // Test Objective: Validate `type` accepts lowercase input (should be invalid).
+    // Inputs: type = "newspaper"
+    // Expected Output: PublicationException thrown.
+    public void testInvalidTypeLowerCase() {
+        try {
+            new Publication("PUB009", "Tech News", 10, 2.99, "newspaper", "Daily");
+            fail("Expected PublicationException for invalid type format.");
+        } catch (PublicationException e) {
+            assertEquals("Type must be either 'Newspaper' or 'Magazine'.", e.getMessage());
+        }
+    }
 
     // Boundary Analysis (BA): Validating `deliveryFrequency`.
-    // Test Case #: 10
-    // Test Objective: Validate `deliveryFrequency` must be non-empty.
+    // Test Case #: 11
+    // Test Objective: Validate deliveryFrequency must be non-empty.
     // Inputs: deliveryFrequency = ""
     // Expected Output: PublicationException thrown.
     public void testEmptyDeliveryFrequency() {
         try {
-            new Publication("PUB009", "Weekly Roundup", 20, 4.99, "Newspaper", "");
+            new Publication("PUB010", "Weekly Roundup", 20, 4.99, "Newspaper", "");
             fail("Expected PublicationException for empty deliveryFrequency.");
         } catch (PublicationException e) {
             assertEquals("Delivery frequency must be specified.", e.getMessage());
         }
     }
-
-    // Test Case #: 11
-    // Test Objective: Validate `deliveryFrequency` accepts a valid frequency string.
-    // Inputs: deliveryFrequency = "Weekly"
-    // Expected Output: Publication object created successfully.
-    public void testValidDeliveryFrequency() throws PublicationException {
-        Publication pub = new Publication("PUB010", "Monthly Digest", 15, 3.50, "Magazine", "Weekly");
-        assertEquals("Weekly", pub.getDeliveryFrequency());
-    }
-
-    // Additional EP: Test Constructor with Null Values
+    
     // Test Case #: 12
+    // Test Objective: Validate deliveryFrequency must be valid format.
+    // Inputs: deliveryFrequency = "1234"
+    // Expected Output: PublicationException thrown.
+    public void testInvalidDeliveryFrequencyFormat() {
+        try {
+            new Publication("PUB011", "Daily News", 10, 1.99, "Newspaper", "1234");
+            fail("Expected PublicationException for invalid deliveryFrequency format.");
+        } catch (PublicationException e) {
+            assertEquals("Delivery frequency must be specified in a valid format.", e.getMessage());
+        }
+    }
+    
+    // Test Case #: 13
     // Test Objective: Ensure constructor throws exception for null `publicationId`.
     // Inputs: publicationId = null
     // Expected Output: PublicationException thrown.
@@ -170,8 +186,16 @@ public class PublicationTest extends TestCase {
         }
     }
 
-    // Additional EP: Test Constructor with Null Title
-    // Test Case #: 13
+    // Test Case #: 14
+    // Test Objective: Validate `deliveryFrequency` accepts a valid frequency string.
+    // Inputs: deliveryFrequency = "Weekly"
+    // Expected Output: Publication object created successfully.
+    public void testValidDeliveryFrequency() throws PublicationException {
+        Publication pub = new Publication("PUB010", "Monthly Digest", 15, 3.50, "Magazine", "Weekly");
+        assertEquals("Weekly", pub.getDeliveryFrequency());
+    }
+
+    // Test Case #: 15
     // Test Objective: Ensure constructor throws exception for null `title`.
     // Inputs: title = null
     // Expected Output: PublicationException thrown.
@@ -184,7 +208,10 @@ public class PublicationTest extends TestCase {
         }
     }
     
-    //BA
+    // Test Case #: 16
+    // Test Objective: Ensure constructor throws exception for title length less than minimum.
+    // Inputs: title = ""
+    // Expected Output: PublicationException thrown.
     public void testTitleLengthTooShort() {
         try {
             new Publication("PUB012", "", 10, 1.99, "Magazine", "Daily");
@@ -194,7 +221,10 @@ public class PublicationTest extends TestCase {
         }
     }
     
-    //BA
+    // Test Case #: 17
+    // Test Objective: Ensure constructor throws exception for title length greater than maximum.
+    // Inputs: title = 101 characters long string
+    // Expected Output: PublicationException thrown.
     public void testTitleLengthTooLong() {
         String longTitle = "A".repeat(101);
         try {
@@ -204,31 +234,44 @@ public class PublicationTest extends TestCase {
             assertEquals("Title must be between 1 and 100 characters.", e.getMessage());
         }
     }
-    public void testInvalidDeliveryFrequencyFormat() {
-        try {
-            new Publication("PUB014", "Daily News", 10, 1.99, "Newspaper", "1234");
-            fail("Expected PublicationException for invalid deliveryFrequency format.");
-        } catch (PublicationException e) {
-            assertEquals("Delivery frequency must be specified in a valid format.", e.getMessage());
-        }
-    }
     
-    public void testInvalidTypeLowerCase() {
-        try {
-            new Publication("PUB015", "Tech News", 10, 1.99, "newspaper", "Daily");
-            fail("Expected PublicationException for invalid type format.");
-        } catch (PublicationException e) {
-            assertEquals("Type must be either 'Newspaper' or 'Magazine'.", e.getMessage());
-        }
-    }
-    
+    // Test Case #: 18
+    // Test Objective: Ensure constructor throws exception with all invalid values.
+    // Inputs: publicationId = null, title = null, numberInStocks = -1, price = -1.00, type = null, deliveryFrequency = null
+    // Expected Output: PublicationException thrown.
     public void testAllNullValues() {
         try {
             new Publication(null, null, -1, -1.00, null, null);
             fail("Expected PublicationException for all null values.");
         } catch (PublicationException e) {
             assertEquals("Publication ID must be in the format PUB000 (Prefix 'PUB' followed by three digits).", e.getMessage());
-            // Also check for other messages based on the order of checks in Publication constructor
+        }
+    }
+
+    // Test Case #: 19
+    // Test Objective: Validate deliveryFrequency must have a minimum length of 3 characters.
+    // Inputs: deliveryFrequency = "AB"
+    // Expected Output: PublicationException thrown.
+    public void testDeliveryFrequencyTooShort() {
+        try {
+            new Publication("PUB015", "Daily News", 10, 1.99, "Newspaper", "AB");
+            fail("Expected PublicationException for delivery frequency less than minimum length.");
+        } catch (PublicationException e) {
+            assertEquals("Delivery frequency must be at least 3 characters.", e.getMessage());
+        }
+    }
+    
+    // Test Case #: 20
+    // Test Objective: Validate deliveryFrequency must have a maximum length of 50 characters.
+    // Inputs: deliveryFrequency = 51 characters long string
+    // Expected Output: PublicationException thrown.
+    public void testDeliveryFrequencyTooLong() {
+        String longDeliveryFrequency = "A".repeat(51); // This creates a string of 51 characters
+        try {
+            new Publication("PUB016", "Weekly Update", 10, 1.99, "Magazine", longDeliveryFrequency);
+            fail("Expected PublicationException for delivery frequency greater than maximum length.");
+        } catch (PublicationException e) {
+            assertEquals("Delivery frequency cannot exceed 50 characters.", e.getMessage());
         }
     }
 }

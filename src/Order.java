@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.*;
 
 enum OrderStatus {
@@ -12,9 +13,9 @@ enum OrderStatus {
 public class Order {
 	private String orderId; //format : ORD0001
 	private int custId;
-	private String deliveryId; //deliveryPersonID format : DP000
-	private String publicationId;
-	private Date orderDate;
+	private String deliveryAreaId; //format AREA00
+	private String publicationId;  // Format: PUB003
+	private LocalDate orderDate;
 	private OrderStatus orderStatus;
 	public String getOrderId() {
 		return orderId;
@@ -28,11 +29,11 @@ public class Order {
 	public void setCustId(int custId) {
 		this.custId = custId;
 	}
-	public String getDeliveryId() {
-		return deliveryId;
+	public String getDeliveryAreaId() {
+		return deliveryAreaId;
 	}
-	public void setDeliveryId(String deliveryId) {
-		this.deliveryId = deliveryId;
+	public void setDeliveryAreaId(String deliveryAreaId) {
+		this.deliveryAreaId = deliveryAreaId;
 	}
 	public String getPublicationId() {
 		return publicationId;
@@ -40,10 +41,10 @@ public class Order {
 	public void setPublicationId(String publicationId) {
 		this.publicationId = publicationId;
 	}
-	public Date getOrderDate() {
+	public LocalDate getOrderDate() {
 		return orderDate;
 	}
-	public void setOrderDate(Date orderDate) {
+	public void setOrderDate(LocalDate orderDate) {
 		this.orderDate = orderDate;
 	}
 	public OrderStatus getOrderStatus() {
@@ -55,13 +56,13 @@ public class Order {
 	public Order() {
 		this.orderId = null;
 		this.custId = 0;
-		this.deliveryId = null ;
+		this.deliveryAreaId = null ;
 		this.publicationId = null;
-		this.orderDate = new Date();
+		this.orderDate = LocalDate.now();
         this.orderStatus = OrderStatus.PENDING;
 	}
 	
-	public Order(String orderId, int custId, String deliveryId, String publicationId, Date orderDate, OrderStatus orderStatus) throws CustomerExceptionHandler  {
+	public Order(String orderId, int custId, String deliveryId, String publicationId, Optional<LocalDate> orderDate, OrderStatus orderStatus) throws CustomerExceptionHandler  {
 		
 		// Validate Input
 		try {
@@ -75,9 +76,9 @@ public class Order {
 			// Set Attributes
 	        this.orderId = orderId;
 	        this.custId = custId;	
-	        this.deliveryId = deliveryId;
+	        this.deliveryAreaId = deliveryId;
 	        this.publicationId = publicationId;
-	        this.orderDate = orderDate != null ? orderDate : new Date();
+	        this.orderDate = orderDate.orElse(LocalDate.now());
 	        this.orderStatus =  orderStatus;
 		}catch (CustomerExceptionHandler e) {
 			throw e;
@@ -91,10 +92,6 @@ public class Order {
 		
 		if (orderId.isBlank() || orderId.isEmpty())
 			throw new CustomerExceptionHandler("Order Id NOT specified");
-		else if (orderId.length() < 2)
-			throw new CustomerExceptionHandler("Order Id does not meet minimum length requirements");
-		else if (orderId.length() > 8)
-			throw new CustomerExceptionHandler("Order Id exceeds maximum length requirements");
 		else if (!orderId.matches("ORD\\d{4}")) {
             throw new CustomerExceptionHandler("Order Id format is invalid. Expected format: ORD0001");
         }
@@ -108,19 +105,16 @@ public class Order {
 		    throw new CustomerExceptionHandler("Customer Id format is invalid. Expected format: positive integer");
 		}
 	}
-	public static void validateDeliveryId(String deliveryId) throws CustomerExceptionHandler {
+	public static void validateDeliveryId(String areaId) throws CustomerExceptionHandler {
 		
 		//Agree Formating Rules on "Delivery Id"
 		//E.G. Name String must be a minimum of 5 characters and a maximum of 60 characters
 		
-		if (deliveryId.isBlank() || deliveryId.isEmpty())
-			throw new CustomerExceptionHandler("Delivery Id NOT specified");
-		else if (deliveryId.length() < 5)
-			throw new CustomerExceptionHandler("Delivery Id does not meet minimum length requirements");
-		else if (deliveryId.length() > 8)
-			throw new CustomerExceptionHandler("Delivery Id exceeds maximum length requirements");
-		else if (!deliveryId.matches("DP\\d{3}")) {
-            throw new CustomerExceptionHandler("Delivery Id format is invalid. Expected format: DP000");
+		if (areaId == null) {
+            throw new CustomerExceptionHandler("Area ID cannot be null.");
+        }
+        if (!areaId.matches("AREA\\d{2}")) {
+            throw new CustomerExceptionHandler("Area ID must match the format: AREA00.");
         }
 	}
 	public static void validatePublicationId(String publicationId) throws CustomerExceptionHandler {
@@ -130,24 +124,19 @@ public class Order {
 		
 		if (publicationId.isBlank() || publicationId.isEmpty())
 			throw new CustomerExceptionHandler("Publication Id NOT specified");
-		else if (publicationId.length() < 5)
-			throw new CustomerExceptionHandler("Publication Id does not meet minimum length requirements");
-		else if (publicationId.length() > 7)
-			throw new CustomerExceptionHandler("Publication Id exceeds maximum length requirements");
-		else if (!publicationId.matches("PUB\\d{3}")) {
-	         throw new CustomerExceptionHandler("Publication Id format is invalid. Expected format: PUB001");
-	       }
+		else if (publicationId == null || !publicationId.matches("PUB\\d{3}")) {
+            throw new CustomerExceptionHandler("Publication ID must be in the format PUB000 (Prefix 'PUB' followed by three digits).");
+        }
 	}
-	 public static void validateOrderDate(Date orderDate) throws CustomerExceptionHandler {
-	        if (orderDate == null) {
-	            throw new CustomerExceptionHandler("Order Date NOT specified");
-	        }
-	        
-	        Date currentDate = new Date();
-	        if (orderDate.before(currentDate)) {
-	            throw new CustomerExceptionHandler("Order Date cannot be in the past");
-	        }
-	    }
+	 public static void validateOrderDate(Optional<LocalDate> orderDate) throws CustomerExceptionHandler {
+		 if (!orderDate.isPresent()) {
+		        throw new CustomerExceptionHandler("Order Date NOT specified."); // Exception if no date is provided
+		    }
+		    
+		    if (orderDate.get().isBefore(LocalDate.now())) { 
+		        throw new CustomerExceptionHandler("Order Date cannot be in the past."); // Exception for past dates
+		    }
+	 }
 
 	 public static void validateOrderStatus(OrderStatus orderStatus) throws CustomerExceptionHandler {
 		    if (orderStatus == null) {
