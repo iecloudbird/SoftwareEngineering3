@@ -24,7 +24,32 @@ public class Publication {
         this.deliveryFrequency = deliveryFrequency;
     }
 
-    // Getters
+    //Setters
+    public void setPublicationId(String publicationId) {
+		this.publicationId = publicationId;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setNumberInStocks(int numberInStocks) {
+		this.numberInStocks = numberInStocks;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setDeliveryFrequency(String deliveryFrequency) {
+		this.deliveryFrequency = deliveryFrequency;
+	}
+
+	// Getters
     public String getPublicationId() { return publicationId; }
     public String getTitle() { return title; }
     public int getNumberInStocks() { return numberInStocks; }
@@ -72,6 +97,10 @@ public class Publication {
         }
         if (deliveryFrequency.length() < 3) {
             throw new PublicationException("Delivery frequency must be at least 3 characters.");
+        }
+        
+        if (deliveryFrequency.length() > 50) {
+            throw new PublicationException("Delivery frequency cannot exceed 50 characters.");
         }
     }
 }
