@@ -368,10 +368,11 @@ import java.sql.SQLException;
 		        
 		        preparedStatement.setString(1, order.getOrderId());
 		        preparedStatement.setInt(2, order.getCustId());
-		        preparedStatement.setString(3, order.getDeliveryId());
+		        preparedStatement.setString(3, order.getDeliveryAreaId());
 		        preparedStatement.setString(4, order.getPublicationId());
-		        preparedStatement.setDate(5, (Date) order.getOrderDate());
-		        preparedStatement.setObject(6, order.getOrderStatus());
+		        preparedStatement.setDate(5, Date.valueOf(order.getOrderDate()));
+//		        preparedStatement.setObject(6, order.getOrderStatus());
+		        preparedStatement.setString(6, order.getOrderStatus().name());
 
 		        int rowsAffected = preparedStatement.executeUpdate();
 		        return rowsAffected > 0; // Return true if insert was successful
@@ -400,10 +401,10 @@ import java.sql.SQLException;
 	        try {
 	            preparedStatement = connect.prepareStatement(query);
 	            preparedStatement.setInt(1, order.getCustId());
-	            preparedStatement.setString(2, order.getDeliveryId());
+	            preparedStatement.setString(2, order.getDeliveryAreaId());
 	            preparedStatement.setString(3, order.getPublicationId());
-	            preparedStatement.setDate(4, (Date)order.getOrderDate());
-	            preparedStatement.setObject(5, order.getOrderStatus());
+	            preparedStatement.setDate(4, Date.valueOf(order.getOrderDate()));
+	            preparedStatement.setString(5, order.getOrderStatus().name());
 	            preparedStatement.setString(6, order.getOrderId());
 
 	            int rowsAffected = preparedStatement.executeUpdate();
@@ -731,10 +732,10 @@ import java.sql.SQLException;
 	        String query = "INSERT INTO warning_letter (letter_id, cust_id, cust_address, reason, due_amount) VALUES (?, ?, ?, ?, ?)";
 	        try (PreparedStatement ps = connect.prepareStatement(query)) {
 	            ps.setString(1, letter.getLetterId());
-	            ps.setInt(2, Integer.parseInt(letter.getCustId()));  // Assuming custId is stored as a String
+	            ps.setInt(2, letter.getCustId()); 
 	            ps.setString(3, letter.getReason());
 	            ps.setDouble(4, letter.getDueAmount());
-	            ps.setDate(5, new java.sql.Date(letter.getIssueDate().getTime()));
+	            ps.setDate(5, java.sql.Date.valueOf(letter.getIssueDate())); 
 	            return ps.executeUpdate() > 0;
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -757,7 +758,7 @@ import java.sql.SQLException;
 	    public boolean updateWarningLetter(WarningLetter letter) {
 	        String query = "UPDATE warning_letter SET cust_address = ?, reason = ?, due_amount = ? WHERE letter_id = ?";
 	        try (PreparedStatement ps = connect.prepareStatement(query)) {
-	            ps.setString(1, letter.getCustId());
+	        	ps.setInt(1, letter.getCustId()); 
 	            ps.setString(2, letter.getReason());
 	            ps.setDouble(3, letter.getDueAmount());
 	            ps.setString(4, letter.getLetterId());

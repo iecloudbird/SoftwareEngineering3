@@ -1,24 +1,23 @@
 public class Publication {
     private String publicationId; // Format: PUB003
     private String title;
-    //private int numberInStocks;
+    private int numberInStocks;
     private double price;
     private String type; // Options: "Newspaper", "Magazine"
     private String deliveryFrequency; // Frequency of delivery
 
     // Constructor
-    public Publication(String publicationId, String title, double price,//, int numberInStocks
-                       String type, String deliveryFrequency) throws PublicationException {
+    public Publication(String publicationId, String title,int numberInStocks, double price, String type, String deliveryFrequency) throws PublicationException {
         validatePublicationId(publicationId);
         validateTitle(title);
-        //validateNumberInStocks(numberInStocks);
+        validateNumberInStocks(numberInStocks);
         validatePrice(price);
         validateType(type);
         validateDeliveryFrequency(deliveryFrequency);
 
         this.publicationId = publicationId;
         this.title = title;
-        //this.numberInStocks = numberInStocks;
+        this.numberInStocks = numberInStocks;
         this.price = price;
         this.type = type;
         this.deliveryFrequency = deliveryFrequency;
@@ -52,7 +51,7 @@ public class Publication {
 	// Getters
     public String getPublicationId() { return publicationId; }
     public String getTitle() { return title; }
-    //public int getNumberInStocks() { return numberInStocks; }
+    public int getNumberInStocks() { return numberInStocks; }
     public double getPrice() { return price; }
     public String getType() { return type; }
     public String getDeliveryFrequency() { return deliveryFrequency; }

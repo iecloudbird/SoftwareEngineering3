@@ -7,9 +7,12 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class CommandLine {
+	
+	private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	private static void listCustomerFuctionalityAvailable() {
 		
@@ -299,11 +302,12 @@ public class CommandLine {
         System.out.println("Enter Publication Title: \n");
         String title = keyboard.nextLine();
         
-//        System.out.println("Enter Publication Stock Amount: \n");
-//        int stock = keyboard.nextInt();
+        System.out.println("Enter Publication Stock Amount: \n");
+        int stock = keyboard.nextInt();
         
         System.out.println("Enter Price: \n");
         double price = keyboard.nextDouble();
+        keyboard.nextLine(); //Consume new line please
         
         System.out.println("Enter Type of Publication (Newspaper or Magazine): \n");
         String type = keyboard.next();
@@ -312,7 +316,7 @@ public class CommandLine {
         String frequency = keyboard.next();
         
         try {
-        	 Publication publication = new Publication(id, title, price, type, frequency);//stock
+        	 Publication publication = new Publication(id, title, stock, price, type, frequency);
              boolean insertResult = dao.insertPublication(publication);
             System.out.println(insertResult ? "Publication Created" : "ERROR: Publication NOT Created");
         } catch (Exception e) {
@@ -352,34 +356,35 @@ public class CommandLine {
 		
 	}
     
-private static void updatePublication(Scanner keyboard, MySQLAccess dao) {
-    // Implementation for updating publication details
-    System.out.println("Enter Publication ID to update:");
-    String updateId = keyboard.nextLine();
-
-    // Get updated details
-    System.out.println("Enter New Publication Title: \n");
-    String title = keyboard.nextLine();
-//    System.out.println("Enter New Publication Stock amount: \n");
-//    int stock = keyboard.nextInt();
-    System.out.println("Enter New Publication Price: \n");
-    double price = keyboard.nextDouble();
-    System.out.println("Enter New Type of Publication (Newspaper/Magazine): \n");
-    String type = keyboard.next();
-    System.out.println("Enter New Delivery Frequency (Daily/Weekly/Monthly): \n");
-    String status = keyboard.next();
-
-    try {
-        // Create a new Publication object with the updated details
-        Publication publication = new Publication(updateId, title, price, type, status);// stock,
-        boolean updateResult = dao.updatePublicationDetails(publication); // You'll need to implement this method in MySQLAccess
-        System.out.println(updateResult ? "Publication Details Updated" : "ERROR: Publication Details NOT Updated");
-    } catch (PublicationException e) {
-        System.out.println("ERROR: " + e.getMessage());
-    } catch (Exception e) {
-        System.out.println("ERROR: " + e.getMessage());
-    }
-}
+	private static void updatePublication(Scanner keyboard, MySQLAccess dao) {
+	    // Implementation for updating publication details
+	    System.out.println("Enter Publication ID to update:");
+	    String updateId = keyboard.nextLine();
+	
+	    // Get updated details
+	    System.out.println("Enter New Publication Title: \n");
+	    String title = keyboard.nextLine();
+	    System.out.println("Enter New Publication Stock amount: \n");
+	    int stock = keyboard.nextInt();
+	    System.out.println("Enter New Publication Price: \n");
+	    double price = keyboard.nextDouble();
+	    keyboard.nextLine();
+	    System.out.println("Enter New Type of Publication (Newspaper/Magazine): \n");
+	    String type = keyboard.next();
+	    System.out.println("Enter New Delivery Frequency (Daily/Weekly/Monthly): \n");
+	    String status = keyboard.next();
+	
+	    try {
+	        // Create a new Publication object with the updated details
+	        Publication publication = new Publication(updateId, title,stock,price, type, status);
+	        boolean updateResult = dao.updatePublicationDetails(publication); // You'll need to implement this method in MySQLAccess
+	        System.out.println(updateResult ? "Publication Details Updated" : "ERROR: Publication Details NOT Updated");
+	    } catch (PublicationException e) {
+	        System.out.println("ERROR: " + e.getMessage());
+	    } catch (Exception e) {
+	        System.out.println("ERROR: " + e.getMessage());
+	    }
+	}
 	private static void deletePublication(Scanner keyboard, MySQLAccess dao) {
 	    // Implementation for deleting publication
 //	    System.out.println("Enter Publication ID to delete:");
@@ -422,25 +427,12 @@ private static void updatePublication(Scanner keyboard, MySQLAccess dao) {
     	System.out.println("Enter publication ID (format PUB001): \n");
     	String publicationId = keyboard.next();
     	
-//    	System.out.println("Enter the order date: \n");
-//    	String dateString = keyboard.nextLine();
-//    	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
-    	Date orderDate = new Date(2024,11,01);
-//		try {
-//			orderDate = dateformat.parse(dateString);
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} 
-//    	Date orderDate = keyboard.next();
-    	
+    	System.out.println("Enter Order Date (format yyyy-MM-dd): ");
+        LocalDate orderDate = LocalDate.parse(keyboard.nextLine(),DATE_FORMAT);
+
     	System.out.println("Enter the order status (format PENDING/CONFIRMED/DISPATCHED/DELIVERED/CANCELLED/POSTPONED): \n");
-    	//String orderStatus = keyboard.next();
-    	//OrderStatus orderStatus = keyboard.next();
-    	//////////////////////////////////////////
     	String input = keyboard.next();
     	OrderStatus orderStatus;
-    	//new Date(); format to yyyy:mm:dd
     	try {
     	    orderStatus = OrderStatus.valueOf(input.toUpperCase());
     	} catch (IllegalArgumentException e) {
@@ -449,7 +441,7 @@ private static void updatePublication(Scanner keyboard, MySQLAccess dao) {
     	
         
         try {
-        	 Order order = new Order(orderId, custId, deliveryId, publicationId, orderDate, orderStatus);
+        	Order order = new Order(orderId, custId, deliveryId, publicationId, Optional.ofNullable(orderDate), orderStatus);
              boolean insertResult = dao.insertOrder(order);
             System.out.println(insertResult ? "Order Created" : "ERROR: Order NOT Created");
         } catch (Exception e) {
