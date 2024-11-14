@@ -26,19 +26,19 @@ public class DeliveryDocket {
         this.deliveryStatus = null;
         this.details = null;
     }
-
-    public DeliveryDocket(String docketId, String orderId,String deliveryPersonId, String deliveryDate, String deliveryStatus, String details) throws DeliveryDocketException {
+//String deliveryDate LocalDate
+    public DeliveryDocket(String docketId, String orderId,String deliveryPersonId, String delivery_date, String deliveryStatus, String details) throws DeliveryDocketException {
         try {
             validateDocketId(docketId);
             validateOrderId(orderId);
-            validateDeliveryDate(deliveryDate);
+            //validateDeliveryDate(deliveryDate);
             validateDeliveryStatus(deliveryStatus);
             validateDeliveryPersonId(deliveryPersonId); 
             
             this.docketId = docketId;
             this.orderId = orderId;
             this.deliveryPersonId = deliveryPersonId; 
-            this.deliveryDate = LocalDate.parse(deliveryDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            this.deliveryDate = LocalDate.parse(delivery_date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             this.deliveryStatus = deliveryStatus;
             this.details = details;
         } catch (DeliveryDocketException e) {

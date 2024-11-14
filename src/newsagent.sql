@@ -15,3 +15,4 @@ CREATE TABLE newsagent (
 
 INSERT INTO newsagent (agent_name, agent_address, agent_phone, agent_email) VALUES
 ('Mike', 'Athlone', '0871234567', 'mike@newsagent.com');
+Select * from newsagent;

@@ -299,8 +299,8 @@ public class CommandLine {
         System.out.println("Enter Publication Title: \n");
         String title = keyboard.nextLine();
         
-        System.out.println("Enter Publication Stock Amount: \n");
-        int stock = keyboard.nextInt();
+//        System.out.println("Enter Publication Stock Amount: \n");
+//        int stock = keyboard.nextInt();
         
         System.out.println("Enter Price: \n");
         double price = keyboard.nextDouble();
@@ -312,7 +312,7 @@ public class CommandLine {
         String frequency = keyboard.next();
         
         try {
-        	 Publication publication = new Publication(id, title, stock, price, type, frequency);
+        	 Publication publication = new Publication(id, title, price, type, frequency);//stock
              boolean insertResult = dao.insertPublication(publication);
             System.out.println(insertResult ? "Publication Created" : "ERROR: Publication NOT Created");
         } catch (Exception e) {
@@ -333,14 +333,14 @@ public class CommandLine {
 		while (rs.next()) {
 			String id = rs.getString("publication_id");
 			String title = rs.getString("publication_name");
-	        int stock = rs.getInt("stock_number");
+	        //int stock = rs.getInt("stock_number");
 	        double price = rs.getDouble("publication_price");
 	        String type = rs.getString("publication_type");
 	        String frequency = rs.getString("publication_frequency");
 	        
 			System.out.printf("%30s", id);
 			System.out.printf("%30s", title);
-			System.out.printf("%30s", stock);
+			//System.out.printf("%30s", stock);
 			System.out.printf("%30s", type);
 			System.out.printf("%30s", price); 
 	        System.out.printf("%30s", frequency);
@@ -360,8 +360,8 @@ private static void updatePublication(Scanner keyboard, MySQLAccess dao) {
     // Get updated details
     System.out.println("Enter New Publication Title: \n");
     String title = keyboard.nextLine();
-    System.out.println("Enter New Publication Stock amount: \n");
-    int stock = keyboard.nextInt();
+//    System.out.println("Enter New Publication Stock amount: \n");
+//    int stock = keyboard.nextInt();
     System.out.println("Enter New Publication Price: \n");
     double price = keyboard.nextDouble();
     System.out.println("Enter New Type of Publication (Newspaper/Magazine): \n");
@@ -371,7 +371,7 @@ private static void updatePublication(Scanner keyboard, MySQLAccess dao) {
 
     try {
         // Create a new Publication object with the updated details
-        Publication publication = new Publication(updateId, title, stock, price, type, status);
+        Publication publication = new Publication(updateId, title, price, type, status);// stock,
         boolean updateResult = dao.updatePublicationDetails(publication); // You'll need to implement this method in MySQLAccess
         System.out.println(updateResult ? "Publication Details Updated" : "ERROR: Publication Details NOT Updated");
     } catch (PublicationException e) {
@@ -595,17 +595,17 @@ private static void updateOrder(Scanner keyboard, MySQLAccess dao) throws Custom
         System.out.println("Enter the Total Amount: \n");
         Double total_amount = keyboard.nextDouble();
         
-        System.out.println("Enter the delivery person ID: \n");
-        String delivery_persons = keyboard.next();
+        System.out.println("Enter the delivery docket ID (format DD00001): \n");
+        String delivery_docket = keyboard.next();
         
-        System.out.println("Enter the Publication ID: \n");
+        System.out.println("Enter the Publication ID (format PUB001): \n");
         String publication_id = keyboard.next();
         
         System.out.println("Enter the Order Status: \n");
         String order_status = keyboard.next();
         
         try {
-        	 Invoice invoice = new Invoice(invoice_id, cust_id, payment_method, order_date, total_amount, delivery_persons, publication_id, order_status);
+        	 Invoice invoice = new Invoice(invoice_id, cust_id, payment_method, order_date, total_amount, delivery_docket, publication_id, order_status);
              boolean insertResult = dao.insertInvoice(invoice);
             System.out.println(insertResult ? "Invoice Created" : "ERROR: Invoice NOT Created");
         } catch (Exception e) {
@@ -629,7 +629,7 @@ private static boolean printInvoiceTable(ResultSet rs) throws Exception {
 	        String payment_method = rs.getString("payment_method");
 	        Date order_date = rs.getDate("order_date");
 	        Double total_amount = rs.getDouble("total_amount");
-	        String delivery_persons = rs.getString("delivery_persons");
+	        String delivery_docket = rs.getString("delivery_docket");
 	        String publication_id = rs.getString("publication_id");
 	        String order_status = rs.getString("order_status");
 	        
@@ -638,7 +638,7 @@ private static boolean printInvoiceTable(ResultSet rs) throws Exception {
 			System.out.printf("%30s", payment_method);
 			System.out.printf("%30s", order_date);
 			System.out.printf("%30s", total_amount); 
-	        System.out.printf("%30s", delivery_persons);
+	        System.out.printf("%30s", delivery_docket);
 	        System.out.printf("%30s", publication_id);
 	        System.out.printf("%30s", order_status);
 			System.out.println();
@@ -721,14 +721,15 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
     	System.out.println("Enter the Delivery Docket ID (format DD00001): \n");
     	String docket_id = keyboard.nextLine();
         
-        System.out.println("Enter the Order ID: \n");
+        System.out.println("Enter the Order ID (format ORD123): \n");
         String order_id = keyboard.nextLine();
         
-        System.out.println("Enter Delivery ID: \n");
+        System.out.println("Enter Delivery ID (format DP123): \n");
         String delivery_id = keyboard.nextLine();
         
 //        System.out.println("Enter the Delivery Date: \n");
-        String delivery_date = LocalDate.now().toString();
+        //LocalDate
+        String delivery_date = LocalDate.now().toString();//String
 //        String dateString = keyboard.nextLine();
 //    	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
 //    	java.util.Date delivery_date = null;
@@ -739,7 +740,7 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
 //    		e.printStackTrace();
 //    	} 
         
-        System.out.println("Enter the Delivery Status: \n");
+        System.out.println("Enter the Delivery Status (Delivered, Out for delivery, Not delivered): \n");
         String delivery_status = keyboard.nextLine();
         
         System.out.println("Enter the Delivery Details: \n");
@@ -954,7 +955,7 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	
 	//Warning letter CRUD:
 	private static void insertWarningLetter(Scanner scanner, MySQLAccess dao) {
-	    System.out.print("Enter Warning Letter ID: ");
+	    System.out.print("Enter Warning Letter ID (format WL123): ");
 	    String letterId = scanner.nextLine();
 
 	    System.out.print("Enter Customer ID: ");
