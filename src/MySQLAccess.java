@@ -258,14 +258,14 @@ import java.sql.SQLException;
 		}
 
 		public boolean insertPublication(Publication publication) {
-		    String query = "INSERT INTO publications (publication_id, publication_name, stock_number, publication_price, publication_type, publication_frequency) VALUES (?, ?, ?, ?, ?, ?)";
-		    
+		    String query = "INSERT INTO publications (publication_id, publication_name, publication_price, publication_type, publication_frequency) VALUES (?, ?, ?, ?, ?)";
+		    //, stock_number
 		    try {
 		        preparedStatement = connect.prepareStatement(query);
 		        
 		        preparedStatement.setString(1, publication.getPublicationId());
 		        preparedStatement.setString(2, publication.getTitle());
-		        preparedStatement.setInt(3, publication.getNumberInStocks());
+		        //preparedStatement.setInt(3, publication.getNumberInStocks());
 		        preparedStatement.setDouble(4, publication.getPrice());
 		        preparedStatement.setString(5, publication.getType());
 		        preparedStatement.setString(6, publication.getDeliveryFrequency());
@@ -292,12 +292,12 @@ import java.sql.SQLException;
 			return resultSet;
 		}
 		public boolean updatePublicationDetails(Publication publication) {
-	        boolean updateSuccessful = false;
-	        String query = "UPDATE publications SET publication_name = ?, stock_number = ?, publication_price = ?, publication_type = ?, publication_frequency = ? WHERE publication_id = ?";
+	        boolean updateSuccessful = false;// publication_price = ?,
+	        String query = "UPDATE publications SET publication_name = ?, stock_number = ?, publication_type = ?, publication_frequency = ? WHERE publication_id = ?";
 	        try {
 	            preparedStatement = connect.prepareStatement(query);
 	            preparedStatement.setString(1, publication.getTitle());
-	            preparedStatement.setInt(2, publication.getNumberInStocks());
+	            //preparedStatement.setInt(2, publication.getNumberInStocks());
 	            preparedStatement.setDouble(3, publication.getPrice());
 	            preparedStatement.setString(4, publication.getType());
 	            preparedStatement.setString(5, publication.getDeliveryFrequency());
@@ -464,7 +464,7 @@ import java.sql.SQLException;
 		    return deleteSuccessful;
 		}
 		public boolean insertInvoice(Invoice invoice) {
-		    String query = "INSERT INTO invoices (invoice_id, cust_id, payment_method, order_date, total_amount, delivery_persons, publication_id, order_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		    String query = "INSERT INTO invoices (invoice_id, cust_id, payment_method, order_date, total_amount, delivery_docket, publication_id, order_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		    
 		    try {
 		        preparedStatement = connect.prepareStatement(query);
@@ -501,7 +501,7 @@ import java.sql.SQLException;
 		
 		public boolean updateInvoiceDetails(Invoice invoice) {
 	        boolean updateSuccessful = false;
-	        String query = "UPDATE invoices SET cust_id = ?, payment_method = ?, order_date = ?, total_amount = ?, delivery_persons = ?, publication_id = ?, order_status = ? WHERE invoice_id = ?";
+	        String query = "UPDATE invoices SET cust_id = ?, payment_method = ?, order_date = ?, total_amount = ?, delivery_docket = ?, publication_id = ?, order_status = ? WHERE invoice_id = ?";
 	        try {
 	            preparedStatement = connect.prepareStatement(query);
 	            preparedStatement.setString(1, invoice.getCustId());
