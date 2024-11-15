@@ -609,10 +609,10 @@ import java.sql.SQLException;
 	            preparedStatement = connect.prepareStatement(query);
 	            preparedStatement.setString(1, deliveryDocket.getOrderId());
 	            preparedStatement.setString(2, deliveryDocket.getDeliveryPersonId());
-	            //preparedStatement.setDate(3,(LocalDate) deliveryDocket.getDeliveryDate());
+	            preparedStatement.setString(3, LocalDate.now().toString());
 	            preparedStatement.setString(4, deliveryDocket.getDeliveryStatus());
 	            preparedStatement.setString(5, deliveryDocket.getDetails());
-
+	            preparedStatement.setString(6, deliveryDocket.getDocketId());
 	            int rowsAffected = preparedStatement.executeUpdate();
 	            updateSuccessful = rowsAffected > 0; // Returns true if update was successful
 	        } catch (SQLException e) {
@@ -729,13 +729,15 @@ import java.sql.SQLException;
 		
 		// Insert Warning Letter
 	    public boolean insertWarningLetter(WarningLetter letter) {
-	        String query = "INSERT INTO warning_letter (letter_id, cust_id, cust_address, reason, due_amount) VALUES (?, ?, ?, ?, ?)";
+	        String query = "INSERT INTO warning_letter (letter_id, order_id, cust_id, reason, due_amount, issue_date) VALUES (?, ?,?, ?, ?, ?)";
 	        try (PreparedStatement ps = connect.prepareStatement(query)) {
-	            ps.setString(1, letter.getLetterId());
-	            ps.setInt(2, letter.getCustId()); 
-	            ps.setString(3, letter.getReason());
-	            ps.setDouble(4, letter.getDueAmount());
-	            ps.setDate(5, java.sql.Date.valueOf(letter.getIssueDate())); 
+	        	 ps.setString(1, letter.getLetterId());
+	        	 ps.setString(2, letter.getOrderId());
+	             ps.setInt(3, letter.getCustId());
+	             ps.setString(4, letter.getReason());
+	             ps.setDouble(5, letter.getDueAmount());
+	             LocalDate issueDate = letter.getIssueDate() != null ? letter.getIssueDate() : LocalDate.now();
+	             ps.setDate(6, java.sql.Date.valueOf(issueDate));
 	            return ps.executeUpdate() > 0;
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -756,11 +758,13 @@ import java.sql.SQLException;
 
 	    // Update Warning Letter
 	    public boolean updateWarningLetter(WarningLetter letter) {
-	        String query = "UPDATE warning_letter SET cust_address = ?, reason = ?, due_amount = ? WHERE letter_id = ?";
+	        String query = "UPDATE warning_letter SET reason = ?, due_amount = ?, issue_date = ?  WHERE letter_id = ?";
 	        try (PreparedStatement ps = connect.prepareStatement(query)) {
-	        	ps.setInt(1, letter.getCustId()); 
-	            ps.setString(2, letter.getReason());
-	            ps.setDouble(3, letter.getDueAmount());
+//	        	ps.setInt(1, letter.getCustId()); //update customer id not necessary 
+	            ps.setString(1, letter.getReason());
+	            ps.setDouble(2, letter.getDueAmount());
+	            LocalDate issueDate = letter.getIssueDate() != null ? letter.getIssueDate() : LocalDate.now();
+	            ps.setDate(3, java.sql.Date.valueOf(issueDate));
 	            ps.setString(4, letter.getLetterId());
 	            return ps.executeUpdate() > 0;
 	        } catch (SQLException e) {
@@ -838,13 +842,13 @@ import java.sql.SQLException;
 		
 		// Insert Storage
 		public boolean insertStorage(Storage storage) {
-		    String query = "INSERT INTO storage (storage_id, publication_id, description_details, current_stock) VALUES (?, ?, ?, ?)";
+			String query = "INSERT INTO storage (storage_id, publication_id, description_details, capacity, current_stock) VALUES (?, ?, ?, ?, ?)";
 		    try (PreparedStatement ps = connect.prepareStatement(query)) {
 		        ps.setString(1, storage.getStorageId());
 		        ps.setString(2, storage.getPublicationId());
-		        ps.setString(3, storage.getDescription());
-//		        ps.setInt(4, storage.getCapacity());
-		        ps.setInt(4, storage.getCurrentStockLevel());
+		        ps.setString(3, storage.getDescription()); // Assuming it's a String
+		        ps.setInt(4, storage.getCapacity()); // Added capacity
+		        ps.setInt(5, storage.getCurrentStockLevel());
 		        return ps.executeUpdate() > 0;
 		    } catch (SQLException e) {
 		        e.printStackTrace();
@@ -865,7 +869,7 @@ import java.sql.SQLException;
 		
 	    // Update Storage
 		public boolean updateStorage(Storage storage) {
-		    String query = "UPDATE storage SET description_details = ?, capacity = ?, current_stock = ? WHERE storage_id = ?";
+			String query = "UPDATE storage SET description_details = ?, capacity = ?, current_stock = ? WHERE storage_id = ?";
 		    try (PreparedStatement ps = connect.prepareStatement(query)) {
 		        ps.setString(1, storage.getDescription());
 		        ps.setInt(2, storage.getCapacity());

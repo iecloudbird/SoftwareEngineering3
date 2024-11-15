@@ -1,19 +1,21 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class DeliveryDocket {
 
     private String docketId;  // Format: DD00000
-    private String orderId;		// Format: ORD001
+    private String orderId;		// Format: ORD0001
     private String deliveryPersonId;  // Format: DP000
-    private LocalDate deliveryDate; // Format: dd/MM/yyyy
+    private LocalDate deliveryDate; // default LocalDate yyyy-mm-dd
     private String deliveryStatus; // "Delivered", "Out for delivery", "Not delivered"
     private String details;
 
     // Regular expression for valid docket ID
     private static final String DOCKET_ID_PATTERN = "DD\\d{5}"; // Updated pattern to match the specified format
-    private static final String ORDER_ID_PATTERN = "ORD\\d{3}";
+    private static final String ORDER_ID_PATTERN = "ORD\\d{4}";
     private static final String DELIVERY_PERSON_ID_PATTERN = "DP\\d{3}"; 
     // Valid delivery statuses
     private static final String[] VALID_STATUSES = {"Delivered", "Out for delivery", "Not delivered"};
@@ -26,19 +28,19 @@ public class DeliveryDocket {
         this.deliveryStatus = null;
         this.details = null;
     }
-//String deliveryDate LocalDate
-    public DeliveryDocket(String docketId, String orderId,String deliveryPersonId, String delivery_date, String deliveryStatus, String details) throws DeliveryDocketException {
+
+    public DeliveryDocket(String docketId, String orderId,String deliveryPersonId, Optional<LocalDate> delivery_date, String deliveryStatus, String details) throws DeliveryDocketException {
         try {
             validateDocketId(docketId);
             validateOrderId(orderId);
-            //validateDeliveryDate(deliveryDate);
+            validateDeliveryDate(delivery_date);
             validateDeliveryStatus(deliveryStatus);
             validateDeliveryPersonId(deliveryPersonId); 
             
             this.docketId = docketId;
             this.orderId = orderId;
             this.deliveryPersonId = deliveryPersonId; 
-            this.deliveryDate = LocalDate.parse(delivery_date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            this.deliveryDate = delivery_date.orElse(LocalDate.now());
             this.deliveryStatus = deliveryStatus;
             this.details = details;
         } catch (DeliveryDocketException e) {
@@ -86,7 +88,8 @@ public class DeliveryDocket {
 		this.deliveryDate = deliveryDate;
 	}
 
-	public void setDeliveryStatus(String deliveryStatus) {
+	public void setDeliveryStatus(String deliveryStatus) throws DeliveryDocketException {
+		validateDeliveryStatus(deliveryStatus);
 		this.deliveryStatus = deliveryStatus;
 	}
 
@@ -108,7 +111,7 @@ public class DeliveryDocket {
 
     public static void validateOrderId(String orderId) throws DeliveryDocketException {
         if (!isValidOrderId(orderId)) {
-            throw new DeliveryDocketException("Invalid Order ID format. Expected format: ORD000");
+            throw new DeliveryDocketException("Invalid Order ID format. Expected format: ORD0000");
         }
     }
     
@@ -118,13 +121,12 @@ public class DeliveryDocket {
         }
     }
 
-    public static void validateDeliveryDate(String deliveryDate) throws DeliveryDocketException {
-        try {
-            LocalDate.parse(deliveryDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        } catch (Exception e) {
-            throw new DeliveryDocketException("Invalid delivery date format. Expected format: dd/MM/yyyy");
+    public static void validateDeliveryDate(Optional<LocalDate> deliveryDate) throws DeliveryDocketException {
+        if (deliveryDate == null ) {
+            throw new DeliveryDocketException("Delivery date is not specified.");
         }
     }
+
 
     public static void validateDeliveryStatus(String deliveryStatus) throws DeliveryDocketException {
         if (!isValidDeliveryStatus(deliveryStatus)) {

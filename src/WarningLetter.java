@@ -23,6 +23,8 @@ public class WarningLetter {
 		return orderId;
 	}
 
+
+
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
@@ -96,6 +98,24 @@ public class WarningLetter {
 			throw e;
 		}
 		
+	}
+	
+	public WarningLetter(String letterId, String reason, double dueAmount, Optional<LocalDate> issueDate) throws CustomerExceptionHandler {
+		try {
+			validateLetterId(letterId);
+			validateReason(reason);
+			validateDueAmount(dueAmount);
+			validateIssueDate(issueDate);
+			
+			 // Set Attributes
+			this.letterId = letterId;
+	        this.reason = reason;
+	        this.dueAmount = dueAmount;
+	        this.issueDate = issueDate.orElse(LocalDate.now());
+		}
+		catch (CustomerExceptionHandler e) {
+			throw e;
+		}
 	}
 	 // Validation methods
 	public static void validateLetterId(String letterId) throws CustomerExceptionHandler {

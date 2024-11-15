@@ -481,58 +481,50 @@ private static boolean printOrderTable(ResultSet rs) throws Exception {
 		
 	}
     
-private static void updateOrder(Scanner keyboard, MySQLAccess dao) throws CustomerExceptionHandler {
-    // Implementation for updating order details
-    System.out.println("Enter Order ID to update:");
-    String orderId = keyboard.nextLine();
-
-    // Get updated details
-    System.out.println("Enter Customer ID: \n");
-    int custId = keyboard.nextInt();
-    System.out.println("Enter Delivery ID: \n");
-    String deliveryId = keyboard.next();
-    System.out.println("Enter Publication ID: \n");
-    String publicationId = keyboard.next();
-    System.out.println("Enter Order Date: \n");
-    String dateString = keyboard.nextLine();
-	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
-	java.util.Date orderDate = null;
-	try {
-		orderDate = dateformat.parse(dateString);
-	} catch (ParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} 
-    //String orderDate = keyboard.next();
-    System.out.println("Enter Order Status: \n");
-    String input = keyboard.next();
-	OrderStatus orderStatus;
-
-	try {
-	    orderStatus = OrderStatus.valueOf(input.toUpperCase());
-	} catch (IllegalArgumentException e) {
-	    throw new CustomerExceptionHandler("Invalid order status entered");
-	}
+	private static void updateOrder(Scanner keyboard, MySQLAccess dao) throws CustomerExceptionHandler {
+	    // Implementation for updating order details
+	    System.out.println("Enter Order ID to update:");
+	    String orderId = keyboard.nextLine();
 	
-    
-    try {
-    	 Order order = new Order(orderId, custId, deliveryId, publicationId, orderDate, orderStatus);
-         boolean insertResult = dao.insertOrder(order);
-        System.out.println(insertResult ? "Order Created" : "ERROR: Order NOT Created");
-    } catch (Exception e) {
-        System.out.println("ERROR: " + e.getMessage());
-    }
-    //String orderStatus = keyboard.next();
+	    // Get updated details
+	    System.out.println("Enter Customer ID: \n");
+	    int custId = keyboard.nextInt();
+	    keyboard.nextLine();
+	    
+	    System.out.println("Enter Delivery ID: \n");
+	    String deliveryId = keyboard.next();
+	    
+	    System.out.println("Enter Publication ID: \n");
+	    String publicationId = keyboard.next();
+	    
+	    System.out.println("Enter Order Date (yyyy-MM-dd):");
+	    LocalDate orderDate = null;
+	    String dateString = keyboard.nextLine();
+	    try {
+	        orderDate = LocalDate.parse(dateString);
+	    } catch (Exception e) {
+	        System.out.println("ERROR: Invalid date format. Expected yyyy-MM-dd.");
+	        return;
+	    }
 
-    try {
-        // Create a new Publication object with the updated details
-        Order order = new Order(orderId, custId, deliveryId, publicationId, orderDate, orderStatus);
-        boolean updateResult = dao.updateOrderDetails(order); // You'll need to implement this method in MySQLAccess
-        System.out.println(updateResult ? "Order Details Updated" : "ERROR: Order Details NOT Updated");
-    } catch (Exception e) {
-        System.out.println("ERROR: " + e.getMessage());
-    }
-}
+	    System.out.println("Enter Order Status:");
+	    String input = keyboard.nextLine();
+	    OrderStatus orderStatus;
+	    try {
+	        orderStatus = OrderStatus.valueOf(input.toUpperCase());
+	    } catch (IllegalArgumentException e) {
+	        throw new CustomerExceptionHandler("Invalid order status entered.");
+	    }
+
+	    // Attempt to update order
+	    try {
+	        Order order = new Order(orderId, custId, deliveryId, publicationId, Optional.of(orderDate), orderStatus);
+	        boolean updateResult = dao.updateOrderDetails(order); // Assuming dao.updateOrderDetails updates an order
+	        System.out.println(updateResult ? "Order Details Updated" : "ERROR: Order Details NOT Updated");
+	    } catch (Exception e) {
+	        System.out.println("ERROR: " + e.getMessage());
+	    }
+	}
 	private static void deleteOrder(Scanner keyboard, MySQLAccess dao) {
 	    // Implementation for deleting Order
 //	    System.out.println("Enter Publication ID to delete:");
@@ -713,24 +705,17 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
     	System.out.println("Enter the Delivery Docket ID (format DD00001): \n");
     	String docket_id = keyboard.nextLine();
         
-        System.out.println("Enter the Order ID (format ORD123): \n");
+        System.out.println("Enter the Order ID (format ORD0001): \n");
         String order_id = keyboard.nextLine();
         
         System.out.println("Enter Delivery ID (format DP123): \n");
         String delivery_id = keyboard.nextLine();
         
-//        System.out.println("Enter the Delivery Date: \n");
-        //LocalDate
-        String delivery_date = LocalDate.now().toString();//String
-//        String dateString = keyboard.nextLine();
-//    	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
-//    	java.util.Date delivery_date = null;
-//    	try {
-//    		delivery_date = dateformat.parse(dateString);
-//    	} catch (ParseException e) {
-//    		// TODO Auto-generated catch block
-//    		e.printStackTrace();
-//    	} 
+        System.out.println("Enter the Delivery Date (leave empty for today): ");
+        String delivery_dateInput = keyboard.nextLine();
+        Optional<LocalDate> delivery_date = delivery_dateInput.isEmpty()
+        		? Optional.empty() 
+                : Optional.of(LocalDate.parse(delivery_dateInput));
         
         System.out.println("Enter the Delivery Status (Delivered, Out for delivery, Not delivered): \n");
         String delivery_status = keyboard.nextLine();
@@ -779,69 +764,57 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 		return true;
 		
 	}
-    
-private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
-    // Implementation for updating Delivery Docket details
-    System.out.println("Enter Delivery Docket ID to update:");
-    String docket_id = keyboard.nextLine();
-
-    // Get updated details
-    System.out.println("Enter Order ID: \n");
-    String order_id = keyboard.nextLine();
-    System.out.println("Enter delivery ID: \n");
-    String delivery_id = keyboard.next();
-    System.out.println("Enter Delivery Date: \n");
-    String delivery_date = keyboard.next();
-//    String dateString = keyboard.nextLine();
-//	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
-//	java.util.Date order_date = null;
-//	try {
-//		order_date = dateformat.parse(dateString);
-//	} catch (ParseException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	} 
-    System.out.println("Enter Delivery Status: \n");
-    String delivery_status = keyboard.next();
-    System.out.println("Enter Delivery Details: \n");
-    String delivery_details = keyboard.next();
-
-    try {
-        // Create a new Publication object with the updated details
-        DeliveryDocket deliveryDocket = new DeliveryDocket(docket_id, order_id, delivery_id, delivery_date, delivery_status, delivery_details);
-        boolean updateResult = dao.updateDeliveryDocketDetails(deliveryDocket); // You'll need to implement this method in MySQLAccess
-        System.out.println(updateResult ? "Delivery Docket Details Updated" : "ERROR: Delivery Docket Details NOT Updated");
-    } catch (Exception e) {
-        System.out.println("ERROR: " + e.getMessage());
-    }
-}
+	    
+	private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
+	    // Implementation for updating Delivery Docket details
+	    System.out.println("Enter Delivery Docket ID to update (format DD00001):");
+	    String docket_id = keyboard.nextLine();
+	
+	    // Get updated details
+	    System.out.println("Enter Order ID (format ORD0001): \n");
+	    String order_id = keyboard.nextLine();
+        System.out.println("Enter Delivery ID (format DP123): \n");
+        String delivery_id = keyboard.nextLine();
+        System.out.println("Enter the Delivery Date (leave empty for today): ");
+        String delivery_dateInput = keyboard.nextLine();
+        Optional<LocalDate> delivery_date = delivery_dateInput.isEmpty()
+        		? Optional.empty() 
+                : Optional.of(LocalDate.parse(delivery_dateInput));
+        
+        System.out.println("Enter the Delivery Status (Delivered, Out for delivery, Not delivered): \n");
+        String delivery_status = keyboard.nextLine();
+        
+        System.out.println("Enter the Delivery Details: \n");
+        String delivery_details = keyboard.nextLine();
+	    try {
+	        // Create a new Publication object with the updated details
+	        DeliveryDocket deliveryDocket = new DeliveryDocket(docket_id, order_id, delivery_id, delivery_date, delivery_status, delivery_details);
+	        boolean updateResult = dao.updateDeliveryDocketDetails(deliveryDocket); // You'll need to implement this method in MySQLAccess
+	        System.out.println(updateResult ? "Delivery Docket Details Updated" : "ERROR: Delivery Docket Details NOT Updated");
+	    } catch (Exception e) {
+	        System.out.println("ERROR: " + e.getMessage());
+	    }
+	}
 	private static void deleteDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
-	    // Implementation for deleting publication
-//	    System.out.println("Enter Publication ID to delete:");
-//	    String deleteId = keyboard.nextLine();
-//	    boolean deleteResult = true;
-		//Delete Publication Record by ID
-		System.out.println("Enter Delivery Docket ID to be deleted or 'DELETEALL' to Clear all Rows:");
-		while (!keyboard.hasNext()) {
-		    System.out.println("Invalid input. Please enter a valid Delivery Docket ID or DELETEALL.");
-		    keyboard.next();  // Consume invalid input
-		}
-		String deleteDeliveryDocketId = keyboard.next().toUpperCase();
-		if (deleteDeliveryDocketId.compareTo("DELETEALL") == 0) {
-		    boolean deleteAllResult = dao.deleteAllinvoices();
-		    if (deleteAllResult) {
-		        System.out.println("Delivery Docket Table Emptied");
-		    } else {
-		        System.out.println("ERROR: Could not empty the table");
-		    }
-		} else {
-		    boolean deleteResult = dao.deletePublicationById(deleteDeliveryDocketId);
-		    if (deleteResult) {
-		        System.out.println("Delivery Docket Deleted");
-		    } else {
-		        System.out.println("ERROR: Delivery Docket Details NOT Deleted or Do Not Exist");
-		    }
-		}
+
+	    System.out.println("Enter Delivery Docket ID to be deleted or 'DELETEALL' to clear all rows:");
+	    String deleteDeliveryDocketId = keyboard.nextLine().trim().toUpperCase();
+	    
+	    if ("DELETEALL".equals(deleteDeliveryDocketId)) {
+	        boolean deleteAllResult = dao.deleteAllDeliveryDockets();
+	        if (deleteAllResult) {
+	            System.out.println("Delivery Docket Table Emptied");
+	        } else {
+	            System.out.println("ERROR: Could not empty the table");
+	        }
+	    } else {
+	        boolean deleteResult = dao.deleteDeliveryDocketById(deleteDeliveryDocketId);
+	        if (deleteResult) {
+	            System.out.println("Delivery Docket Deleted");
+	        } else {
+	            System.out.println("ERROR: Delivery Docket Details NOT Deleted or Do Not Exist");
+	        }
+	    }
 	}
 	//DELIVERY AREA CRUD 
 	// Insert a new delivery area
@@ -947,36 +920,37 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	
 	//Warning letter CRUD:
 	private static void insertWarningLetter(Scanner scanner, MySQLAccess dao) {
-	    System.out.print("Enter Warning Letter ID (format WL123): ");
-	    String letterId = scanner.nextLine();
+		System.out.print("Enter Warning Letter ID (format WL123): ");
+        String letterId = scanner.nextLine();
 
-	    System.out.print("Enter Customer ID: ");
-	    String custId = scanner.nextLine();
+        System.out.print("Enter Order ID (format ORD0001): ");
+        String orderId = scanner.nextLine();
 
-	    System.out.print("Enter Customer Address: ");
-	    String custAddress = scanner.nextLine();
+        System.out.print("Enter Customer ID (integer): ");
+        int custId = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
 
-	    System.out.print("Enter Reason: ");
-	    String reason = scanner.nextLine();
+        System.out.print("Enter Reason: ");
+        String reason = scanner.nextLine();
 
-	    System.out.print("Enter Due Amount: ");
-	    double dueAmount = scanner.nextDouble();
-	    scanner.nextLine(); // Consume newline
+        System.out.print("Enter Due Amount: ");
+        double dueAmount = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
 
-	    System.out.print("Enter Issue Date (YYYY-MM-DD): ");
-	    String issueDateStr = scanner.nextLine();
-	    Date issueDate = Date.valueOf(issueDateStr);  // Assuming proper date format
+        System.out.print("Enter Issue Date (YYYY-MM-DD), or leave empty for today: ");
+        String issueDateStr = scanner.nextLine();
+        Optional<LocalDate> issueDate = issueDateStr.isEmpty() 
+                ? Optional.empty() 
+                : Optional.of(LocalDate.parse(issueDateStr));
 
-	    try {
-	        // Create a new WarningLetter object
-	        WarningLetter letter = new WarningLetter(letterId, custId, custAddress, reason, dueAmount, issueDate);
-
-	        // Insert the WarningLetter into the database
-	        boolean result = dao.insertWarningLetter(letter);
-	        System.out.println(result ? "Warning letter inserted successfully!" : "Failed to insert warning letter.");
-	    } catch (CustomerExceptionHandler e) {
-	        System.out.println("ERROR: " + e.getMessage());
-	    }
+        try {
+            // Create a new WarningLetter object
+            WarningLetter letter = new WarningLetter(letterId, orderId, custId, reason, dueAmount, issueDate);
+            boolean result = dao.insertWarningLetter(letter);
+            System.out.println(result ? "Warning letter inserted successfully!" : "Failed to insert warning letter.");
+        } catch (CustomerExceptionHandler e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
 	}
 	private static boolean printWarningLetterTable(ResultSet rs) throws SQLException {
 	    System.out.println("------------------------------------------------------------------------------------------------------");
@@ -986,19 +960,19 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	    }
 	    System.out.println();
 	    while (rs.next()) {
-	        String letterId = rs.getString("letter_id");
+	    	String letterId = rs.getString("letter_id");
+	        String orderId = rs.getString("order_id");
 	        String custId = rs.getString("cust_id");
-	        String custAddress = rs.getString("cust_address");
 	        String reason = rs.getString("reason");
 	        double dueAmount = rs.getDouble("due_amount");
-//	        Date issueDate = rs.getDate("issue_date");
+	        Date issueDate = rs.getDate("issue_date");
 
 	        System.out.printf("%30s", letterId);
+	        System.out.printf("%30s", orderId);  // Display the order ID
 	        System.out.printf("%30s", custId);
-	        System.out.printf("%30s", custAddress);
 	        System.out.printf("%30s", reason);
 	        System.out.printf("%30.2f", dueAmount);
-//	        System.out.printf("%30s", issueDate);
+	        System.out.printf("%30s", issueDate != null ? issueDate.toString() : "N/A"); // Handle issue_date column
 	        System.out.println();
 	    }
 	    System.out.println("------------------------------------------------------------------------------------------------------");
@@ -1023,36 +997,40 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	}
 
 	private static void updateWarningLetter(Scanner scanner, MySQLAccess dao) {
-	    System.out.print("Enter Warning Letter ID to update: ");
-	    String letterId = scanner.nextLine();
+		System.out.print("Enter Warning Letter ID to update: ");
+        String letterId = scanner.nextLine();
 
-	    System.out.print("Enter New Customer ID: ");
-	    String custId = scanner.nextLine();
+        //update order id and customer id not necessary, will only yield more underlying bugs.
+//        System.out.print("Enter New Order ID (format ORD0001): ");
+//        String orderId = scanner.nextLine();
+//
+//        System.out.print("Enter New Customer ID (integer): ");
+//        int custId = scanner.nextInt();
+//        scanner.nextLine(); // Consume newline
 
-	    System.out.print("Enter New Customer Address: ");
-	    String custAddress = scanner.nextLine();
+        System.out.print("Enter New Reason: ");
+        String reason = scanner.nextLine();
 
-	    System.out.print("Enter New Reason: ");
-	    String reason = scanner.nextLine();
+        System.out.print("Enter New Due Amount: ");
+        double dueAmount = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline
 
-	    System.out.print("Enter New Due Amount: ");
-	    double dueAmount = scanner.nextDouble();
-	    scanner.nextLine(); // Consume newline
+        System.out.print("Enter New Issue Date (YYYY-MM-DD), or leave empty for today: ");
+        String issueDateStr = scanner.nextLine();
+        Optional<LocalDate> issueDate = issueDateStr.isEmpty() 
+                ? Optional.empty() 
+                : Optional.of(LocalDate.parse(issueDateStr));
 
-	    System.out.print("Enter New Issue Date (YYYY-MM-DD): ");
-	    String issueDateStr = scanner.nextLine();
-	    Date issueDate = Date.valueOf(issueDateStr);
+        try {
+            // Create a new WarningLetter object with updated information
+            WarningLetter letter = new WarningLetter(letterId, reason, dueAmount, issueDate);
 
-	    try {
-	        // Create a new WarningLetter object with updated information
-	        WarningLetter letter = new WarningLetter(letterId, custId, custAddress, reason, dueAmount, issueDate);
-
-	        // Update the WarningLetter in the database
-	        boolean result = dao.updateWarningLetter(letter);
-	        System.out.println(result ? "Warning letter updated successfully!" : "Failed to update warning letter.");
-	    } catch (CustomerExceptionHandler e) {
-	        System.out.println("ERROR: " + e.getMessage());
-	    }
+            // Update the WarningLetter in the database
+            boolean result = dao.updateWarningLetter(letter);
+            System.out.println(result ? "Warning letter updated successfully!" : "Failed to update warning letter.");
+        } catch (CustomerExceptionHandler e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
 	}
 
 	private static void deleteWarningLetter(Scanner scanner, MySQLAccess dao) {
@@ -1165,16 +1143,16 @@ private static void updateDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
 	    }
 	    System.out.println();
 	    while (rs.next()) {
-	        String storageId = rs.getString("storage_id");
+	    	String storageId = rs.getString("storage_id");
 	        String publicationId = rs.getString("publication_id");
 	        String description = rs.getString("description_details");
-//	        int capacity = rs.getInt("capacity");
+	        int capacity = rs.getInt("capacity");
 	        int currentStockLevel = rs.getInt("current_stock");
 
 	        System.out.printf("%30s", storageId);
 	        System.out.printf("%30s", publicationId);
 	        System.out.printf("%30s", description);
-//	        System.out.printf("%30d", capacity);
+	        System.out.printf("%30d", capacity);  // Display capacity
 	        System.out.printf("%30d", currentStockLevel);
 	        System.out.println();
 	    }
