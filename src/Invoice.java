@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class Invoice {
     private String invoiceId;          // Unique identifier for the invoice
@@ -23,7 +24,7 @@ public class Invoice {
     }
 
     // Parameterized constructor
-    public Invoice(String invoiceId, String custId, String paymentMethod, LocalDate orderDate, double totalAmount,
+    public Invoice(String invoiceId, String custId, String paymentMethod, Optional<LocalDate> orderDate, double totalAmount,
                    String deliveryId, String publicationId, String orderStatus) throws CustomerExceptionHandler {
         
         validateInvoiceId(invoiceId);
@@ -38,7 +39,7 @@ public class Invoice {
         this.invoiceId = invoiceId;
         this.custId = custId;
         this.paymentMethod = PaymentMethod.fromString(paymentMethod);  
-        this.orderDate = orderDate;
+        this.orderDate = orderDate.orElse(LocalDate.now());
         this.totalAmount = totalAmount;
         this.deliveryId = deliveryId;
         this.publicationId = publicationId;
@@ -77,7 +78,6 @@ public class Invoice {
     }
 
     public void setOrderDate(LocalDate orderDate) throws CustomerExceptionHandler {
-        validateOrderDate(orderDate);
         this.orderDate = orderDate;
     }
 
@@ -140,7 +140,7 @@ public class Invoice {
         PaymentMethod.fromString(paymentMethod);
     }
 
-    public static void validateOrderDate(LocalDate orderDate) throws CustomerExceptionHandler {
+    public static void validateOrderDate(Optional<LocalDate> orderDate) throws CustomerExceptionHandler {
         if (orderDate == null) {
             throw new CustomerExceptionHandler("Order Date NOT specified");
         }

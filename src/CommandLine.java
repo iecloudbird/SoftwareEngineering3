@@ -87,7 +87,7 @@ public class CommandLine {
 		System.out.println("101. Customer CRUD Actions");
 		System.out.println("102. Delivery Person CRUD Actions");
 		System.out.println("103. Invoice CRUD Actions");
-		System.out.println("104. Customer Publication Actions");
+		System.out.println("104. Publication Actions");
 		System.out.println("105. Order CRUD Actions");
 		System.out.println("106. Delivery Docket CRUD Actions");
 		System.out.println("107. Delivery Area CRUD Actions");
@@ -262,9 +262,10 @@ public class CommandLine {
         String deleteId = keyboard.nextLine();
         if(dao.deleteDeliveryPersonById(deleteId)) {
             boolean deleteResult = true;
+            System.out.println("Delivery Person deleted successfully.");
         }
         else {
-        	System.out.println("Id does not exist, come on man.");
+        	System.out.println("Id does not exist, Please enter an existing id to update.)");
         }
     }
     
@@ -562,25 +563,20 @@ private static boolean printOrderTable(ResultSet rs) throws Exception {
         String cust_id = keyboard.nextLine();
         
         System.out.println("Enter Payment Method: \n");
-        String payment_method = keyboard.next();
+        String payment_method = keyboard.nextLine();
         
-//        System.out.println("Enter the Order Date: \n");
-        //String order_date = keyboard.next();
-//        String dateString = keyboard.nextLine();
-//    	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
-    	LocalDate order_date = LocalDate.now();
-//    	try {
-//    		order_date = dateformat.parse(dateString);
-//    	} catch (ParseException e) {
-//    		// TODO Auto-generated catch block
-//    		e.printStackTrace();
-//    	} 
+        System.out.print("Enter Issue Date (YYYY-MM-DD), or leave empty for today: \n");
+        String orderDateStr = keyboard.nextLine();
+        Optional<LocalDate> order_date= orderDateStr.isEmpty() 
+                ? Optional.empty() 
+                : Optional.of(LocalDate.parse(orderDateStr));
+        
         
         System.out.println("Enter the Total Amount: \n");
         Double total_amount = keyboard.nextDouble();
         
         System.out.println("Enter the delivery docket ID (format DD00001): \n");
-        String delivery_docket = keyboard.next();
+        String delivery_docket_id = keyboard.next();
         
         System.out.println("Enter the Publication ID (format PUB001): \n");
         String publication_id = keyboard.next();
@@ -589,7 +585,7 @@ private static boolean printOrderTable(ResultSet rs) throws Exception {
         String order_status = keyboard.next();
         
         try {
-        	 Invoice invoice = new Invoice(invoice_id, cust_id, payment_method, order_date, total_amount, delivery_docket, publication_id, order_status);
+        	 Invoice invoice = new Invoice(invoice_id, cust_id, payment_method, order_date, total_amount, delivery_docket_id, publication_id, order_status);
              boolean insertResult = dao.insertInvoice(invoice);
             System.out.println(insertResult ? "Invoice Created" : "ERROR: Invoice NOT Created");
         } catch (Exception e) {
@@ -613,7 +609,7 @@ private static boolean printInvoiceTable(ResultSet rs) throws Exception {
 	        String payment_method = rs.getString("payment_method");
 	        Date order_date = rs.getDate("order_date");
 	        Double total_amount = rs.getDouble("total_amount");
-	        String delivery_docket = rs.getString("delivery_docket");
+	        String delivery_docket_id = rs.getString("delivery_docket_id");
 	        String publication_id = rs.getString("publication_id");
 	        String order_status = rs.getString("order_status");
 	        
@@ -622,7 +618,7 @@ private static boolean printInvoiceTable(ResultSet rs) throws Exception {
 			System.out.printf("%30s", payment_method);
 			System.out.printf("%30s", order_date);
 			System.out.printf("%30s", total_amount); 
-	        System.out.printf("%30s", delivery_docket);
+	        System.out.printf("%30s", delivery_docket_id);
 	        System.out.printf("%30s", publication_id);
 	        System.out.printf("%30s", order_status);
 			System.out.println();
@@ -642,22 +638,18 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
     System.out.println("Enter Customer ID: \n");
     String cust_id = keyboard.nextLine();
     System.out.println("Enter payment method: \n");
-    String payment_method = keyboard.next();
-//    System.out.println("Enter Order Date: \n");
-//    Date order_date = keyboard.next();
-//    String dateString = keyboard.nextLine();
-//	SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd");
-	LocalDate order_date = LocalDate.now();
-//	try {
-//		order_date = dateformat.parse(dateString);
-//	} catch (ParseException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	} 
+    String payment_method = keyboard.nextLine();
+
+    System.out.print("Enter Issue Date (YYYY-MM-DD), or leave empty for today: \n");
+    String orderDateStr = keyboard.nextLine();
+    Optional<LocalDate> order_date= orderDateStr.isEmpty() 
+            ? Optional.empty() 
+            : Optional.of(LocalDate.parse(orderDateStr));
+
     System.out.println("Enter Total Amount: \n");
     Double total_amount = keyboard.nextDouble();
-    System.out.println("Enter Delivery Person: \n");
-    String delivery_persons = keyboard.next();
+    System.out.println("Enter Delivery Docket ID:");
+    String delivery_docket_id = keyboard.next();
     System.out.println("Enter Publication ID: \n");
     String publication_id = keyboard.next();
     System.out.println("Enter Order Status: \n");
@@ -665,7 +657,7 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
 
     try {
         // Create a new Publication object with the updated details
-        Invoice invoice = new Invoice(invoice_id, cust_id, payment_method, order_date, total_amount, delivery_persons, publication_id, order_status);
+        Invoice invoice = new Invoice(invoice_id, cust_id, payment_method, order_date, total_amount, delivery_docket_id, publication_id, order_status);
         boolean updateResult = dao.updateInvoiceDetails(invoice); // You'll need to implement this method in MySQLAccess
         System.out.println(updateResult ? "Invoice Details Updated" : "ERROR: Invoice Details NOT Updated");
     } catch (Exception e) {
@@ -673,32 +665,30 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
     }
 }
 	private static void deleteInvoice(Scanner keyboard, MySQLAccess dao) {
-	    // Implementation for deleting publication
-//	    System.out.println("Enter Publication ID to delete:");
-//	    String deleteId = keyboard.nextLine();
-//	    boolean deleteResult = true;
-		//Delete Publication Record by ID
 		System.out.println("Enter Invoice ID to be deleted or 'DELETEALL' to Clear all Rows:");
 		while (!keyboard.hasNext()) {
 		    System.out.println("Invalid input. Please enter a valid Invoice ID or DELETEALL.");
 		    keyboard.next();  // Consume invalid input
 		}
-		String deleteinvoiceId = keyboard.next().toUpperCase();
-		if (deleteinvoiceId.compareTo("DELETEALL") == 0) {
-		    boolean deleteAllResult = dao.deleteAllinvoices();
-		    if (deleteAllResult) {
-		        System.out.println("Invoice Table Emptied");
-		    } else {
-		        System.out.println("ERROR: Could not empty the table");
-		    }
-		} else {
-		    boolean deleteResult = dao.deletePublicationById(deleteinvoiceId);
-		    if (deleteResult) {
-		        System.out.println("Invoice Deleted");
-		    } else {
-		        System.out.println("ERROR: Invoice Details NOT Deleted or Do Not Exist");
-		    }
-		}
+		String input = keyboard.next().toUpperCase().trim();
+
+	    // If input is DELETEALL, delete all invoices
+	    if ("DELETEALL".equals(input)) {
+	        boolean deleteAllResult = dao.deleteAllinvoices();
+	        if (deleteAllResult) {
+	            System.out.println("Invoice Table Emptied");
+	        } else {
+	            System.out.println("ERROR: Could not empty the table");
+	        }
+	    } else {
+	        // Otherwise, delete a specific invoice by ID
+	        boolean deleteResult = dao.deleteInvoiceById(input);
+	        if (deleteResult) {
+	            System.out.println("Invoice Deleted");
+	        } else {
+	            System.out.println("ERROR: Invoice Details NOT Deleted or Do Not Exist");
+	        }
+	    }
 	}
 	private static void createDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
     	//Implementation for creating Publication
@@ -746,14 +736,14 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 		while (rs.next()) {
 			String docket_id = rs.getString("docket_id");
 			String order_id = rs.getString("order_id");
-	        String delivery_id = rs.getString("delivery_id");
+	        String delivery_person_id = rs.getString("delivery_id");
 	        Date delivery_date = rs.getDate("delivery_date");
 	        String delivery_status = rs.getString("delivery_status");
 	        String delivery_details = rs.getString("delivery_details");
 	        
 			System.out.printf("%30s", docket_id);
 			System.out.printf("%30s", order_id);
-			System.out.printf("%30s", delivery_id);
+			System.out.printf("%30s", delivery_person_id);
 			System.out.printf("%30s", delivery_date);
 			System.out.printf("%30s", delivery_status); 
 	        System.out.printf("%30s", delivery_details);

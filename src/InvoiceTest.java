@@ -1,5 +1,7 @@
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Optional;
+
 import junit.framework.TestCase;
 
 /*
@@ -33,16 +35,14 @@ public class InvoiceTest extends TestCase {
 	// Inputs: invoiceId = "INV0001", custId = "123", paymentMethod = "card", orderDate = current date, totalAmount = 100.0, deliveryId = "DD00001", publicationId = "PUB001", orderStatus = "Pending"
 	// Expected Output: Invoice object created with correct details, all fields matching expected values
 	public void testCreateInvoiceSuccess() {
-		 LocalDate orderDate = LocalDate.now();
 		
 		 try {
-			 Invoice invoiceObj = new Invoice("INV0001", "123", "card", orderDate, 100.0, "DD00001", "PUB001", "Pending");
+			 Invoice invoiceObj = new Invoice("INV0001", "123", "card", Optional.empty(), 100.0, "DD00001", "PUB001", "Pending");
 			 assertEquals("INV0001", invoiceObj.getInvoiceId());
 		     assertEquals("123", invoiceObj.getCustId());
-		     assertEquals(PaymentMethod.CARD, invoiceObj.getPaymentMethod());  // This now correctly matches the enum
-		     assertTrue("Order dates do not match", 
-		                   orderDate.equals(invoiceObj.getOrderDate()));  // Using LocalDate.equals for comparison
-		     assertEquals(100.0, invoiceObj.getTotalAmount(), 0.001);  // Use delta for double comparison
+		     assertEquals(PaymentMethod.CARD, invoiceObj.getPaymentMethod());  
+		     assertEquals(LocalDate.now(), invoiceObj.getOrderDate());
+		     assertEquals(100.0, invoiceObj.getTotalAmount(), 0.001);  
 		     assertEquals("DD00001", invoiceObj.getDeliveryId());
 		     assertEquals("PUB001", invoiceObj.getPublicationId());
 		     assertEquals("Pending", invoiceObj.getOrderStatus());
@@ -416,7 +416,7 @@ public class InvoiceTest extends TestCase {
 	 // Expected Output: Invoice object is created with totalAmount = Integer.MAX_VALUE
 	 public void testMaxTotalAmount() {
 	     try {
-	         Invoice invoiceObj = new Invoice("INV1001", "123", "card", LocalDate.now(), Integer.MAX_VALUE, "DD00001", "PUB001", "Pending");
+	         Invoice invoiceObj = new Invoice("INV1001", "123", "card", Optional.empty(), Integer.MAX_VALUE, "DD00001", "PUB001", "Pending");
 	         assertEquals(Integer.MAX_VALUE, invoiceObj.getTotalAmount(), 0.001);
 	     } catch (CustomerExceptionHandler e) {
 	         fail("Exception not expected: " + e.getMessage());
@@ -429,7 +429,7 @@ public class InvoiceTest extends TestCase {
 	 // Expected Output: No exception thrown
 	 public void testValidOrderDateFormat() {
 	     try {
-	         LocalDate validOrderDate = LocalDate.parse("2024-11-09");
+	    	 Optional<LocalDate> validOrderDate = Optional.of(LocalDate.parse("2024-11-09"));
 	         Invoice.validateOrderDate(validOrderDate); // Valid format
 	     } catch (CustomerExceptionHandler e) {
 	         fail("Exception not expected");

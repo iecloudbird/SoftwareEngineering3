@@ -6,17 +6,18 @@ DROP TABLE IF EXISTS delivery_docket;
 CREATE TABLE delivery_docket (
 	docket_id VARCHAR(50) PRIMARY KEY,
     order_id VARCHAR(50),
-    delivery_id VARCHAR(50),
+    delivery_person_id VARCHAR(50),
     delivery_date DATE DEFAULT CURRENT_DATE,
     delivery_status VARCHAR(50) NOT NULL,
-    delivery_details VARCHAR(50)
+    delivery_details VARCHAR(50),
+    FOREIGN KEY (delivery_id) REFERENCES delivery_persons(delivery_person_id) ON DELETE CASCADE
     -- FOREIGN KEY (cust_id) REFERENCES customers(customer_id) ON DELETE CASCADE,
     -- FOREIGN KEY (delivery_id) REFERENCES delivery_persons(delivery_person_id) ON DELETE CASCADE,
 	-- FOREIGN KEY (order_id) REFERENCES order_id(order_id) ON DELETE CASCADE
     -- FOREIGN KEY (publication_id) REFERENCES publications(publication_id) ON DELETE CASCADE
 );
 	
-INSERT INTO delivery_docket (docket_id, order_id, delivery_id, delivery_date, delivery_status, delivery_details) VALUES
+INSERT INTO delivery_docket (docket_id, order_id, delivery_person_id, delivery_date, delivery_status, delivery_details) VALUES
 ('DD001', 'ORD0001', 'DP001', NOW(), 'Delivered', 'Delivered'),
 ('DD002', 'ORD0002', 'DP002', NOW(), 'Not Delivered', 'Not Delivered'),
 ('DD003', 'ORD0003', 'DP003', NOW(), 'Delivered', 'Delivered'),

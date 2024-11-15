@@ -417,9 +417,6 @@ import java.sql.SQLException;
 		public boolean deleteOrderById(String orderId) {
 			
 			boolean deleteSucessfull = true;
-			
-			//Add Code here to call embedded SQL to insert publication into DB
-			
 			try {
 				
 				//Create prepared statement to issue SQL query to the database
@@ -465,14 +462,14 @@ import java.sql.SQLException;
 		    return deleteSuccessful;
 		}
 		public boolean insertInvoice(Invoice invoice) {
-		    String query = "INSERT INTO invoices (invoice_id, cust_id, payment_method, order_date, total_amount, delivery_docket, publication_id, order_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		    String query = "INSERT INTO invoices (invoice_id, cust_id, payment_method, order_date, total_amount, delivery_docket_id, publication_id, order_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		    
 		    try {
 		        preparedStatement = connect.prepareStatement(query);
 		        
 		        preparedStatement.setString(1, invoice.getInvoiceId());
 		        preparedStatement.setString(2, invoice.getCustId());
-		        preparedStatement.setObject(3, invoice.getPaymentMethod());
+		        preparedStatement.setString(3, invoice.getPaymentMethod().getMethod()); 
 		        preparedStatement.setDate(4, Date.valueOf(invoice.getOrderDate()));
 		        preparedStatement.setDouble(5, invoice.getTotalAmount());
 		        preparedStatement.setString(6, invoice.getDeliveryId());
@@ -502,16 +499,18 @@ import java.sql.SQLException;
 		
 		public boolean updateInvoiceDetails(Invoice invoice) {
 	        boolean updateSuccessful = false;
-	        String query = "UPDATE invoices SET cust_id = ?, payment_method = ?, order_date = ?, total_amount = ?, delivery_docket = ?, publication_id = ?, order_status = ? WHERE invoice_id = ?";
+	        String query = "UPDATE invoices SET cust_id = ?, payment_method = ?, order_date = ?, total_amount = ?, delivery_docket_id = ?, publication_id = ?, order_status = ? WHERE invoice_id = ?";
 	        try {
 	            preparedStatement = connect.prepareStatement(query);
 	            preparedStatement.setString(1, invoice.getCustId());
-	            preparedStatement.setObject(2, invoice.getPaymentMethod());
+	            preparedStatement.setString(2, invoice.getPaymentMethod().getMethod());
 	            preparedStatement.setDate(3, Date.valueOf(invoice.getOrderDate()));
 	            preparedStatement.setDouble(4, invoice.getTotalAmount());
 	            preparedStatement.setString(5, invoice.getDeliveryId());
 	            preparedStatement.setString(6, invoice.getPublicationId());
 	            preparedStatement.setString(7, invoice.getOrderStatus());
+	            
+	            preparedStatement.setString(8, invoice.getInvoiceId());
 
 	            int rowsAffected = preparedStatement.executeUpdate();
 	            updateSuccessful = rowsAffected > 0; // Returns true if update was successful
@@ -521,54 +520,23 @@ import java.sql.SQLException;
 	        return updateSuccessful;
 	    }
 		public boolean deleteInvoiceById(String invoiceId) {
-			
-			boolean deleteSucessfull = true;
-			
-			//Add Code here to call embedded SQL to insert order into DB
-			
-			try {
-				
-				//Create prepared statement to issue SQL query to the database
-				if (invoiceId == "DELETEALL")
-					//Delete all entries in Table
-					preparedStatement = connect.prepareStatement("delete from newsagent.invoices");
-				else
-					//Delete a particular order
-					preparedStatement = connect.prepareStatement("DELETE FROM newsagent.invoices WHERE invoice_id = ?");
-				preparedStatement.setString(1, invoiceId);
-	
-				preparedStatement.executeUpdate();
-			 
-			}
-			catch (Exception e) {
-				deleteSucessfull = false;
-			}
-			
-			return deleteSucessfull;
-			
+			String query = "DELETE FROM invoices WHERE invoice_id = ?";
+			 try (PreparedStatement ps = connect.prepareStatement(query)) {
+		            ps.setString(1, invoiceId);
+		            return ps.executeUpdate() > 0;
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		            return false;
+		        }
 		}
 		public boolean deleteAllinvoices() {
-			boolean deleteSuccessful = true;
-		    try {
-		        preparedStatement = connect.prepareStatement("DELETE FROM newsagent.invoices");
-		        preparedStatement.executeUpdate();
-		        //System.out.println("All good");
-		    } catch (Exception e) {
-		        deleteSuccessful = false;
-		        e.printStackTrace();  // Log the error for easier debugging
-		    } finally {
-		        try {
-		            if (preparedStatement != null) {
-		                preparedStatement.close();
-		            }
-		            if (connect != null) {
-		                connect.close();
-		            }
-		        } catch (Exception e) {
-		            e.printStackTrace();
-		        }
+			String query = "DELETE FROM invoices";
+		    try (PreparedStatement ps = connect.prepareStatement(query)) {
+		        return ps.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
 		    }
-		    return deleteSuccessful;
 		}
 		public boolean insertDeliveryDocket(DeliveryDocket deliveryDocket) {
 		    String query = "INSERT INTO delivery_docket (docket_id, order_id, delivery_id, delivery_date, delivery_status, delivery_details) VALUES (?, ?, ?, ?, ?, ?)";

@@ -47,16 +47,16 @@ CREATE TABLE publications (
 -- Create Invoices table
 CREATE TABLE Invoices (
     invoice_id VARCHAR(50) PRIMARY KEY,
-    cust_id INT NOT NULL,
-    payment_method VARCHAR(60) NOT NULL,
-    order_date DATE NOT NULL,
-    total_amount DECIMAL(10, 2) NOT NULL,
-    delivery_person_id VARCHAR(10) NOT NULL,
-    publication_id VARCHAR(20) NOT NULL,
-    order_status VARCHAR(50) NOT NULL,
-    FOREIGN KEY (cust_id) REFERENCES customers(customer_id) ON DELETE CASCADE,
-    FOREIGN KEY (delivery_person_id) REFERENCES delivery_persons(delivery_person_id) ON DELETE CASCADE,
-    FOREIGN KEY (publication_id) REFERENCES publications(publication_id) ON DELETE CASCADE
+   	cust_id INT NOT NULL,
+    payment_method ENUM('card', 'cash') NOT NULL,
+    order_date DATE DEFAULT CURRENT_DATE,
+    total_amount DECIMAL(10, 2) NOT NULL, 
+    delivery_docket_id VARCHAR(50) NOT NULL, 
+    publication_id VARCHAR(20) NOT NULL, 
+    order_status VARCHAR(50) NOT NULL
+    -- FOREIGN KEY (cust_id) REFERENCES customers(customer_id) ON DELETE CASCADE,
+    -- FOREIGN KEY (delivery_docket_id) REFERENCES delivery_docket(docket_id) ON DELETE CASCADE,
+    -- FOREIGN KEY (publication_id) REFERENCES publications(publication_id) ON DELETE CASCADE
 );
 
 -- Create newsagent table
@@ -105,10 +105,11 @@ CREATE TABLE warning_letter (
 CREATE TABLE delivery_docket (
 	docket_id VARCHAR(50) PRIMARY KEY,
     order_id VARCHAR(50),
-    delivery_id VARCHAR(50),
+    delivery_person_id VARCHAR(10),
     delivery_date DATE DEFAULT CURRENT_DATE,
     delivery_status VARCHAR(50) NOT NULL,
-    delivery_details VARCHAR(50)
+    delivery_details VARCHAR(50),
+    FOREIGN KEY (delivery_person_id) REFERENCES delivery_persons(delivery_person_id) ON DELETE CASCADE
 );
 
 -- Create Delivery Areas Table
@@ -160,8 +161,15 @@ INSERT INTO publications (publication_id, publication_name, publication_type, pu
 ('PUB003', 'Monthly Tech Review', 'Magazine', 10.00, 'Monthly');
 
 -- Insert sample data into Invoices
-INSERT INTO Invoices (invoice_id, cust_id, payment_method, order_date, total_amount, delivery_person_id, publication_id, order_status) VALUES
-('INV0001', 1, 'Credit Card', '2024-10-01', 150.00, 'DP001', 'PUB001', 'PENDING');
+INSERT INTO Invoices (invoice_id, cust_id, payment_method, order_date, total_amount
+, delivery_docket_id, publication_id, order_status
+) VALUES
+('INV0001', '1', 'card', '2024-10-01', 150.00, 'DD00001', 'PUB001', 'PENDING'), -- ,
+('INV0002', '2', 'card', '2024-10-02', 250.50, 'DD00002', 'PUB002', 'PENDING'),
+('INV0003', '3', 'card', '2024-10-03', 75.20, 'DD00003', 'PUB003', 'PENDING'),
+('INV0004', '4', 'card', '2024-10-04', 200.00, 'DD00004', 'PUB004', 'PENDING'),
+('INV0005', '5', 'cash', '2024-10-05', 120.75, 'DD00005', 'PUB005', 'PENDING');
+
 
 -- Insert sample data into newsagent
 INSERT INTO newsagent (agent_name, agent_address, agent_phone, agent_email) VALUES
@@ -206,7 +214,7 @@ INSERT INTO warning_letter (letter_id, order_id, cust_id, reason, due_amount, is
 ('WL024', 'ORD024', 3, 'payment due', 90.00, '2024-11-01');
 
 -- Insert Data into Delivery Docket Table
-INSERT INTO delivery_docket (docket_id, order_id, delivery_id, delivery_date, delivery_status, delivery_details) VALUES
+INSERT INTO delivery_docket (docket_id, order_id, delivery_person_id, delivery_date, delivery_status, delivery_details) VALUES
 ('DD001', 'ORD0001', 'DP001', NOW(), 'Delivered', 'Delivered'),
 ('DD002', 'ORD0002', 'DP002', NOW(), 'Not Delivered', 'Not Delivered'),
 ('DD003', 'ORD0003', 'DP003', NOW(), 'Delivered', 'Delivered'),
