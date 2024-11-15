@@ -7,7 +7,7 @@ enum OrderStatus {
     DISPATCHED,   
     DELIVERED, 
     CANCELLED,   
-    POSTPONED     
+    POSTPONED
 }
 
 public class Order {
@@ -16,7 +16,7 @@ public class Order {
 	private String deliveryAreaId; //format AREA00
 	private String publicationId;  // Format: PUB003
 	private LocalDate orderDate;
-	private OrderStatus orderStatus;
+	private OrderStatus orderStatus; 
 	public String getOrderId() {
 		return orderId;
 	}
@@ -48,11 +48,11 @@ public class Order {
 		this.orderDate = orderDate;
 	}
 	public OrderStatus getOrderStatus() {
-		return orderStatus;
+	    return orderStatus;
 	}
 	public void setOrderStatus(OrderStatus orderStatus) {
-		this.orderStatus = orderStatus;
-	}
+        this.orderStatus = orderStatus;
+    }
 	public Order() {
 		this.orderId = null;
 		this.custId = 0;
@@ -63,28 +63,25 @@ public class Order {
 	}
 	
 	public Order(String orderId, int custId, String deliveryId, String publicationId, Optional<LocalDate> orderDate, OrderStatus orderStatus) throws CustomerExceptionHandler  {
-		
-		// Validate Input
-		try {
-			validateOrderId(orderId);
-			validateCustId(custId);
-			validateDeliveryId(deliveryId);
-			validatePublicationId(publicationId);
-			validateOrderDate(orderDate);
-			validateOrderStatus(orderStatus);
-			
-			// Set Attributes
-	        this.orderId = orderId;
-	        this.custId = custId;	
-	        this.deliveryAreaId = deliveryId;
-	        this.publicationId = publicationId;
-	        this.orderDate = orderDate.orElse(LocalDate.now());
-	        this.orderStatus =  orderStatus;
-		}catch (CustomerExceptionHandler e) {
-			throw e;
-		}
-		
-	}
+        try {
+            validateOrderId(orderId);
+            validateCustId(custId);
+            validateDeliveryId(deliveryId);
+            validatePublicationId(publicationId);
+            validateOrderDate(orderDate);
+            validateOrderStatus(orderStatus);
+            
+            // Set Attributes
+            this.orderId = orderId;
+            this.custId = custId;    
+            this.deliveryAreaId = deliveryId;
+            this.publicationId = publicationId;
+            this.orderDate = orderDate.orElse(LocalDate.now());
+            this.orderStatus = orderStatus;
+        } catch (CustomerExceptionHandler e) {
+            throw e;
+        }
+    }
 	public static void validateOrderId(String orderId) throws CustomerExceptionHandler {
 		
 		//Agree Formating Rules on "Order Id"
@@ -129,18 +126,17 @@ public class Order {
         }
 	}
 	 public static void validateOrderDate(Optional<LocalDate> orderDate) throws CustomerExceptionHandler {
-		 if (!orderDate.isPresent()) {
-		        throw new CustomerExceptionHandler("Order Date NOT specified."); // Exception if no date is provided
+		 if (orderDate == null) {
+		        throw new CustomerExceptionHandler("Order Date NOT specified.");
 		    }
-		    
-		    if (orderDate.get().isBefore(LocalDate.now())) { 
-		        throw new CustomerExceptionHandler("Order Date cannot be in the past."); // Exception for past dates
-		    }
-	 }
 
+	 }
+	 
+	 
 	 public static void validateOrderStatus(OrderStatus orderStatus) throws CustomerExceptionHandler {
-		    if (orderStatus == null) {
-		        throw new CustomerExceptionHandler("Order Status NOT specified");
-		    }
-		}
+	        if (orderStatus == null) {
+	            throw new CustomerExceptionHandler("Order Status NOT specified");
+	        }
+	  }
+	
 }

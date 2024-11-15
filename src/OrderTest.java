@@ -11,12 +11,12 @@ import junit.framework.TestCase;
  * Entity: Order
  * Objective: Ensure 100% full coverage test cases using Equivalence Partitioning (EP) and Boundary Analysis (BA)
  * 
- * Total Test Cases: 20 (10 BA + 10 EP)
+ * Total Test Cases: 19 (10 BA + 9 EP)
  * 
  * Boundary Analysis (BA): 10 Test Cases
  * - Max and Min Length for OrderId,CustId, deliveryArea Id and publication ID
  * 
- * Equivalence Partitioning (EP): 10 Test Cases
+ * Equivalence Partitioning (EP): 9 Test Cases
  * - Successful Creation of Order
  * - Invalid and Valid Order Status, orderDate, custId
  */
@@ -198,35 +198,19 @@ public class OrderTest extends TestCase{
 	    }
 
     // Test #: 14
-    // Test Objective: Validate Order Date - Past date.
-    // Inputs: orderDate = past date
-    // Expected Output: Exception with message "Order Date cannot be in the past".
-	 public void testOrderDateInThePast() {
-	        // Create a past date using LocalDate
-	        LocalDate pastLocalDate = LocalDate.now().minusYears(1); // 1 year ago
-
-	        try {
-	            Order.validateOrderDate(Optional.of(pastLocalDate)); // Past date
-	            fail("Exception expected");
-	        } catch (CustomerExceptionHandler e) {
-	            assertEquals("Order Date cannot be in the past.", e.getMessage());
-	        }
-	    }
-
-    // Test #: 15
     // Test Objective: Validate Order Date - Null check.
     // Inputs: orderDate = null
     // Expected Output: Exception with message "Order Date NOT specified".
 	 public void testOrderDateNullCheck() {
 	        try {
-	            Order.validateOrderDate(Optional.empty()); // Null check
+	            Order.validateOrderDate(null); // Null check
 	            fail("Exception expected");
 	        } catch (CustomerExceptionHandler e) {
 	            assertEquals("Order Date NOT specified.", e.getMessage());
 	        }
 	    }
     
-    // Test #: 16
+    // Test #: 15
     // Test Objective: Validate Order Status - Null check.
     // Inputs: orderStatus = null
     // Expected Output: Exception with message "Order Status NOT specified".

@@ -79,8 +79,8 @@ public class CommandLine {
 //        System.out.println("47. Update Storage Record by ID");
 //        System.out.println("48. Delete Storage Record by ID");
 
-		System.out.println("99. Close the NewsAgent Application");
-		System.out.println(" ");
+
+
 //		System.out.println("=============================================");
 //		System.out.println(" ");
 		///////////////////////////////////////////////////////////////////
@@ -94,6 +94,9 @@ public class CommandLine {
 		System.out.println("108. Warning Letter CRUD Actions");
 		System.out.println("109. Newsagent CRUD Actions");
 		System.out.println("110. Storage Record CRUD Actions");
+		
+		System.out.println(" ");
+		System.out.println("99. Close the NewsAgent Application");
 		System.out.println("=============================================");
 		System.out.println(" ");
 	}
@@ -163,7 +166,7 @@ public class CommandLine {
         System.out.printf("Enter Delivery Person Last Name (Length: 1-25): \n");
         String lastName = keyboard.nextLine();
         
-        System.out.printf("Enter Delivery Person ID (format DP/123): \n");
+        System.out.printf("Enter Delivery Person ID (format DP123): \n");
         String id = keyboard.nextLine().toUpperCase();
         
         System.out.printf("Enter Delivery Person Phone Number (Length: 10): \n");
@@ -337,20 +340,20 @@ public class CommandLine {
 		System.out.println();
 		while (rs.next()) {
 			String id = rs.getString("publication_id");
-			String title = rs.getString("publication_name");
-	        //int stock = rs.getInt("stock_number");
-	        double price = rs.getDouble("publication_price");
-	        String type = rs.getString("publication_type");
-	        String frequency = rs.getString("publication_frequency");
-	        
-			System.out.printf("%30s", id);
-			System.out.printf("%30s", title);
-			//System.out.printf("%30s", stock);
-			System.out.printf("%30s", type);
-			System.out.printf("%30s", price); 
+	        String title = rs.getString("title");
+	        int stock = rs.getInt("number_in_stocks");
+	        double price = rs.getDouble("price");
+	        String type = rs.getString("type");
+	        String frequency = rs.getString("delivery_frequency");
+
+	        System.out.printf("%30s", id);
+	        System.out.printf("%30s", title);
+	        System.out.printf("%30d", stock);
+	        System.out.printf("%30s", type);
+	        System.out.printf("%30.2f", price);
 	        System.out.printf("%30s", frequency);
-			System.out.println();
-		}// end while
+	        System.out.println();
+		}
 		System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
 		
 		return true;
@@ -387,32 +390,27 @@ public class CommandLine {
 	    }
 	}
 	private static void deletePublication(Scanner keyboard, MySQLAccess dao) {
-	    // Implementation for deleting publication
-//	    System.out.println("Enter Publication ID to delete:");
-//	    String deleteId = keyboard.nextLine();
-//	    boolean deleteResult = true;
-		//Delete Publication Record by ID
 		System.out.println("Enter Publication ID to be deleted or 'DELETEALL' to Clear all Rows:");
 		while (!keyboard.hasNext()) {
 		    System.out.println("Invalid input. Please enter a valid Publication ID or DELETEALL.");
 		    keyboard.next();  // Consume invalid input
 		}
 		String deletepublicationId = keyboard.next().toUpperCase();
-		if (deletepublicationId.compareTo("DELETEALL") == 0) {
-		    boolean deleteAllResult = dao.deleteAllPublications();
-		    if (deleteAllResult) {
-		        System.out.println("Publication Table Emptied");
-		    } else {
-		        System.out.println("ERROR: Could not empty the table");
-		    }
-		} else {
-		    boolean deleteResult = dao.deletePublicationById(deletepublicationId);
-		    if (deleteResult) {
-		        System.out.println("Publication Deleted");
-		    } else {
-		        System.out.println("ERROR: Publication Details NOT Deleted or Do Not Exist");
-		    }
-		}
+		if ("DELETEALL".equals(deletepublicationId)) {
+	        boolean deleteAllResult = dao.deleteAllPublications();
+	        if (deleteAllResult) {
+	            System.out.println("Publication Table Emptied");
+	        } else {
+	            System.out.println("ERROR: Could not empty the table");
+	        }
+	    } else {
+	        boolean deleteResult = dao.deletePublicationById(deletepublicationId);
+	        if (deleteResult) {
+	            System.out.println("Publication Deleted");
+	        } else {
+	            System.out.println("ERROR: Publication Details NOT Deleted or Do Not Exist");
+	        }
+	    }
 	}
 	private static void createOrder(Scanner keyboard, MySQLAccess dao) throws CustomerExceptionHandler {
     	//Implementation for creating Order
@@ -421,18 +419,22 @@ public class CommandLine {
     	
     	System.out.println("Enter Customer ID: \n");
     	int custId = keyboard.nextInt();
+    	keyboard.nextLine();
     	
-    	System.out.println("Enter delivery ID (format DP001): \n");
-    	String deliveryId = keyboard.next();
+    	System.out.println("Enter delivery ID (format AREA01): \n");
+    	String deliveryId = keyboard.nextLine();
     	
     	System.out.println("Enter publication ID (format PUB001): \n");
-    	String publicationId = keyboard.next();
-    	
-    	System.out.println("Enter Order Date (format yyyy-MM-dd): ");
-        LocalDate orderDate = LocalDate.parse(keyboard.nextLine(),DATE_FORMAT);
+    	String publicationId = keyboard.nextLine();
+        
+        System.out.print("Enter Order Date (YYYY-MM-DD), or leave empty for today: \n");
+        String orderDateStr = keyboard.nextLine();
+        Optional<LocalDate> orderDate= orderDateStr.isEmpty() 
+                ? Optional.empty() 
+                : Optional.of(LocalDate.parse(orderDateStr));
 
     	System.out.println("Enter the order status (format PENDING/CONFIRMED/DISPATCHED/DELIVERED/CANCELLED/POSTPONED): \n");
-    	String input = keyboard.next();
+    	String input = keyboard.nextLine();
     	OrderStatus orderStatus;
     	try {
     	    orderStatus = OrderStatus.valueOf(input.toUpperCase());
@@ -442,7 +444,7 @@ public class CommandLine {
     	
         
         try {
-        	Order order = new Order(orderId, custId, deliveryId, publicationId, Optional.ofNullable(orderDate), orderStatus);
+        	Order order = new Order(orderId, custId, deliveryId, publicationId,orderDate, orderStatus);
              boolean insertResult = dao.insertOrder(order);
             System.out.println(insertResult ? "Order Created" : "ERROR: Order NOT Created");
         } catch (Exception e) {
@@ -462,11 +464,11 @@ private static boolean printOrderTable(ResultSet rs) throws Exception {
 		System.out.println();
 		while (rs.next()) {
 			String orderId = rs.getString("order_id");
-			int custId = rs.getInt("cust_id");
+	        int custId = rs.getInt("cust_id");
 	        String deliveryId = rs.getString("delivery_id");
 	        String publicationId = rs.getString("publication_id");
 	        Date orderDate = rs.getDate("order_date");
-	        Boolean orderStatus = rs.getBoolean("order_status");
+	        String orderStatus = rs.getString("order_status");
 	        
 			System.out.printf("%30s", orderId);
 			System.out.printf("%30s", custId);
@@ -492,23 +494,19 @@ private static boolean printOrderTable(ResultSet rs) throws Exception {
 	    int custId = keyboard.nextInt();
 	    keyboard.nextLine();
 	    
-	    System.out.println("Enter Delivery ID: \n");
-	    String deliveryId = keyboard.next();
+	    System.out.println("Enter Delivery ID (format: AREA00): \n");
+	    String deliveryId = keyboard.nextLine();
 	    
-	    System.out.println("Enter Publication ID: \n");
-	    String publicationId = keyboard.next();
+	    System.out.println("Enter Publication ID (format: PUB001): \n");
+	    String publicationId = keyboard.nextLine();
 	    
-	    System.out.println("Enter Order Date (yyyy-MM-dd):");
-	    LocalDate orderDate = null;
-	    String dateString = keyboard.nextLine();
-	    try {
-	        orderDate = LocalDate.parse(dateString);
-	    } catch (Exception e) {
-	        System.out.println("ERROR: Invalid date format. Expected yyyy-MM-dd.");
-	        return;
-	    }
+	    System.out.print("Enter Order Date (YYYY-MM-DD), or leave empty for today: \n");
+        String orderDateStr = keyboard.nextLine();
+        Optional<LocalDate> orderDate= orderDateStr.isEmpty() 
+                ? Optional.empty() 
+                : Optional.of(LocalDate.parse(orderDateStr));
 
-	    System.out.println("Enter Order Status:");
+	    System.out.println("Enter the order status (format PENDING/CONFIRMED/DISPATCHED/DELIVERED/CANCELLED/POSTPONED): \n");
 	    String input = keyboard.nextLine();
 	    OrderStatus orderStatus;
 	    try {
@@ -519,7 +517,7 @@ private static boolean printOrderTable(ResultSet rs) throws Exception {
 
 	    // Attempt to update order
 	    try {
-	        Order order = new Order(orderId, custId, deliveryId, publicationId, Optional.of(orderDate), orderStatus);
+	        Order order = new Order(orderId, custId, deliveryId, publicationId, orderDate, orderStatus);
 	        boolean updateResult = dao.updateOrderDetails(order); // Assuming dao.updateOrderDetails updates an order
 	        System.out.println(updateResult ? "Order Details Updated" : "ERROR: Order Details NOT Updated");
 	    } catch (Exception e) {
@@ -581,7 +579,7 @@ private static boolean printOrderTable(ResultSet rs) throws Exception {
         System.out.println("Enter the Publication ID (format PUB001): \n");
         String publication_id = keyboard.next();
         
-        System.out.println("Enter the Order Status: \n");
+        System.out.println("Enter the Order Status (format Pending,Paid,Cancelled,Refunded): \n");
         String order_status = keyboard.next();
         
         try {
@@ -637,7 +635,7 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
     // Get updated details
     System.out.println("Enter Customer ID: \n");
     String cust_id = keyboard.nextLine();
-    System.out.println("Enter payment method: \n");
+    System.out.println("Enter payment method (cash or card): \n");
     String payment_method = keyboard.nextLine();
 
     System.out.print("Enter Issue Date (YYYY-MM-DD), or leave empty for today: \n");
@@ -648,11 +646,11 @@ private static void updateInvoice(Scanner keyboard, MySQLAccess dao) {
 
     System.out.println("Enter Total Amount: \n");
     Double total_amount = keyboard.nextDouble();
-    System.out.println("Enter Delivery Docket ID:");
+    System.out.println("Enter Delivery Docket ID (format DD00001):");
     String delivery_docket_id = keyboard.next();
-    System.out.println("Enter Publication ID: \n");
+    System.out.println("Enter Publication ID (format PUB000): \n");
     String publication_id = keyboard.next();
-    System.out.println("Enter Order Status: \n");
+    System.out.println("Enter Order Status (format Pending,Paid,Cancelled,Refunded): \n");
     String order_status = keyboard.next();
 
     try {
@@ -736,7 +734,7 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 		while (rs.next()) {
 			String docket_id = rs.getString("docket_id");
 			String order_id = rs.getString("order_id");
-	        String delivery_person_id = rs.getString("delivery_id");
+	        String delivery_person_id = rs.getString("delivery_person_id");
 	        Date delivery_date = rs.getDate("delivery_date");
 	        String delivery_status = rs.getString("delivery_status");
 	        String delivery_details = rs.getString("delivery_details");
@@ -1168,10 +1166,10 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 	}
 
     private static void updateStorageRecord(Scanner keyboard, MySQLAccess dao) {
-        System.out.printf("Enter Storage ID to update: \n");
+        System.out.printf("Enter Storage ID to update (format ST001): \n");
         String storageId = keyboard.nextLine().toUpperCase();
         
-        System.out.printf("Enter Publication ID to update: \n");
+        System.out.printf("Enter Publication ID to update (format PUB001): \n");
         String publicationId = keyboard.nextLine().toUpperCase();
 
         System.out.printf("Enter New Description Details: \n");
