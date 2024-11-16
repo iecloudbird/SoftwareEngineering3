@@ -83,6 +83,34 @@ import java.sql.SQLException;
 			return resultSet;
 		}
 		
+		public ResultSet retrieveCustomerAndOrdersById(int customerId) {
+			 String query = """
+				        SELECT 
+				            c.customer_id, c.customer_name, c.customer_address, c.customer_phone, c.customer_email, c.is_subscribed,
+				            o.order_id, o.order_date, o.order_status,
+				            p.publication_id, p.title, p.type, p.price, p.delivery_frequency
+				        FROM 
+				            customers c
+				        LEFT JOIN 
+				            orders o ON c.customer_id = o.cust_id
+				        LEFT JOIN 
+				            publications p ON o.publication_id = p.publication_id
+				        WHERE 
+				            c.customer_id = ?
+				        ORDER BY 
+				            o.order_date DESC;
+				    """;
+
+		    try {
+		        PreparedStatement preparedStatement = connect.prepareStatement(query);
+		        preparedStatement.setInt(1, customerId);
+		        return preparedStatement.executeQuery();
+		    } catch (SQLException e) {
+		        System.out.println("Error executing query: " + e.getMessage());
+		        return null;
+		    }
+		}
+		
 		public boolean updateCustomerDetails(int customerId, String name, String address, String phoneNumber, String email) {
 		    boolean updateSuccessful = false;
 		    String query = "UPDATE newsagent.customers SET customer_name = ?, customer_address = ?, customer_phone = ?, customer_email = ? WHERE customer_id = ?";
@@ -449,6 +477,37 @@ import java.sql.SQLException;
 				resultSet = null;
 			}
 			return resultSet;
+		}
+		
+		public ResultSet retrieveInvoicesWithDetails(String customerId) {
+		    String query = """
+		        SELECT 
+		            i.invoice_id, i.order_date, i.total_amount, i.order_status, i.payment_method,
+		            c.customer_name, c.customer_address, c.customer_phone, c.customer_email,
+		            d.docket_id, d.delivery_date, d.delivery_status, d.delivery_details,
+		            p.publication_id, p.title, p.type, p.price, p.delivery_frequency
+		        FROM 
+		            invoices i
+		        JOIN 
+		            customers c ON i.cust_id = c.customer_id
+		        LEFT JOIN 
+		            delivery_docket d ON i.delivery_docket_id = d.docket_id
+		        LEFT JOIN 
+		            publications p ON i.publication_id = p.publication_id
+		        WHERE 
+		            i.cust_id = ?
+		        ORDER BY 
+		            i.order_date DESC;
+		    """;
+
+		    try {
+		        PreparedStatement preparedStatement = connect.prepareStatement(query);
+		        preparedStatement.setString(1, customerId);
+		        return preparedStatement.executeQuery();
+		    } catch (SQLException e) {
+		        System.out.println("Error retrieving invoices: " + e.getMessage());
+		        return null;
+		    }
 		}
 		
 		public boolean updateInvoiceDetails(Invoice invoice) {

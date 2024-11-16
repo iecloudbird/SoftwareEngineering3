@@ -1203,6 +1203,150 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
             System.out.println("ERROR: " + e.getMessage());
         }
     }
+    
+    private static void displayCustomerOrderSummary(Scanner keyboard, MySQLAccess dao) {
+        System.out.print("Enter Customer ID: ");
+        int customerId = keyboard.nextInt();  
+        keyboard.nextLine();
+        
+        // Fetch customer details
+        try {
+        	
+            ResultSet resultSet = dao.retrieveCustomerAndOrdersById(customerId);
+
+            if (resultSet != null && resultSet.next()) {
+                String customerName = resultSet.getString("customer_name");
+                String customerAddress = resultSet.getString("customer_address");
+                String customerPhone = resultSet.getString("customer_phone");
+                String customerEmail = resultSet.getString("customer_email");
+                boolean isSubscribed = resultSet.getBoolean("is_subscribed");
+
+                System.out.println(" ");
+                System.out.println("===============================================");
+                System.out.println("Order Summary for " +customerName);
+                System.out.println("===============================================");
+                System.out.println("Customer Details:");
+                System.out.printf("Name       : %s%n", customerName);
+                System.out.printf("Address    : %s%n", customerAddress);
+                System.out.printf("Phone      : %s%n", customerPhone);
+                System.out.printf("Email      : %s%n", customerEmail);
+                System.out.printf("Subscribed : %s%n", isSubscribed ? "Yes" : "No");
+                System.out.println("===============================================");
+
+                // Display orders
+                System.out.println("Orders and Publications:");
+                do {
+                	String orderId = resultSet.getString("order_id");
+                    String orderDate = resultSet.getString("order_date");
+                    String orderStatus = resultSet.getString("order_status");
+                    String publicationId = resultSet.getString("publication_id");
+                    String publicationTitle = resultSet.getString("title");
+                    String publicationType = resultSet.getString("type");
+                    double publicationPrice = resultSet.getDouble("price");
+                    String deliveryFrequency = resultSet.getString("delivery_frequency");
+
+                    if (orderId != null) {
+                        System.out.println("\nOrder Details:");
+                        System.out.printf("  Order ID     : %s%n", orderId);
+                        System.out.printf("  Order Date   : %s%n", orderDate);
+                        System.out.printf("  Order Status : %s%n", orderStatus);
+                        System.out.println("\nPublication Details:");
+                        System.out.printf("    ID            : %s%n", publicationId);
+                        System.out.printf("    Title         : %s%n", publicationTitle);
+                        System.out.printf("    Type          : %s%n", publicationType);
+                        System.out.printf("    Price         : $%.2f%n", publicationPrice);
+                        System.out.printf("    Delivery Freq : %s%n", deliveryFrequency);
+                        System.out.println("------------------------------------");
+                    }
+                    
+                } while (resultSet.next());
+                System.out.println("===============================================");
+            } else {
+                System.out.println("Customer not found or no associated orders.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving customer or orders: " + e.getMessage());
+        }
+    }
+    private static void displayCustomerInvoices(Scanner keyboard, MySQLAccess dao) {
+        System.out.print("Enter Customer ID: ");
+        String customerId = keyboard.nextLine();
+
+        try {
+            ResultSet resultSet = dao.retrieveInvoicesWithDetails(customerId);
+
+            if (resultSet != null && resultSet.next()) {
+                do {
+                    // Invoice Header
+                    String invoiceId = resultSet.getString("invoice_id");
+                    String orderDate = resultSet.getString("order_date");
+                    String orderStatus = resultSet.getString("order_status");
+                    String paymentMethod = resultSet.getString("payment_method");
+                    double totalAmount = resultSet.getDouble("total_amount");
+
+                    System.out.println("====================================");
+                    System.out.println("          INVOICE SUMMARY           ");
+                    System.out.println("====================================");
+                    System.out.printf("Invoice ID        : %s%n", invoiceId);
+                    System.out.printf("Date Issued       : %s%n", orderDate);
+                    System.out.printf("Order Status      : %s%n", orderStatus);
+                    System.out.printf("Payment Method    : %s%n", paymentMethod);
+                    System.out.println("------------------------------------");
+
+                    // Customer Details
+                    String customerName = resultSet.getString("customer_name");
+                    String customerAddress = resultSet.getString("customer_address");
+                    String customerPhone = resultSet.getString("customer_phone");
+                    String customerEmail = resultSet.getString("customer_email");
+
+                    System.out.println("Customer Details:");
+                    System.out.printf("  Name    : %s%n", customerName);
+                    System.out.printf("  Address : %s%n", customerAddress);
+                    System.out.printf("  Phone   : %s%n", customerPhone);
+                    System.out.printf("  Email   : %s%n", customerEmail);
+                    System.out.println("------------------------------------");
+
+                    // Order Details
+                    String publicationId = resultSet.getString("publication_id");
+                    String title = resultSet.getString("title");
+                    String type = resultSet.getString("type");
+                    double price = resultSet.getDouble("price");
+                    String deliveryFrequency = resultSet.getString("delivery_frequency");
+
+                    System.out.println("Order Details:");
+                    System.out.printf("  Publication ID : %s%n", publicationId);
+                    System.out.printf("  Title          : %s%n", title);
+                    System.out.printf("  Type           : %s%n", type);
+                    System.out.printf("  Price          : $%.2f%n", price);
+                    System.out.printf("  Frequency      : %s%n", deliveryFrequency);
+                    System.out.println("------------------------------------");
+
+                    // Delivery Details
+                    String docketId = resultSet.getString("docket_id");
+                    String deliveryDate = resultSet.getString("delivery_date");
+                    String deliveryStatus = resultSet.getString("delivery_status");
+                    String deliveryDetails = resultSet.getString("delivery_details");
+
+                    System.out.println("Delivery Details:");
+                    System.out.printf("  Docket ID      : %s%n", docketId);
+                    System.out.printf("  Delivery Date  : %s%n", deliveryDate);
+                    System.out.printf("  Delivery Status: %s%n", deliveryStatus);
+                    System.out.printf("  Instructions   : %s%n", deliveryDetails);
+                    System.out.println("------------------------------------");
+
+                    // Total Amount
+                    System.out.printf("Total Amount: $%.2f%n", totalAmount);
+                    System.out.println("====================================");
+                    System.out.println();
+                } while (resultSet.next());
+            } else {
+                System.out.println("No invoices found for this customer.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error displaying invoices: " + e.getMessage());
+        }
+    }
+
 	public static void main(String[] args) {
 		
 		//Create the Database Object
@@ -1611,6 +1755,13 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 							    }
 							}
 							break;
+							
+						case "5":
+						    displayCustomerOrderSummary(keyboard, dao); // Call the new method here
+						    break;
+						case "6":
+						    displayCustomerInvoices(keyboard, dao); // Call the new method here
+						    break;
 						case "55":
 							//main(String[] args);
 							GoBack();
@@ -1725,6 +1876,8 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 		System.out.println("2. View ALL Customer Records");
 		System.out.println("3. Update Customer Record by ID");
         System.out.println("4. Delete Inactive Customer Records");
+        System.out.println("5. View Customer Order Summary"); 
+        System.out.println("6. View Invoices Generated (for customer)"); 
         System.out.println("55. Go back.");
         System.out.println("99. Close Application");
 	}
@@ -2055,6 +2208,7 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 						 	deleteOrder(keyboard, dao);
 					        // Create invoice logic...
 					        break;
+
 					case "55":
 						//main(String[] args);
 						GoBack();
