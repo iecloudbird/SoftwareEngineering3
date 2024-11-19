@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -1347,6 +1348,139 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
         }
     }
 
+    private static void generateWarningLetter(Scanner keyboard, MySQLAccess dao) throws NumberFormatException, CustomerExceptionHandler {
+        System.out.print("Enter Customer ID: ");
+        String customerId = keyboard.nextLine();
+
+        try {
+            ResultSet resultSet = dao.retrieveInvoicesWithDetails(customerId);
+            
+            if (resultSet != null && resultSet.next()) {
+                System.out.print("Enter Invoice ID to generate warning letter for: ");
+                String invoiceId = keyboard.nextLine();
+
+                double totalAmount = 0;
+                boolean isOverdue = false;
+                String customerName = "";
+                int monthsOverdue = 0;
+                String orderId = resultSet.getString("order_id");
+                do {
+                    String currentInvoiceId = resultSet.getString("invoice_id");
+                    if (currentInvoiceId.equals(invoiceId)) {
+                        totalAmount = resultSet.getDouble("total_amount");
+                        String orderStatus = resultSet.getString("order_status");
+//                        String orderId = resultSet.getString("order_id");
+                        customerName = resultSet.getString("customer_name");
+                        Date orderDate = resultSet.getDate("order_date");
+
+                        // Check if the invoice is overdue
+                        isOverdue = "Overdue".equalsIgnoreCase(orderStatus);
+
+                        if (isOverdue) {
+                            // Calculate months overdue
+                            LocalDate currentDate = LocalDate.now();
+                            LocalDate orderLocalDate = orderDate.toLocalDate();
+                            monthsOverdue = Period.between(orderLocalDate, currentDate).getMonths() + 
+                                            Period.between(orderLocalDate, currentDate).getYears() * 12;
+                        }
+                        break;
+                    }
+                } while (resultSet.next());
+
+                if (!isOverdue) {
+                    System.out.println("The selected invoice is not overdue.");
+                    return;
+                }
+
+                System.out.print("Enter Reason for Warning Letter: ");
+                String reason = keyboard.nextLine();
+
+                String letterId = "WL" +  String.format("%03d", (int)(System.currentTimeMillis() % 1000)); // Unique letter ID
+                dao.insertWarningLetter(new WarningLetter(letterId, orderId, Integer.parseInt(customerId), reason, totalAmount, Optional.empty()));
+
+                System.out.println("====================================");
+                System.out.println("       WARNING LETTER GENERATED     ");
+                System.out.println("====================================");
+
+                // Generate content based on months overdue
+                String warningLetter;
+                if (monthsOverdue == 1) {
+                    warningLetter = String.format(
+                            """
+                            Dear %s,
+
+                            Subject: Reminder of Overdue Payment - First Notice
+
+                            We are writing to inform you that your first payment for the invoice (Invoice ID: %s) is overdue. 
+                            As of today, an outstanding amount of $%.2f remains unpaid. Please find your first invoice attached to this letter.
+
+                            It is important that you address this payment as soon as possible to avoid any service interruptions. 
+                            If you have already made the payment, please disregard this message. Otherwise, we request you to clear the amount by the earliest possible date.
+
+                            Thank you for your prompt attention to this matter.
+
+                            Sincerely,
+                            Athlone Newspaper
+                            """,
+                            customerName, invoiceId, totalAmount
+                    );
+                } else if (monthsOverdue >= 2) {
+                    warningLetter = String.format(
+                            """
+                            Dear %s,
+
+                            Subject: Final Reminder of Overdue Payment and Suspension Notice
+
+                            This is a final reminder regarding the overdue payment for your invoice (Invoice ID: %s). As of today, 
+                            your account shows an unpaid balance of $%.2f, including the first invoice. 
+
+                            Please note that failure to settle this balance within the next 7 days will result in the suspension of your delivery services. 
+                            Additionally, we have attached your third invoice along with this letter.
+
+                            We strongly encourage you to make the payment immediately to avoid service disruption. If you have already made the payment, please notify us.
+
+                            Thank you for your immediate attention.
+
+                            Sincerely,
+                            Athlone Newspaper
+                            """,
+                            customerName, invoiceId, totalAmount
+                    );
+                } else {
+                    warningLetter = String.format(
+                            """
+                            Dear %s,
+
+                            Subject: Notice of Overdue Payment
+
+                            We are writing to remind you of an outstanding payment for your invoice (Invoice ID: %s). 
+                            As of today, an amount of $%.2f remains unpaid.
+
+                            Please make the payment as soon as possible to avoid further action. If you have already cleared the payment, please let us know.
+
+                            Thank you.
+
+                            Sincerely,
+                            Athlone Newspaper
+                            """,
+                            customerName, invoiceId, totalAmount
+                    );
+                }
+
+                System.out.println(warningLetter);
+                System.out.println("====================================");
+            } else {
+                System.out.println("No invoices found for this customer.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error generating warning letter: " + e.getMessage());
+        }
+    }
+
+
+
+
+
 	public static void main(String[] args) {
 		
 		//Create the Database Object
@@ -2471,6 +2605,9 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 					    case "4":
 					        deleteWarningLetter(keyboard, dao);
 					        break;
+					    case "5":
+					        generateWarningLetter(keyboard, dao);
+					        break;
 					case "55":
 						//main(String[] args);
 						GoBack();
@@ -2515,6 +2652,7 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 		System.out.println("2. View ALL Warning Letters");
 		System.out.println("3. Update Warning Letter");
         System.out.println("4. Delete Warning Letter");
+        System.out.println("5. Print out Warning Letter");
         System.out.println("55. Go Back");
         System.out.println("99. Close Application");
 	}

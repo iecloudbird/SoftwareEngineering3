@@ -20,10 +20,9 @@ CREATE TABLE Invoices (
 );
 
 -- Insert dummy data into Invoice table
-INSERT INTO Invoices (invoice_id, cust_id, payment_method, order_date, total_amount
-, delivery_docket_id, publication_id, order_status
+INSERT INTO Invoices (invoice_id, cust_id, payment_method, order_date, total_amount, delivery_docket_id, publication_id, order_status
 ) VALUES
-('INV0001', '1', 'card', '2024-10-01', 150.00, 'DD00001', 'PUB001', 'PENDING'), -- ,
+('INV0001', '1', 'card', '2024-09-01', 150.00, 'DD00001', 'PUB001', 'PENDING'), 
 ('INV0002', '2', 'card', '2024-10-02', 250.50, 'DD00002', 'PUB002', 'PENDING'),
 ('INV0003', '3', 'card', '2024-10-03', 75.20, 'DD00003', 'PUB003', 'PENDING'),
 ('INV0004', '4', 'card', '2024-10-04', 200.00, 'DD00004', 'PUB004', 'PENDING'),

@@ -17,9 +17,9 @@ CREATE TABLE orders (
 
 
 INSERT INTO orders (order_id, cust_id, delivery_id, publication_id, order_date, order_status) VALUES
-('ORD0001', 1, 'AREA01', 'PUB001', NOW(), 'PENDING'),  -- New order with status PENDING
-('ORD0002', 2, 'AREA02', 'PUB002', NOW(), 'CONFIRMED'),  -- Order confirmed
-('ORD0003', 3, 'AREA03', 'PUB003', NOW(), 'DISPATCHED');  -- Order dispatched
+('ORD0001', 1, 'AREA01', 'PUB001','2023-09-01', 'Overdue'),  
+('ORD0002', 2, 'AREA02', 'PUB002', NOW(), 'CONFIRMED'),  
+('ORD0003', 3, 'AREA03', 'PUB003', NOW(), 'DISPATCHED'); 
 
 Select *  from orders;
 -- Select orders from orders WHERE order_id = ORD0001;

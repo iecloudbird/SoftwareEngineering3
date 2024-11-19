@@ -482,7 +482,8 @@ import java.sql.SQLException;
 		public ResultSet retrieveInvoicesWithDetails(String customerId) {
 		    String query = """
 		        SELECT 
-		            i.invoice_id, i.order_date, i.total_amount, i.order_status, i.payment_method,
+		            i.invoice_id, i.order_date AS invoice_date, i.total_amount, i.payment_method,
+		            o.order_status, o.order_id, o.order_date AS order_date, -- Fetching order details
 		            c.customer_name, c.customer_address, c.customer_phone, c.customer_email,
 		            d.docket_id, d.delivery_date, d.delivery_status, d.delivery_details,
 		            p.publication_id, p.title, p.type, p.price, p.delivery_frequency
@@ -490,6 +491,8 @@ import java.sql.SQLException;
 		            invoices i
 		        JOIN 
 		            customers c ON i.cust_id = c.customer_id
+		        LEFT JOIN 
+		            orders o ON o.cust_id = c.customer_id -- Adjusted JOIN
 		        LEFT JOIN 
 		            delivery_docket d ON i.delivery_docket_id = d.docket_id
 		        LEFT JOIN 
@@ -509,6 +512,37 @@ import java.sql.SQLException;
 		        return null;
 		    }
 		}
+
+//		public ResultSet retrieveInvoicesWithDetails(String customerId) {
+//		    String query = """
+//		        SELECT 
+//		            i.invoice_id, i.order_date, i.total_amount, i.order_status, i.payment_method,
+//		            c.customer_name, c.customer_address, c.customer_phone, c.customer_email,
+//		            d.docket_id, d.delivery_date, d.delivery_status, d.delivery_details,
+//		            p.publication_id, p.title, p.type, p.price, p.delivery_frequency
+//		        FROM 
+//		            invoices i
+//		        JOIN 
+//		            customers c ON i.cust_id = c.customer_id
+//		        LEFT JOIN 
+//		            delivery_docket d ON i.delivery_docket_id = d.docket_id
+//		        LEFT JOIN 
+//		            publications p ON i.publication_id = p.publication_id
+//		        WHERE 
+//		            i.cust_id = ?
+//		        ORDER BY 
+//		            i.order_date DESC;
+//		    """;
+//
+//		    try {
+//		        PreparedStatement preparedStatement = connect.prepareStatement(query);
+//		        preparedStatement.setString(1, customerId);
+//		        return preparedStatement.executeQuery();
+//		    } catch (SQLException e) {
+//		        System.out.println("Error retrieving invoices: " + e.getMessage());
+//		        return null;
+//		    }
+//		}
 		
 		public boolean updateInvoiceDetails(Invoice invoice) {
 	        boolean updateSuccessful = false;

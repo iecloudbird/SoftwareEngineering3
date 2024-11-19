@@ -186,7 +186,7 @@ INSERT INTO publications (publication_id, title, number_in_stocks, price, type, 
 INSERT INTO Invoices (invoice_id, cust_id, payment_method, order_date, total_amount
 , delivery_docket_id, publication_id, order_status
 ) VALUES
-('INV0001', '1', 'card', '2024-10-01', 150.00, 'DD00001', 'PUB001', 'PENDING'), -- ,
+('INV0001', '1', 'card', '2024-09-01', 150.00, 'DD00001', 'PUB001', 'PENDING'), 
 ('INV0002', '2', 'card', '2024-10-02', 250.50, 'DD00002', 'PUB002', 'PENDING'),
 ('INV0003', '3', 'card', '2024-10-03', 75.20, 'DD00003', 'PUB003', 'PENDING'),
 ('INV0004', '4', 'card', '2024-10-04', 200.00, 'DD00004', 'PUB004', 'PENDING'),
@@ -199,7 +199,7 @@ INSERT INTO newsagent (agent_name, agent_address, agent_phone, agent_email) VALU
 
 -- Insert sample data into orders
 INSERT INTO orders (order_id, cust_id, delivery_id, publication_id, order_date, order_status) VALUES
-('ORD0001', 1, 'AREA01', 'PUB001', NOW(), 'PENDING'),  -- New order with status PENDING
+('ORD0001', 1, 'AREA01', 'PUB001','2023-09-01', 'Overdue'),  
 ('ORD0002', 2, 'AREA02', 'PUB002', NOW(), 'CONFIRMED'),  -- Order confirmed
 ('ORD0003', 3, 'AREA03', 'PUB003', NOW(), 'DISPATCHED');  -- Order dispatched
 
