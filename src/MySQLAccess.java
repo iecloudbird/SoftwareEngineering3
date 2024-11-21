@@ -617,6 +617,75 @@ import java.sql.SQLException;
 			}
 			return resultSet;
 		}
+		public ResultSet retrieveAreaAndDDById(String areaId) {//public ResultSet retrieveCustomerAndDDById(int customerId)
+			 //String query = """
+//				        SELECT 
+//				            c.customer_id, c.customer_name, c.customer_address, c.customer_phone, c.customer_email, c.is_subscribed,
+//				            o.order_id, o.order_date, o.order_status, o.delivery_id,
+//				            p.publication_id, p.title, p.type, p.price, p.delivery_frequency, p.number_in_stocks,
+//				            a.area_id, a.total_customers,
+//				            d.docket_id, d.order_id, d.delivery_person_id, d.delivery_date, d.delivery_status, d.delivery_details
+//				        FROM 
+//				            customers c
+//				        LEFT JOIN 
+//				            orders o ON c.customer_id = o.cust_id
+//				        LEFT JOIN 
+//				            publications p ON o.publication_id = p.publication_id
+//				        LEFT JOIN
+//			 		    	delivery_areas a on o.delivery_id = a.area_id
+//				        LEFT JOIN
+//			 		    	delivery_docket d ON a.delivery_person_id = d.delivery_person_id
+//				        WHERE 
+//				            c.customer_id = ?
+//				            -- a.area_id = ?
+//				        ORDER BY 
+//				            o.order_date DESC;
+//				    """;
+			String query = """
+			        SELECT
+					    a.area_id, a.area_name, a.delivery_person_id, a.total_customers,
+			            c.customer_id, c.customer_name, c.customer_address, c.customer_phone, c.customer_email, c.is_subscribed,
+			            o.order_id, o.cust_id, o.delivery_id, o.publication_id, o.order_date, o.order_status
+			            -- p.publication_id, p.title, p.type, p.price, p.delivery_frequency, p.number_in_stocks,		            
+			            -- d.docket_id, d.order_id, d.delivery_person_id, d.delivery_date, d.delivery_status, d.delivery_details
+			        FROM 
+			            -- customers c
+			            -- area_id a
+			            delivery_areas a
+			        LEFT JOIN
+					    orders o ON a.area_id = o.delivery_id
+					    
+					LEFT JOIN
+						delivery_docket d ON o.order_id = d.order_id
+					   
+					LEFT JOIN
+						customers c ON o.cust_id = c.customer_id
+					   
+					    
+			        -- LEFT JOIN 
+			            -- orders o ON c.customer_id = o.cust_id
+			        -- LEFT JOIN 
+			            -- publications p ON o.publication_id = p.publication_id
+			        -- LEFT JOIN
+		 		    	-- delivery_areas a on o.delivery_person_id = a.area_id
+			        -- LEFT JOIN
+		 		    	-- delivery_docket d ON a.delivery_person_id = d.delivery_person_id
+			        WHERE 
+			            -- c.customer_id = ?
+			            a.area_id = ?
+			        ORDER BY 
+			            o.order_date DESC;
+			    """;
+
+		    try {
+		        PreparedStatement preparedStatement = connect.prepareStatement(query);
+		        preparedStatement.setString(1, areaId);//setInt customerId
+		        return preparedStatement.executeQuery();
+		    } catch (SQLException e) {
+		        System.out.println("Error executing query: " + e.getMessage());
+		        return null;
+		    }
+		}
 		public boolean updateDeliveryDocketDetails(DeliveryDocket deliveryDocket) {
 	        boolean updateSuccessful = false;
 	        String query = "UPDATE delivery_docket SET order_id = ?, delivery_id = ?, delivery_date = ?, delivery_status = ?, delivery_details = ? WHERE docket_id = ?";

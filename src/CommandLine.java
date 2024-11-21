@@ -805,6 +805,119 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 	        }
 	    }
 	}
+	private static void displayDeliveryDocket(Scanner keyboard, MySQLAccess dao) {
+//		System.out.print("Enter Customer ID: ");
+//        int customerId = keyboard.nextInt(); 
+		System.out.print("Enter Area ID (format AREA00): ");
+        String areaId = keyboard.next(); 
+        keyboard.nextLine();
+        
+        // Fetch customer details
+        try {
+        	
+//            ResultSet resultSet = dao.retrieveCustomerAndDDById(customerId);//Customer
+        	ResultSet resultSet = dao.retrieveAreaAndDDById(areaId);
+            if (resultSet != null && resultSet.next()) {
+            	//String areaId = resultSet.getString("area_id");
+            	String areaName = resultSet.getString("area_name");
+            	String customerId = resultSet.getString("customer_id");
+                String customerName = resultSet.getString("customer_name");
+//                String customerAddress = resultSet.getString("customer_address");
+//                String customerPhone = resultSet.getString("customer_phone");
+//                String customerEmail = resultSet.getString("customer_email");
+//                boolean isSubscribed = resultSet.getBoolean("is_subscribed");
+//                Date DeliveryDate = resultSet.getDate("delivery_date");
+                Date orderDate = resultSet.getDate("order_date");
+                String docketId = resultSet.getString("docket_id");
+                //String areaId = resultSet.getString("area_id");
+                //String address = resultSet.getString("agent_address");
+                //String title = resultSet.getString("title");
+                //String numberInStocks = resultSet.getString("number_in_stocks");
+                //System.out.println(areaId+areaName);
+                System.out.println("");
+                System.out.println("===============================================");
+                System.out.println("Delivery Docket For "+customerName);
+                System.out.println("===============================================");
+                System.out.println("Date: "+orderDate+"	Docket ID: "+docketId);//+"	Docket ID: "+docketId);//"Date: "+DeliveryDate+//DeliveryDate
+//                try (ResultSet rs = dao.getNewsagent()) { 
+//        	        while (rs.next()) {
+//        	            //String name = rs.getString("agent_name");
+//        	            String address = rs.getString("agent_address");
+//        	            System.out.println("Delivery To: "+areaId+"	Delivery From: "+address);//customerAddress
+//        	            System.out.println("===============================================");
+//        	            System.out.println("Customer Id: "+customerId);
+//        	            System.out.println("Customer Address: "+customerAddress);
+//        	            System.out.println("Publication Title: "+title);
+//        	            System.out.println("Number in Stocks: "+numberInStocks);
+//        	            System.out.println("===============================================");
+//        	        }
+//        	    } catch (SQLException | CustomerExceptionHandler e) {
+//        	        e.printStackTrace();
+//        	    }
+                //System.out.println("Delivery To: "+customerAddress+"	Delivery From: "+address);//+"	Delivery From: "+address
+//                try (ResultSet rs = dao.getNewsagent()) { 
+//        	        while (rs.next()) {
+//        	            String name = rs.getString("agent_name");
+//        	            String address = rs.getString("agent_address");
+//        	            String phone = rs.getString("agent_phone");
+//        	            String email = rs.getString("agent_email");
+//
+//        	            System.out.println("Name: " + name);
+//        	            System.out.println("Address: " + address);
+//        	            System.out.println("Phone: " + phone);
+//        	            System.out.println("Email: " + email);
+//        	            System.out.println("--------------------");
+//        	        }
+//        	    } catch (SQLException | CustomerExceptionHandler e) {
+//        	        e.printStackTrace();
+//        	    }
+//                System.out.println(" ");
+//                System.out.println("===============================================");
+//                System.out.println("Delivery Docket for " +customerName);
+//                System.out.println("===============================================");
+//                System.out.println("Customer Details:");
+//                System.out.printf("Name       : %s%n", customerName);
+//                System.out.printf("Address    : %s%n", customerAddress);
+//                System.out.printf("Phone      : %s%n", customerPhone);
+//                System.out.printf("Email      : %s%n", customerEmail);
+//                System.out.printf("Subscribed : %s%n", isSubscribed ? "Yes" : "No");
+//                System.out.println("===============================================");
+
+                // Display orders
+                //System.out.println("Orders and Publications:");
+                //do {
+//                	String orderId = resultSet.getString("order_id");
+//                    String orderDate = resultSet.getString("order_date");
+//                    String orderStatus = resultSet.getString("order_status");
+//                    String publicationId = resultSet.getString("publication_id");
+//                    String publicationTitle = resultSet.getString("title");
+//                    String publicationType = resultSet.getString("type");
+//                    double publicationPrice = resultSet.getDouble("price");
+//                    String deliveryFrequency = resultSet.getString("delivery_frequency");
+//
+//                    if (orderId != null) {
+//                        System.out.println("\nOrder Details:");
+//                        System.out.printf("  Order ID     : %s%n", orderId);
+//                        System.out.printf("  Order Date   : %s%n", orderDate);
+//                        System.out.printf("  Order Status : %s%n", orderStatus);
+//                        System.out.println("\nPublication Details:");
+//                        System.out.printf("    ID            : %s%n", publicationId);
+//                        System.out.printf("    Title         : %s%n", publicationTitle);
+//                        System.out.printf("    Type          : %s%n", publicationType);
+//                        System.out.printf("    Price         : $%.2f%n", publicationPrice);
+//                        System.out.printf("    Delivery Freq : %s%n", deliveryFrequency);
+//                        System.out.println("------------------------------------");
+//                    }
+                    
+//                } while (resultSet.next());
+//                System.out.println("===============================================");
+            } else {
+                System.out.println("Area Id not found or no associated delivery dockets.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving area or delivery dockets: " + e.getMessage());
+        }
+	}
 	//DELIVERY AREA CRUD 
 	// Insert a new delivery area
 	private static void insertDeliveryArea(Scanner scanner, MySQLAccess dao) {
@@ -2439,6 +2552,9 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 						 	deleteDeliveryDocket(keyboard, dao);
 					        // Create invoice logic...
 					        break;
+					case "5":
+							displayDeliveryDocket(keyboard, dao);
+							break;
 					case "55":
 						//main(String[] args);
 						GoBack();
@@ -2483,6 +2599,7 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 		System.out.println("2. View ALL Delivery Docket Records");
 		System.out.println("3. Update Delivery Docket Record by ID");
         System.out.println("4. Delete Delivery Docket Records");
+        System.out.println("5. View Delivery Docket by ID");
         System.out.println("55. Go Back");
         System.out.println("99. Close Application");
 	}
