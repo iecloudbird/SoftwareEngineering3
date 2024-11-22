@@ -822,29 +822,37 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
             	String areaName = resultSet.getString("area_name");
             	String customerId = resultSet.getString("customer_id");
                 String customerName = resultSet.getString("customer_name");
-//                String customerAddress = resultSet.getString("customer_address");
+                String customerAddress = resultSet.getString("customer_address");
 //                String customerPhone = resultSet.getString("customer_phone");
 //                String customerEmail = resultSet.getString("customer_email");
 //                boolean isSubscribed = resultSet.getBoolean("is_subscribed");
 //                Date DeliveryDate = resultSet.getDate("delivery_date");
                 Date orderDate = resultSet.getDate("order_date");
+                String PubId = resultSet.getString("publication_id");
                 String docketId = resultSet.getString("docket_id");
                 //String areaId = resultSet.getString("area_id");
                 //String address = resultSet.getString("agent_address");
                 //String title = resultSet.getString("title");
-                //String numberInStocks = resultSet.getString("number_in_stocks");
+                String numberInStocks = resultSet.getString("number_in_stocks");
+                String price = resultSet.getString("price");
                 //System.out.println(areaId+areaName);
                 System.out.println("");
                 System.out.println("===============================================");
-                System.out.println("Delivery Docket For "+customerName);
+                System.out.println("Customer Name: "+customerName);
+                System.out.println("Customer Address: "+customerAddress);
                 System.out.println("===============================================");
                 System.out.println("Date: "+orderDate+"	Docket ID: "+docketId);//+"	Docket ID: "+docketId);//"Date: "+DeliveryDate+//DeliveryDate
-//                try (ResultSet rs = dao.getNewsagent()) { 
-//        	        while (rs.next()) {
+                try (ResultSet rs = dao.getNewsagent()) { 
+        	        while (rs.next()) {
 //        	            //String name = rs.getString("agent_name");
-//        	            String address = rs.getString("agent_address");
-//        	            System.out.println("Delivery To: "+areaId+"	Delivery From: "+address);//customerAddress
-//        	            System.out.println("===============================================");
+        	            String address = rs.getString("agent_address");
+//        	            String PubId = rs.getString("publication_id");
+        	            System.out.println("Delivery To: "+areaId+"	Delivery From: "+address);//customerAddress
+        	            System.out.println("===============================================");
+        	            System.out.println("Date		Description   Quantity");
+        	            //while() {
+        	            System.out.println(orderDate+"	"+PubId+"		"+numberInStocks);//+"			"+numberInStocks);
+        	            //}
 //        	            System.out.println("Customer Id: "+customerId);
 //        	            System.out.println("Customer Address: "+customerAddress);
 //        	            System.out.println("Publication Title: "+title);
@@ -907,10 +915,14 @@ private static boolean printDeliveryDocketTable(ResultSet rs) throws Exception {
 //                        System.out.printf("    Price         : $%.2f%n", publicationPrice);
 //                        System.out.printf("    Delivery Freq : %s%n", deliveryFrequency);
 //                        System.out.println("------------------------------------");
-//                    }
+                    }
                     
-//                } while (resultSet.next());
-//                System.out.println("===============================================");
+                } catch (CustomerExceptionHandler e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} while (resultSet.next());
+                System.out.println("===============================================");
+                System.out.println("Total: "+price);//+numberInStocks);
             } else {
                 System.out.println("Area Id not found or no associated delivery dockets.");
             }

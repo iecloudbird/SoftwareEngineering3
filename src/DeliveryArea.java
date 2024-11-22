@@ -5,12 +5,12 @@ public class DeliveryArea {
     private String deliveryPersonId; // format: DP000
     private int totalCustomers;      
 
-    public DeliveryArea() {
-        this.areaId = null;
-        this.areaName = null;
-        this.deliveryPersonId = null;
-        this.totalCustomers = 0;
-    }
+//    public DeliveryArea() {
+//        this.areaId = null;
+//        this.areaName = null;
+//        this.deliveryPersonId = null;
+//        this.totalCustomers = 0;
+//    }
 
     public DeliveryArea(String areaId, String areaName, String deliveryPersonId, int totalCustomers) throws DeliveryAreaException {
         setAreaId(areaId);
@@ -91,15 +91,15 @@ public class DeliveryArea {
         }
     }
 
-    @Override
-    public String toString() {
-        return "DeliveryArea{" +
-                "areaId='" + areaId + '\'' +
-                ", areaName='" + areaName + '\'' +
-                ", deliveryPersonId='" + deliveryPersonId + '\'' +
-                ", totalCustomers=" + totalCustomers +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "DeliveryArea{" +
+//                "areaId='" + areaId + '\'' +
+//                ", areaName='" + areaName + '\'' +
+//                ", deliveryPersonId='" + deliveryPersonId + '\'' +
+//                ", totalCustomers=" + totalCustomers +
+//                '}';
+//    }
 }
 
 class DeliveryAreaException extends Exception {
